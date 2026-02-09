@@ -152,12 +152,14 @@ class CreateUserServiceTest extends TestCase
         $this->passwordTokenRepository
             ->expects($this->never())
             ->method('save');
+        $this->logger
+            ->expects($this->never())
+            ->method('error');
 
         $this->expectException(TokenNotFoundException::class);
         $this->expectExceptionMessage('exception.tokenNotFound');
 
         $this->service->verifyByToken('token');
-
     }
 
     public function testLogAndThrowExceptionWhenProcessVerifyingFails(): void
@@ -204,7 +206,7 @@ class CreateUserServiceTest extends TestCase
     {
         $now = new \DateTimeImmutable('now');
         $passwordToken = new PasswordToken($user = new User(), token: 'token', expiredAt: new \DateTimeImmutable('+1 day'));
-        $passwordToken->verify();
+
         $this->passwordTokenRepository
             ->expects($this->once())
             ->method('getByToken')
@@ -229,6 +231,7 @@ class CreateUserServiceTest extends TestCase
             ->method('error');
 
         $this->assertSame($user, $this->service->verifyByToken('token'));
+        $this->assertNotNull($passwordToken->getUpdatedBy());
     }
 
     public function testThrowExceptionWhenUserNotFoundOnResendConfirmationEmail(): void

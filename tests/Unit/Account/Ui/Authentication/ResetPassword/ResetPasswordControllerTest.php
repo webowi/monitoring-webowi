@@ -56,7 +56,7 @@ class ResetPasswordControllerTest extends TestCase
         $this->controller->setContainer($this->container);
     }
 
-    private function testValidSubmittedForm(): void
+    private function testValidSubmittedForm(Request $request): void
     {
         $this->container
             ->expects($this->exactly(2))
@@ -71,7 +71,7 @@ class ResetPasswordControllerTest extends TestCase
         $this->form
             ->expects($this->once())
             ->method('handleRequest')
-            ->with($this->request)
+            ->with($request)
             ->willReturnSelf();
         $this->form
             ->expects($this->exactly(2))
@@ -92,14 +92,21 @@ class ResetPasswordControllerTest extends TestCase
             ->willReturn('rendered');
     }
 
+    private function generateRequest(null|int|string $token, null|int|string $email): Request
+    {
+        return new Request(
+            query: [
+                'token'      => $token,
+                'emailValue' => $email,
+            ]
+        );
+    }
+
     public function testThrowPasswordRequiredExceptionWhenPasswordNotString(): void
     {
-        $this->testValidSubmittedForm();
-        $this->request
-            ->expects($this->exactly(2))
-            ->method('get')
-            ->with(...$this->consecutiveParams(['token'], ['emailValue']))
-            ->willReturnOnConsecutiveCalls('token', 'email');
+        $request = $this->generateRequest('token', 'email');
+
+        $this->testValidSubmittedForm($request);
         $this->form
             ->expects($this->once())
             ->method('get')
@@ -115,17 +122,14 @@ class ResetPasswordControllerTest extends TestCase
             ->with('exception.passwordRequired', 'dashboard.authentication.resetPassword.error.passwordRequired.title')
             ->willReturnSelf();
 
-        $this->controller->resetPassword($this->request);
+        $this->controller->resetPassword($request);
     }
 
     public function testThrowPasswordRequiredExceptionWhenPasswordNotFound(): void
     {
-        $this->testValidSubmittedForm();
-        $this->request
-            ->expects($this->exactly(2))
-            ->method('get')
-            ->with(...$this->consecutiveParams(['token'], ['emailValue']))
-            ->willReturnOnConsecutiveCalls('token', 'email');
+        $request = $this->generateRequest('token', 'email');
+
+        $this->testValidSubmittedForm($request);
         $this->form
             ->expects($this->once())
             ->method('get')
@@ -141,17 +145,14 @@ class ResetPasswordControllerTest extends TestCase
             ->with('exception.passwordRequired', 'dashboard.authentication.resetPassword.error.passwordRequired.title')
             ->willReturnSelf();
 
-        $this->controller->resetPassword($this->request);
+        $this->controller->resetPassword($request);
     }
 
     public function testThrowTokenNotFoundExceptionWhenTokenIsNotString(): void
     {
-        $this->testValidSubmittedForm();
-        $this->request
-            ->expects($this->exactly(2))
-            ->method('get')
-            ->with(...$this->consecutiveParams(['token'], ['emailValue']))
-            ->willReturnOnConsecutiveCalls(123, 'email');
+        $request = $this->generateRequest(123, 'email');
+
+        $this->testValidSubmittedForm($request);
         $this->form
             ->expects($this->once())
             ->method('get')
@@ -167,17 +168,14 @@ class ResetPasswordControllerTest extends TestCase
             ->with('exception.tokenNotFound', 'dashboard.authentication.resetPassword.error.tokenNotFound.title')
             ->willReturnSelf();
 
-        $this->controller->resetPassword($this->request);
+        $this->controller->resetPassword($request);
     }
 
     public function testThrowTokenNotFoundExceptionWhenTokenNotFound(): void
     {
-        $this->testValidSubmittedForm();
-        $this->request
-            ->expects($this->exactly(2))
-            ->method('get')
-            ->with(...$this->consecutiveParams(['token'], ['emailValue']))
-            ->willReturnOnConsecutiveCalls(null, 'email');
+        $request = $this->generateRequest(null, 'email');
+
+        $this->testValidSubmittedForm($request);
         $this->form
             ->expects($this->once())
             ->method('get')
@@ -193,17 +191,14 @@ class ResetPasswordControllerTest extends TestCase
             ->with('exception.tokenNotFound', 'dashboard.authentication.resetPassword.error.tokenNotFound.title')
             ->willReturnSelf();
 
-        $this->controller->resetPassword($this->request);
+        $this->controller->resetPassword($request);
     }
 
     public function testThrowUserNotFoundExceptionWhenEmailNotFound(): void
     {
-        $this->testValidSubmittedForm();
-        $this->request
-            ->expects($this->exactly(2))
-            ->method('get')
-            ->with(...$this->consecutiveParams(['token'], ['emailValue']))
-            ->willReturnOnConsecutiveCalls('token', null);
+        $request = $this->generateRequest('token', null);
+
+        $this->testValidSubmittedForm($request);
         $this->form
             ->expects($this->once())
             ->method('get')
@@ -219,17 +214,14 @@ class ResetPasswordControllerTest extends TestCase
             ->with('exception.userNotFound', 'dashboard.authentication.resetPassword.error.userNotFound.title')
             ->willReturnSelf();
 
-        $this->controller->resetPassword($this->request);
+        $this->controller->resetPassword($request);
     }
 
     public function testThrowUserNotFoundExceptionWhenEmailNotString(): void
     {
-        $this->testValidSubmittedForm();
-        $this->request
-            ->expects($this->exactly(2))
-            ->method('get')
-            ->with(...$this->consecutiveParams(['token'], ['emailValue']))
-            ->willReturnOnConsecutiveCalls('token', 123);
+        $request = $this->generateRequest('token', 123);
+
+        $this->testValidSubmittedForm($request);
         $this->form
             ->expects($this->once())
             ->method('get')
@@ -245,17 +237,14 @@ class ResetPasswordControllerTest extends TestCase
             ->with('exception.userNotFound', 'dashboard.authentication.resetPassword.error.userNotFound.title')
             ->willReturnSelf();
 
-        $this->controller->resetPassword($this->request);
+        $this->controller->resetPassword($request);
     }
 
     public function testCatchResetPasswordExceptionWhenThrowsOnResetPassword(): void
     {
-        $this->testValidSubmittedForm();
-        $this->request
-            ->expects($this->exactly(2))
-            ->method('get')
-            ->with(...$this->consecutiveParams(['token'], ['emailValue']))
-            ->willReturnOnConsecutiveCalls('token', 'email');
+        $request = $this->generateRequest('token', 'email');
+
+        $this->testValidSubmittedForm($request);
         $this->form
             ->expects($this->once())
             ->method('get')
@@ -276,17 +265,14 @@ class ResetPasswordControllerTest extends TestCase
             ->with('exception.resetPassword', 'dashboard.authentication.resetPassword.error.resetPassword.title')
             ->willReturnSelf();
 
-        $this->controller->resetPassword($this->request);
+        $this->controller->resetPassword($request);
     }
 
     public function testCatchUnknownExceptionWhenThrowsOnResetPassword(): void
     {
-        $this->testValidSubmittedForm();
-        $this->request
-            ->expects($this->exactly(2))
-            ->method('get')
-            ->with(...$this->consecutiveParams(['token'], ['emailValue']))
-            ->willReturnOnConsecutiveCalls('token', 'email');
+        $request = $this->generateRequest('token', 'email');
+
+        $this->testValidSubmittedForm($request);
         $this->form
             ->expects($this->once())
             ->method('get')
@@ -310,11 +296,13 @@ class ResetPasswordControllerTest extends TestCase
             )
             ->willReturnSelf();
 
-        $this->controller->resetPassword($this->request);
+        $this->controller->resetPassword($request);
     }
 
     public function testRedirectToLoginWhenResetPasswordSuccess(): void
     {
+        $request = $this->generateRequest('token', 'email');
+
         $this->container
             ->expects($this->exactly(2))
             ->method('get')
@@ -328,7 +316,7 @@ class ResetPasswordControllerTest extends TestCase
         $this->form
             ->expects($this->once())
             ->method('handleRequest')
-            ->with($this->request)
+            ->with($request)
             ->willReturnSelf();
         $this->form
             ->expects($this->once())
@@ -338,11 +326,6 @@ class ResetPasswordControllerTest extends TestCase
             ->expects($this->once())
             ->method('isValid')
             ->willReturn(true);
-        $this->request
-            ->expects($this->exactly(2))
-            ->method('get')
-            ->with(...$this->consecutiveParams(['token'], ['emailValue']))
-            ->willReturnOnConsecutiveCalls('token', 'email');
         $this->form
             ->expects($this->once())
             ->method('get')
@@ -371,6 +354,6 @@ class ResetPasswordControllerTest extends TestCase
             ->with('app_login')
             ->willReturn('app_login');
 
-        $this->controller->resetPassword($this->request);
+        $this->controller->resetPassword($request);
     }
 }

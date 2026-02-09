@@ -33,7 +33,6 @@ class EasyAdminSubscriberTest extends TestCase
         $this->imageConverter = $this->createMock(ImageConverterInterface::class);
         $this->entityManager = $this->createMock(EntityManagerInterface::class);
         $this->logger = $this->createMock(LoggerInterface::class);
-        $this->entity = $this->createMock(ImageResourceInterface::class);
 
         $this->easyAdminSubscriber = new EasyAdminSubscriber(
             $this->imageConverter,
@@ -46,8 +45,8 @@ class EasyAdminSubscriberTest extends TestCase
     {
         $subscribedEvents = EasyAdminSubscriber::getSubscribedEvents();
 
-        $this->assertArrayHasKey('EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityPersistedEvent', $subscribedEvents);
-        $this->assertArrayHasKey('EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityUpdatedEvent', $subscribedEvents);
+        $this->assertSame($subscribedEvents[AfterEntityPersistedEvent::class][0], 'provideImagePath');
+        $this->assertSame($subscribedEvents[AfterEntityUpdatedEvent::class][0], 'updateImagePath');
     }
 
     /**
@@ -76,6 +75,7 @@ class EasyAdminSubscriberTest extends TestCase
                 return $this;
             }
         };
+
         return [
             [$entity, new AfterEntityPersistedEvent($entity), 'provideImagePath'],
             [$entity, new AfterEntityUpdatedEvent($entity), 'updateImagePath'],

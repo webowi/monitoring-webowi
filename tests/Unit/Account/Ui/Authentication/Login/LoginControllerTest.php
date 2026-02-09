@@ -19,6 +19,7 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Twig\Environment;
 
@@ -137,6 +138,10 @@ class LoginControllerTest extends TestCase
         $user->makeAdmin();
         $user->verify();
 
+        $this->authenticationUtils
+            ->expects($this->once())
+            ->method('getLastAuthenticationError')
+            ->willReturn(new AuthenticationException());
         $this->container
             ->expects($this->once())
             ->method('has')
@@ -174,5 +179,117 @@ class LoginControllerTest extends TestCase
         $this->expectExceptionMessage('This method can be blank - it will be intercepted by the logout key on your firewall.');
 
         $this->loginController->logout();
+    }
+
+    public function testDoNotShowVerifyEmailMessageWhenThereIsAuthenticationError(): void
+    {
+        $user = new User();
+
+        $this->container->expects($this->exactly(2))
+            ->method('has')
+            ->with(...$this->consecutiveParams(['security.token_storage'], ['twig']))
+            ->willReturn(true);
+
+        $this->container->expects($this->exactly(3))
+            ->method('get')
+            ->with(...$this->consecutiveParams(
+                ['security.token_storage'],
+                ['form.factory'],
+                ['twig'],
+            ))
+            ->willReturnOnConsecutiveCalls($this->tokenStorage, $this->formFactory, $this->twig);
+
+        $this->tokenStorage->expects($this->once())->method('getToken')->willReturn($this->token);
+        $this->token->expects($this->once())->method('getUser')->willReturn($user);
+
+        $this->authenticationUtils->expects($this->once())
+            ->method('getLastAuthenticationError')
+            ->willReturn(new AuthenticationException());
+
+        $this->flasher->expects($this->never())->method('error');
+
+        $this->authenticationUtils->expects($this->once())->method('getLastUsername')->willReturn('username');
+
+        $this->formFactory->expects($this->once())->method('create')->with(LoginFormType::class)->willReturn($this->form);
+        $this->form->expects($this->once())->method('createView')->willReturn($this->createMock(FormView::class));
+
+        $this->twig->expects($this->once())->method('render')->willReturn('content');
+
+        $response = $this->loginController->login($this->authenticationUtils, $this->flasher);
+
+        $this->assertSame('content', $response->getContent());
+    }
+
+    public function testDoNotShowVerifyEmailMessageWhenUserIsNull(): void
+    {
+        $this->container->expects($this->exactly(2))
+            ->method('has')
+            ->with(...$this->consecutiveParams(['security.token_storage'], ['twig']))
+            ->willReturn(true);
+
+        $this->container->expects($this->exactly(3))
+            ->method('get')
+            ->with(...$this->consecutiveParams(
+                ['security.token_storage'],
+                ['form.factory'],
+                ['twig'],
+            ))
+            ->willReturnOnConsecutiveCalls($this->tokenStorage, $this->formFactory, $this->twig);
+
+        $this->tokenStorage->expects($this->once())->method('getToken')->willReturn($this->token);
+        $this->token->expects($this->once())->method('getUser')->willReturn(null);
+
+        $this->authenticationUtils->expects($this->once())
+            ->method('getLastAuthenticationError')
+            ->willReturn(null);
+
+        $this->flasher->expects($this->never())->method('error');
+
+        $this->authenticationUtils->expects($this->once())->method('getLastUsername')->willReturn('username');
+        $this->formFactory->expects($this->once())->method('create')->willReturn($this->form);
+        $this->form->expects($this->once())->method('createView')->willReturn($this->createMock(FormView::class));
+        $this->twig->expects($this->once())->method('render')->willReturn('content');
+
+        $response = $this->loginController->login($this->authenticationUtils, $this->flasher);
+
+        $this->assertSame('content', $response->getContent());
+    }
+
+    public function testDoNotRedirectWhenUserIsVerifiedButNotAdmin(): void
+    {
+        $user = new User();
+        $user->verify(); // verified = true, admin = false
+
+        $this->authenticationUtils->method('getLastAuthenticationError')->willReturn(null);
+
+        $this->container->expects($this->exactly(2))
+            ->method('has')
+            ->with(...$this->consecutiveParams(['security.token_storage'], ['twig']))
+            ->willReturn(true);
+
+        $this->container->expects($this->exactly(3))
+            ->method('get')
+            ->with(...$this->consecutiveParams(
+                ['security.token_storage'],
+                ['form.factory'],
+                ['twig'],
+            ))
+            ->willReturnOnConsecutiveCalls($this->tokenStorage, $this->formFactory, $this->twig);
+
+        $this->tokenStorage->method('getToken')->willReturn($this->token);
+        $this->token->method('getUser')->willReturn($user);
+
+        $this->router->expects($this->never())->method('generate');
+
+        $this->flasher->expects($this->never())->method('error');
+
+        $this->authenticationUtils->method('getLastUsername')->willReturn('username');
+        $this->formFactory->method('create')->willReturn($this->form);
+        $this->form->method('createView')->willReturn($this->createMock(FormView::class));
+        $this->twig->method('render')->willReturn('content');
+
+        $response = $this->loginController->login($this->authenticationUtils, $this->flasher);
+
+        $this->assertSame('content', $response->getContent());
     }
 }

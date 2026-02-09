@@ -78,6 +78,43 @@ class TimestampableSubscriberTest extends TestCase
         $this->subscriber->prePersist($this->event);
     }
 
+    public function testPrePersistUserNotFound(): void
+    {
+        $dateTime = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s'));
+
+        $this->event->expects($this->once())->method('getObject')->willReturn($this->entity);
+        $this->entity
+            ->expects($this->once())
+            ->method('getCreatedAt')
+            ->willReturn(null);
+        $this->entity
+            ->expects($this->once())
+            ->method('setCreatedAt')
+            ->with($dateTime)
+            ->willReturnSelf();
+        $this->entity
+            ->expects($this->once())
+            ->method('setUpdatedAt')
+            ->with($dateTime)
+            ->willReturnSelf();
+        $this->security
+            ->expects($this->once())
+            ->method('getUser')
+            ->willReturn(null);
+        $this->entity
+            ->expects($this->never())
+            ->method('setCreatedBy');
+        $this->entity
+            ->expects($this->once())
+            ->method('setUpdatedBy')
+            ->with(null);
+        $this->logger
+            ->expects($this->never())
+            ->method('error');
+
+        $this->subscriber->prePersist($this->event);
+    }
+
     public function testLogErrorWhenSettingUserFailsOnPrePersist(): void
     {
         $dateTime = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s'));
@@ -161,6 +198,34 @@ class TimestampableSubscriberTest extends TestCase
         $this->subscriber->preUpdate($this->event);
     }
 
+    public function testPreUpdateUserNotFound(): void
+    {
+        $dateTime = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s'));
+
+        $this->event->expects($this->once())->method('getObject')->willReturn($this->entity);
+        $this->entity
+            ->expects($this->once())
+            ->method('setUpdatedAt')
+            ->with($dateTime)
+            ->willReturnSelf();
+        $this->security
+            ->expects($this->once())
+            ->method('getUser')
+            ->willReturn(null);
+        $this->user
+            ->expects($this->never())
+            ->method('getUserIdentifier');
+        $this->entity
+            ->expects($this->once())
+            ->method('setUpdatedBy')
+            ->with(null);
+        $this->logger
+            ->expects($this->never())
+            ->method('error');
+
+        $this->subscriber->preUpdate($this->event);
+    }
+
     public function testLogErrorWhenSettingUserFailsOnPreRemove(): void
     {
         $dateTime = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s'));
@@ -194,6 +259,34 @@ class TimestampableSubscriberTest extends TestCase
                     'class'     => TimestampableSubscriber::class,
                 ]
             );
+
+        $this->subscriber->preRemove($this->event);
+    }
+
+    public function testOnPreRemoveUserNotFound(): void
+    {
+        $dateTime = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s'));
+
+        $this->event->expects($this->once())->method('getObject')->willReturn($this->entity);
+        $this->entity
+            ->expects($this->once())
+            ->method('setDeletedAt')
+            ->with($dateTime)
+            ->willReturnSelf();
+        $this->security
+            ->expects($this->once())
+            ->method('getUser')
+            ->willReturn(null);
+        $this->user
+            ->expects($this->never())
+            ->method('getUserIdentifier');
+        $this->entity
+            ->expects($this->once())
+            ->method('setDeletedBy')
+            ->with(null);
+        $this->logger
+            ->expects($this->never())
+            ->method('error');
 
         $this->subscriber->preRemove($this->event);
     }

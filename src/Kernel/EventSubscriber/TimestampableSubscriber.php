@@ -43,8 +43,8 @@ final readonly class TimestampableSubscriber
         try {
             $user = $this->security->getUser();
 
-            if (null === $entity->getCreatedBy()) {
-                $entity->setCreatedBy($user?->getUserIdentifier());
+            if (null !== $user && null === $entity->getCreatedBy()) {
+                $entity->setCreatedBy($user->getUserIdentifier());
             }
 
             $entity->setUpdatedBy($user?->getUserIdentifier());

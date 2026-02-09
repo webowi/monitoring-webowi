@@ -34,6 +34,11 @@ phpunit-test: phpunit ## Alias for unit tests
 test-unit: phpunit ## Alias for unit tests
 tests-unit: phpunit ## Alias for unit tests
 
+.PHONY: cs-fixer csfix
+cs-fixer: ## Run PHP CS Fixer
+	docker exec -it -u root $(CONTAINER_NAME) /var/www/html/vendor/bin/php-cs-fixer fix
+csfix: cs-fixer ## Alias for cs-fixer
+
 .PHONY: create-user cu c-u
 create-user: ## Rebuild node container
 	docker exec -it -u root $(CONTAINER_NAME) bin/console app:create:user --email=admin@example.com --password=admin --force-verify

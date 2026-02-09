@@ -31,8 +31,8 @@ class ResetPasswordController extends AbstractBaseController
 
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-                $token = $request->get('token');
-                $email = $request->get('emailValue');
+                $token = $request->query->get('token');
+                $email = $request->query->get('emailValue');
                 $password = $form->get('password')->getData();
                 if (null === $password || false === is_string($password)) {
                     throw new PasswordRequiredException();
