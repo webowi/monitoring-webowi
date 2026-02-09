@@ -4,33 +4,21 @@
 
 /* ---- 1) Tokens (spójne z loginem) ---- */
 :root{
-    /* Twoje tokeny */
     --bg:#05070b;
     --text:rgba(255,255,255,.92);
     --muted:rgba(255,255,255,.68);
+
     --card:rgba(18,22,32,.62);
     --card-border:rgba(255,255,255,.10);
+    --shadow:0 20px 60px rgba(0,0,0,.55);
+
     --primary:#8d1519;
     --primary-hover:#a61a20;
+
+    --ring-strong:rgba(141,21,25,.45);
     --radius:16px;
-
-    /* MAPOWANIE na EasyAdmin variables */
-    --body-bg: var(--bg);
-    --text-color: var(--text);
-
-    --content-bg: transparent; /* żeby tło z body “przechodziło” */
-    --sidebar-bg: rgba(8,10,14,.92);
-    --sidebar-color: var(--text);
-
-    --link-color: var(--primary);
-    --color-primary: var(--primary);
-
-    --border-radius: var(--radius);
-
-    /* często robi robotę też: */
-    --table-thead-bg: rgba(255,255,255,.06);
-    --table-hover-bg: rgba(255,255,255,.04);
 }
+
 /* =========================
    DASHBOARD HOME (Twoje kafelki)
    ========================= */
@@ -135,28 +123,3 @@
     border: 1px solid rgba(255,255,255,.14);
 }
 .btn--ghost:hover{ background: rgba(255,255,255,.12); }
-
-.content-panel, .card, .ea-content .card {
-    background: var(--card);
-    border: 1px solid var(--card-border);
-    border-radius: var(--radius);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-}
-
-/* Tło “content wrapper” żeby nie było białych plam */
-.content-wrapper, .content, .main-content {
-    background: transparent;
-}
-
-/* Linki / przyciski (część EA korzysta z primary) */
-a, .btn-primary, .badge-primary {
-    color: var(--text);
-}
-.btn-primary {
-    background: var(--primary);
-    border-color: transparent;
-}
-.btn-primary:hover {
-    background: var(--primary-hover);
-}

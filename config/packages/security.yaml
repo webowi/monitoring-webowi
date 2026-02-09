@@ -23,7 +23,7 @@ security:
                 check_path: 2fa_login_check
             logout:
                 path: app_logout
-                target: /dashboard
+                target: /
         api:
             pattern: ^/api/v1
             stateless: true

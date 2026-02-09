@@ -59,7 +59,8 @@ class DashboardCrudController extends AbstractDashboardController
             ->setTitle('monitoring-webowi')
             ->setFaviconPath('/images/favicon.ico')
             ->setTranslationDomain('messages')
-            ->disableDarkMode();
+            ->setDefaultColorScheme('dark')
+            ->disableDarkMode(false);
     }
 
     /**
