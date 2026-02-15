@@ -5,7 +5,7 @@ controllers_dashboard:
     type: attribute
 controllers_account:
     resource:
-        path: ../src/Account/Ui/
+        path: ../src/Identity/Ui/
         namespace: App\Account\Ui
     type: attribute
 translation_controller:

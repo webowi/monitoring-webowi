@@ -17,7 +17,7 @@ doctrine:
             Account:
                 type: attribute
                 is_bundle: false
-                dir: '%kernel.project_dir%/src/Account'
+                dir: '%kernel.project_dir%/src/Identity'
                 prefix: 'App\Account\Domain'
                 alias: App
             Dashboard:
