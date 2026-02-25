@@ -6,6 +6,7 @@ namespace App\Kernel\Translator;
 
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -21,12 +22,11 @@ class TranslatorUXController extends AbstractController
 {
     private const ALL = 'ALL';
 
-    private const CACHE_TTL = 3600;
-
     public function __construct(
         private readonly TranslatorInterface $translator,
         private readonly CacheInterface $cache,
-        private readonly int $cacheTTl = self::CACHE_TTL,
+        #[Autowire('%app.translation_cache_ttl%')]
+        private readonly int $cacheTTl,
     ) {
     }
 
@@ -41,7 +41,6 @@ class TranslatorUXController extends AbstractController
         $translation = $this->cache->get($cacheKey, function (ItemInterface $item) use ($key) {
             $item->expiresAfter($this->cacheTTl);
 
-            /** @phpstan-ignore-next-line */
             return self::ALL === strtoupper($key) ? $this->translator->getCatalogue()->all()['messages'] ?? [] : $this->translator->trans($key);
         });
 

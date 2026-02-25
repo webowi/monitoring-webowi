@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Dashboard\Ui;
 
-use App\Account\Domain\RoleEnum;
-use App\Account\Domain\User;
-use App\Account\Ui\AccountCrudController;
+use App\Identity\Domain\Company;
+use App\Identity\Domain\RoleEnum;
+use App\Identity\Domain\User;
+use App\Identity\Ui\Panel\AccountCrudController;
+use App\Identity\Ui\Panel\CompanyCrudController;
 use App\Kernel\Security\MultiplyRolesExpression;
 use App\Kernel\Security\UserInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -16,7 +18,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\UserMenu;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
-use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -31,11 +32,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(new MultiplyRolesExpression(RoleEnum::ADMIN, RoleEnum::SUPER_ADMIN, RoleEnum::MODERATOR))]
 class DashboardCrudController extends AbstractDashboardController
 {
-    public function __construct(
-        private readonly AdminUrlGenerator $adminUrlGenerator
-    ) {
-    }
-
     #[Route('/', name: 'main')]
     #[Route('/', name: 'dashboard')]
     public function index(): Response
@@ -98,6 +94,13 @@ class DashboardCrudController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
+        $company = $this->getUser()->getCompany();
+
+        yield MenuItem::section('dashboard.panel.mainInformation');
+        yield MenuItem::linkToCrud('dashboard.company.title', 'fa fa-building-user', Company::class)
+            ->setController(CompanyCrudController::class)
+            ->setEntityId($company->getId())
+            ->setAction(Action::EDIT);
         yield MenuItem::section('dashboard.panel.projects');
     }
 }

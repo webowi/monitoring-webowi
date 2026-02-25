@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Account\Ui\Authentication;
+namespace App\Identity\Ui\Authentication;
 
-use App\Account\Application\AccountAuthenticatorService;
-use App\Account\Ui\Exception\EmailRequiredException;
-use App\Account\Ui\Exception\PasswordRequiredException;
+use App\Identity\Application\AccountAuthenticatorService;
+use App\Identity\Ui\Exception\EmailRequiredException;
+use App\Identity\Ui\Exception\PasswordRequiredException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -66,10 +66,6 @@ class AccountAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        if (false === $this->accountAuthenticator->isVerified($request)) {
-            return new RedirectResponse($this->accountAuthenticator->getLoginUrl());
-        }
-
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }

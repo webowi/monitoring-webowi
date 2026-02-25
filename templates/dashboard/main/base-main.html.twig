@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% trans %}dashboard.meta.title{% endtrans %}{% endblock %}</title>
+    <meta name="robots" content="index, follow">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+    <meta
+            name="description"
+            content="{% trans %}dashboard.meta.description{% endtrans %}"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+
+    {% block javascripts %}
+        {% block importmap %}{{ importmap('dashboard-main') }}{% endblock %}
+    {% endblock %}
+</head>
+<body>
+<div class="background" ></div>
+{% block body %}
+
+
+{% endblock %}
+</body>
+</html>

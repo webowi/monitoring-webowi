@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Account\Domain;
+namespace App\Identity\Domain;
 
-use App\Account\Domain\ValueObject\TotpSecret;
-use App\Account\Infrastructure\UserRepository;
+use App\Identity\Domain\ValueObject\TotpSecret;
+use App\Identity\Infrastructure\UserRepository;
 use App\Kernel\EventSubscriber\TimestampableResourceInterface;
 use App\Kernel\EventSubscriber\UuidResourceInterface;
 use App\Kernel\Security\UserInterface;
@@ -59,8 +59,9 @@ class User implements
     #[ORM\Column(type: 'uuid', unique: true)]
     private ?Uuid $uuid = null;
 
-    #[ORM\Column(type: 'uuid', nullable: true)]
-    private ?Uuid $companyId = null;
+    #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'users')]
+    #[ORM\JoinColumn(nullable: false)]
+    private Company $company;
 
     #[ORM\Column(type: Types::STRING, length: 180, unique: true, nullable: false)]
     #[Assert\NotNull]
@@ -134,16 +135,14 @@ class User implements
         return $this;
     }
 
-    public function getCompanyId(): ?Uuid
+    public function getCompany(): Company
     {
-        return $this->companyId;
+        return $this->company;
     }
 
-    public function setCompanyId(?Uuid $companyId): self
+    public function setCompany(Company $company): void
     {
-        $this->companyId = $companyId;
-
-        return $this;
+        $this->company = $company;
     }
 
     public function getEmail(): string
@@ -367,13 +366,8 @@ class User implements
 
     public function getActiveToken(\DateTimeImmutable $now): ?PasswordToken
     {
-        foreach ($this->passwordTokens as $passwordToken) {
-            if ($passwordToken->isActive($now)) {
-                return $passwordToken;
-            }
-        }
+        return array_find($this->passwordTokens->toArray(), fn ($passwordToken) => $passwordToken->isActive($now));
 
-        return null;
     }
 
     public function isActive(): bool
@@ -383,14 +377,8 @@ class User implements
 
     public function isTokenValid(string $token): bool
     {
-        foreach ($this->passwordTokens as $passwordToken) {
-            if ($passwordToken->isTokenSame($token)
-                && $passwordToken->isActive(new \DateTimeImmutable())
-            ) {
-                return true;
-            }
-        }
+        return array_any($this->passwordTokens->toArray(), fn ($passwordToken) => $passwordToken->isTokenSame($token)
+            && $passwordToken->isActive(new \DateTimeImmutable()));
 
-        return false;
     }
 }

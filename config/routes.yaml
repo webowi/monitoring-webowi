@@ -6,7 +6,7 @@ controllers_dashboard:
 controllers_account:
     resource:
         path: ../src/Identity/Ui/
-        namespace: App\Account\Ui
+        namespace: App\Identity\Ui
     type: attribute
 translation_controller:
     resource:

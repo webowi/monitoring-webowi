@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Account\Ui\Authentication\Login;
+namespace App\Identity\Ui\Authentication\Login;
 
-use App\Account\Domain\User;
+use App\Identity\Domain\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;

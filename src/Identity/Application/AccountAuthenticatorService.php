@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Account\Application;
+namespace App\Identity\Application;
 
-use App\Account\Domain\UserRepositoryInterface;
+use App\Identity\Domain\UserRepositoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 

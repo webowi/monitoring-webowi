@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Account\Application\Exception;
+namespace App\Identity\Application\Exception;
 
 class CannotSendEmailException extends \Exception
 {

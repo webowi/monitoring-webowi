@@ -8,12 +8,10 @@ dashboard:
   panel:
     categories: "Kategorie"
     mainInformation: "Główne informacje"
-    images: "Zdjęcia"
-    notes: 'Notatki'
     mainTitle: "monitoring-webowi"
     home: "Strona główna"
     advancedSettings: 'Ustawienia zaawansowane'
-    realizations: 'Realizacje'
+    projects: 'Projekty'
     another: 'Inne'
   authentication:
     back: 'Powrót'
@@ -197,39 +195,17 @@ dashboard:
       help: "Po wpisaniu NIP-u, dane firmy zostaną automatycznie uzupełnione na podstawie informacji z GUS'u"
     logo:
       title: "Logo"
-    title: "Dane firmy"
-  realization:
-    mainRealizationImage: 'Głowne zdjęcie realizacji'
-    images: 'Zdjęcia realizacji'
-    description: 'Opis'
-    name: 'Nazwa'
-    add: 'Dodaj realizację'
-    realization:
-      title: 'Realizacje'
-    create:
-      success:
-        title: 'Realizacja został dodana'
-        description: 'Realizacja została zapisana.'
-      error:
-        title: 'Nie udało się zapisać realizacji'
-        description: 'Nie udało się zapisać realizacji. Spróbuj ponownie.'
-    delete:
-      title: 'Usuń'
-      confirm: 'Czy na pewno chcesz usunąć realizację?'
-      success:
-        title: 'Realizacja został usunięta'
-        description: 'Realizacja została usunięta.'
-      error:
-        title: 'Nie udało się usunąć realizacji'
-        description: 'Nie udało się usunąć realizacji. Spróbuj ponownie.'
+    title: "Dane Twojej firmy"
     edit:
       title: 'Edytuj'
       success:
-        title: 'Realizacja został zaktualizowana'
-        description: 'Realizacja została zaktualizowana.'
+        title: 'Dane firmy zostały zaktualizowane'
+        description: 'Dane firmy zostały zaktualizowane.'
       error:
-        title: 'Nie udało się zaktualizować realizacji'
-        description: 'Nie udało się zaktualizować realizacji. Spróbuj ponownie.'
+        title: 'Nie udało się zaktualizować danych firmy'
+        description: 'Nie udało się zaktualizować danych firmy. Spróbuj ponownie.'
+error:
+  httpStatus: "Błąd (%status%)."
 exception:
   cannotSendEmail: "Nie udało się wysłać e-maila."
   emailRequired: "Adres e-mail jest wymagany."
@@ -241,6 +217,24 @@ exception:
   tokenNotFound: "Token wygasł lub jest niepoprawny."
   companyNotFound: "Firma nie została znaleziona."
   cannotChange2FaState: "Nie udało się zmienić stanu dwuetapowego uwierzytelniania."
-  realizationNotFound: 'Realizacji nie znaleziono.'
   userExist: 'Użytkownik już istnieje.'
   softDeleteFailed: 'Nie udało się usunąć.'
+  cannotGetGusData: "Nie udało się pobrać danych z GUS."
+  gusApiTooManyRequests: 'Zbyt wiele zapytań do API GUS. Spróbuj ponownie później.'
+  gusApiNotFound: 'Nie znaleziono danych dla podanego NIP-u.'
+  companyNotFoundByTin: "Nie znaleziono firmy dla podanego NIP."
+  tooManyRequests: "Za dużo zapytań — spróbuj ponownie za chwilę."
+validator:
+  invalidTin: "Podaj poprawny NIP (10 cyfr)."
+
+gusApi:
+  fetchDataFromGus:
+    title: "Pobierz dane z GUS"
+    hint: "Uzupełnimy nazwę i adres na podstawie NIP."
+  fetchingData:
+    loading: "Pobieram dane…"
+    success: "Uzupełniono dane z GUS ✅"
+    failed: "Nie udało się pobrać danych z GUS."
+  clear:
+    confirm: "Czy na pewno chcesz wyczyścić dane pobrane z GUS?"
+    success: "Dane zostały wyczyszczone."

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Account\Domain;
+namespace App\Identity\Domain;
 
-use App\Account\Infrastructure\PasswordTokenRepository;
+use App\Identity\Infrastructure\PasswordTokenRepository;
 use App\Kernel\EventSubscriber\UuidResourceInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -24,11 +24,9 @@ class PasswordToken implements UuidResourceInterface
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     #[ORM\Column(type: Types::INTEGER)]
-    #[ApiProperty(identifier: false)]
     private ?int $id = null;
 
     #[ORM\Column(type: 'uuid', unique: true)]
-    #[ApiProperty(identifier: true)]
     private ?Uuid $uuid = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Account\Ui;
+namespace App\Identity\Ui;
 
-use App\Account\Domain\User;
+use App\Identity\Domain\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**

@@ -39,20 +39,26 @@ cs-fixer: ## Run PHP CS Fixer
 	docker exec -it -u root $(CONTAINER_NAME) /var/www/html/vendor/bin/php-cs-fixer fix
 csfix: cs-fixer ## Alias for cs-fixer
 
-.PHONY: create-user cu c-u
-create-user: ## Rebuild node container
-	docker exec -it -u root $(CONTAINER_NAME) bin/console app:create:user --email=admin@example.com --password=admin --force-verify
-cu: create-user ## Alias for create-user
-c-u: create-user ## Alias for create-user
+.PHONY: create-account ca c-a
+create-account: ## Rebuild node container
+	docker exec -it -u root $(CONTAINER_NAME) bin/console app:create:account --email=admin@example.com --password=admin
+ca: create-account ## Alias for create-account
+c-a: create-account ## Alias for create-account
 
-.PHONY: create-user-local cul c-u-l
-create-user-local: ## Rebuild node container
-	php bin/console app:create:user --email=admin@example.com --password=admin --force-verify
-cul: create-user-local ## Alias for create-user
-c-u-l: create-user-local ## Alias for create-user
+.PHONY: create-account-local cal c-a-l
+create-account-local: ## Rebuild node container
+	php bin/console app:create:account --email=admin@example.com --password=admin
+cal: create-account-local ## Alias for create-account
+c-a-l: create-account-local ## Alias for create-account
 
 .PHONY: compile-ui c-ui cui
 compile-ui: ## Compile UI assets
 	docker exec -it -u root $(CONTAINER_NAME) bin/console asset-map:compile
 c-ui: compile-ui ## Alias for compile-ui
 cui: compile-ui ## Alias for compile-ui
+
+.PHONY: compile-ui-local c-ui-l cuil;
+compile-ui-local: ## Compile UI assets local
+	php bin/console asset-map:compile
+c-ui-l: compile-ui-local ## Alias for compile-ui-local
+cuil: compile-ui-local ## Alias for compile-ui-local

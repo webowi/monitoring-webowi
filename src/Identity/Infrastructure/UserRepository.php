@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Account\Infrastructure;
+namespace App\Identity\Infrastructure;
 
-use App\Account\Domain\User;
-use App\Account\Domain\UserRepositoryInterface;
+use App\Identity\Domain\User;
+use App\Identity\Domain\UserRepositoryInterface;
 use App\Kernel\Security\UserInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;

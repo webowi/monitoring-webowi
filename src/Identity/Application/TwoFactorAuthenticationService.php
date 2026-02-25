@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Account\Application;
+namespace App\Identity\Application;
 
-use App\Account\Application\Exception\CannotChange2FaStateException;
-use App\Account\Domain\User;
-use App\Account\Domain\UserRepositoryInterface;
-use App\Account\Domain\ValueObject\TotpSecret;
+use App\Identity\Application\Exception\CannotChange2FaStateException;
+use App\Identity\Domain\User;
+use App\Identity\Domain\UserRepositoryInterface;
+use App\Identity\Domain\ValueObject\TotpSecret;
 use App\Kernel\Security\UserInterface;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Exception\ValidationException;

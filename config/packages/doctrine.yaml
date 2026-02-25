@@ -14,17 +14,29 @@ doctrine:
         validate_xml_mapping: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         mappings:
-            Account:
+            Identity:
                 type: attribute
                 is_bundle: false
                 dir: '%kernel.project_dir%/src/Identity'
-                prefix: 'App\Account\Domain'
+                prefix: 'App\Identity\Domain'
                 alias: App
             Dashboard:
                 type: attribute
                 is_bundle: false
                 dir: '%kernel.project_dir%/src/Dashboard'
                 prefix: 'App\Dashboard\Domain'
+                alias: App
+            Projects:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Projects'
+                prefix: 'App\Projects\Domain'
+                alias: App
+            Logging:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Logging'
+                prefix: 'App\Logging\Domain'
                 alias: App
 
 when@test:

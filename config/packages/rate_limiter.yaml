@@ -1,6 +1,6 @@
 framework:
   rate_limiter:
-    rent-equipment:
-      policy: 'fixed_window'
-      limit: 5
-      interval: '60 minutes'
+    gus_api:
+      policy: 'sliding_window'
+      limit: '%env(int:GUS_API_LIMIT)%'
+      interval: '1 hour'

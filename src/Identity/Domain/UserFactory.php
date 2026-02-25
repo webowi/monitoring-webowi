@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Account\Domain;
+namespace App\Identity\Domain;
 
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -17,8 +17,11 @@ class UserFactory
     /**
      * @throws UserExistException
      */
-    public function create(string $email, string $password): User
-    {
+    public function create(
+        string $email,
+        string $password,
+        Company $company,
+    ): User {
         if (null !== $this->userRepository->getByEmail($email)) {
             throw new UserExistException();
         }
@@ -29,6 +32,7 @@ class UserFactory
             $password
         );
         $user->setPassword($hashedPassword);
+        $user->setCompany($company);
         $user->makeAdmin();
 
         return $user;

@@ -8,3 +8,5 @@ validation:
         strength: " Musi zawierać co najmniej jedną cyfrę (0-9), jedną literę oraz jeden znak specjalny (np. !@#$%^&*)."
     token:
         invalid: "Token wygasł lub jest niepoprawny"
+    tin:
+        invalid: "Niepoprawny numer identyfikacji podatkowej (NIP)"

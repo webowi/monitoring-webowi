@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Kernel\Security;
 
+use App\Identity\Domain\Company;
 use Symfony\Component\Security\Core\User\UserInterface as BaseUserInterface;
 use Symfony\Component\Uid\Uuid;
 
@@ -15,7 +16,5 @@ interface UserInterface extends BaseUserInterface
 
     public function isSuperAdmin(): bool;
 
-    public function getCompanyId(): ?Uuid;
-
-    public function setCompanyId(?Uuid $companyId): self;
+    public function getCompany(): Company;
 }

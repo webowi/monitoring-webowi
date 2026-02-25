@@ -14,7 +14,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @infection-ignore-all Simple service
  */
-readonly class LocaleListener implements EventSubscriberInterface
+final readonly class LocaleListener implements EventSubscriberInterface
 {
     public function __construct(
         private TranslatorInterface $translator,

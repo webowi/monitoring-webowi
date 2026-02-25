@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Account\Ui\Exception;
+namespace App\Identity\Ui\Exception;
 
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;

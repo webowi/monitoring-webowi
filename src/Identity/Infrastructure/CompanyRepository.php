@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Account\Infrastructure;
+namespace App\Identity\Infrastructure;
 
-use App\Account\Domain\Company;
-use App\Account\Domain\CompanyRepositoryInterface;
+use App\Identity\Domain\Company;
+use App\Identity\Domain\CompanyRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;

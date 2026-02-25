@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Account\Application\Password;
+namespace App\Identity\Application\Password;
 
-use App\Account\Domain\User;
+use App\Identity\Domain\User;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormBuilderInterface;

@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+
+    "baseUrl": ".",
+    "paths": {
+      "translator": ["assets/dashboard-ui/main/Translator.ts"]
+    }
+  },
+  "include": ["assets/**/*"]
+}

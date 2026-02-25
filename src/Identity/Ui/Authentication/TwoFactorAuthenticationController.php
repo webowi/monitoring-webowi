@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Account\Ui\Authentication;
+namespace App\Identity\Ui\Authentication;
 
-use App\Account\Application\Exception\CannotChange2FaStateException;
-use App\Account\Application\TwoFactorAuthenticationService;
-use App\Account\Domain\RoleEnum;
-use App\Account\Ui\AbstractBaseController;
+use App\Identity\Application\Exception\CannotChange2FaStateException;
+use App\Identity\Application\TwoFactorAuthenticationService;
+use App\Identity\Domain\RoleEnum;
+use App\Identity\Ui\AbstractBaseController;
 use App\Kernel\Security\MultiplyRolesExpression;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;

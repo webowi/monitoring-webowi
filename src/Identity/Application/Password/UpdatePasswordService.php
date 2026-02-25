@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Account\Application\Password;
+namespace App\Identity\Application\Password;
 
-use App\Account\Domain\User;
-use App\Account\Domain\UserRepositoryInterface;
+use App\Identity\Domain\User;
+use App\Identity\Domain\UserRepositoryInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UpdatePasswordService

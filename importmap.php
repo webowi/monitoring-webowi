@@ -22,6 +22,10 @@ return [
         'path'       => './assets/dashboard-ui/main/main.ts',
         'entrypoint' => true,
     ],
+    'translator' => [
+        'path'       => './assets/dashboard-ui/main/Translator.ts',
+        'entrypoint' => true,
+    ],
     '@hotwired/stimulus' => [
         'version' => '3.2.2',
     ],
@@ -30,5 +34,8 @@ return [
     ],
     '@hotwired/turbo' => [
         'version' => '7.3.0',
+    ],
+    'notyf' => [
+        'version' => '3.10.0',
     ],
 ];

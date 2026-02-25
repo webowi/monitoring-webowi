@@ -67,12 +67,6 @@
                 <button class="btn btn--primary btn--block" type="submit">
                     {% trans %}dashboard.authentication.login.submit{% endtrans %}
                 </button>
-
-                <div class="authCard__footer">
-                    <a href="{{ path('app_forgot_password') }}" class="authLink">
-                        {% trans %}dashboard.authentication.login.forgotPassword{% endtrans %}
-                    </a>
-                </div>
                 {{ form_end(loginForm) }}
             </div>
         </div>

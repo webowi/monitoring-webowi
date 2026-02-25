@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Account\Ui\Authentication\Login;
+namespace App\Identity\Ui\Authentication\Login;
 
-use App\Account\Application\AccountAuthenticatorService;
-use App\Account\Ui\AbstractBaseController;
-use App\Kernel\Flasher\FlasherInterface;
+use App\Identity\Application\AccountAuthenticatorService;
+use App\Identity\Ui\AbstractBaseController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -14,16 +13,10 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class LoginController extends AbstractBaseController
 {
     #[Route(path: '/dashboard/login', name: 'app_login')]
-    public function login(AuthenticationUtils $authenticationUtils, FlasherInterface $flasher): Response
+    public function login(AuthenticationUtils $authenticationUtils): Response
     {
         $user = $this->getUser();
         $error = $authenticationUtils->getLastAuthenticationError();
-
-        if (null === $error && $user && false === $user->isVerified()) {
-            $resendUrl = $this->generateUrl('app_register_resend_confirmation_email');
-
-            $flasher->error('dashboard.authentication.login.verifyEmail', translateParams: ['%resend_url%' => $resendUrl]);
-        }
 
         if ($user && $user->isAdmin() && $user->isVerified()) {
             return $this->redirectToRoute(AccountAuthenticatorService::DASHBOARD_ROUTE);

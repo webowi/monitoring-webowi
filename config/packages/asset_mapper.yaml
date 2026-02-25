@@ -3,6 +3,7 @@ framework:
         # The paths to make available to the asset mapper.
         paths:
             - assets/
+            - vendor/php-flasher/flasher/Resources/public/
         missing_import_mode: warn
 
 when@prod:

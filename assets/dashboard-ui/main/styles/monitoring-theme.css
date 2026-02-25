@@ -123,3 +123,108 @@
     border: 1px solid rgba(255,255,255,.14);
 }
 .btn--ghost:hover{ background: rgba(255,255,255,.12); }
+
+/* GUS button polish */
+.ea-gus__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    border: 1px solid rgba(0,0,0,.08);
+    background: rgba(255,255,255,.75);
+    backdrop-filter: blur(6px);
+}
+
+.ea-gus__btn:hover {
+    background: rgba(255,255,255,.95);
+}
+
+.ea-gus__btn:disabled {
+    opacity: .7;
+    cursor: not-allowed;
+}
+
+.ea-gus__icon {
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.ea-gus__spinner {
+    margin-left: .25rem;
+}
+
+.ea-gus__meta {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: .35rem;
+}
+
+.ea-gus__status {
+    font-size: .875rem;
+    padding: .25rem .5rem;
+    border-radius: 999px;
+    border: 1px solid rgba(0,0,0,.08);
+    background: rgba(0,0,0,.03);
+    white-space: nowrap;
+}
+
+.ea-gus__status.is-error {
+    border-color: rgba(220,53,69,.25);
+    background: rgba(220,53,69,.08);
+}
+
+.ea-gus__status.is-success {
+    border-color: rgba(25,135,84,.25);
+    background: rgba(25,135,84,.08);
+}
+
+.ea-gus__btn{
+    display:inline-flex;
+    align-items:center;
+    gap:.5rem;
+
+    /* neutralne tło zależne od motywu */
+    background: rgba(127,127,127,.12);
+    border: 1px solid rgba(127,127,127,.25);
+    color: inherit;
+}
+
+.ea-gus__btn:hover{
+    background: rgba(127,127,127,.18);
+}
+
+.ea-gus__btn:focus{
+    box-shadow: 0 0 0 .2rem rgba(13,110,253,.15); /* bootstrap primary-ish */
+}
+
+.ea-gus__btn:disabled{
+    opacity:.65;
+    cursor:not-allowed;
+}
+
+.ea-gus__btn{
+    display:inline-flex;
+    align-items:center;
+    gap:.4rem;
+    background: rgba(127,127,127,.12);
+    border:1px solid rgba(127,127,127,.25);
+    color:inherit;
+}
+
+.ea-gus__btn:hover{
+    background: rgba(127,127,127,.18);
+}
+
+.ea-gus__btn--danger{
+    border-color: rgba(220,53,69,.35);
+}
+
+.ea-gus__btn--danger:hover{
+    background: rgba(220,53,69,.12);
+}
+
+.ea-gus__status.is-warning{
+    border-color: rgba(255,193,7,.4);
+    background: rgba(255,193,7,.12);
+}

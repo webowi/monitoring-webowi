@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Account\Domain;
+namespace App\Identity\Domain;
 
-use App\Account\Infrastructure\CompanyRepository;
+use App\Identity\Infrastructure\CompanyRepository;
 use App\Kernel\EventSubscriber\TimestampableResourceInterface;
 use App\Kernel\Traits\TimestampableTrait;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -31,7 +32,13 @@ class Company implements TimestampableResourceInterface
     private ?int $id = null;
 
     #[ORM\Column(type: 'uuid', unique: true)]
-    private ?Uuid $uuid = null;
+    private ?Uuid $uuid;
+
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'company')]
+    private Collection $users;
 
     #[ORM\Column(type: Types::STRING, length: 191, nullable: true)]
     #[Assert\NotNull]
@@ -88,6 +95,11 @@ class Company implements TimestampableResourceInterface
     #[Assert\Email]
     private ?string $companyEmail = null;
 
+    public function __construct(
+    ) {
+        $this->uuid = Uuid::v4();
+    }
+
     public function __toString(): string
     {
         return $this->name ?? '';
@@ -108,6 +120,21 @@ class Company implements TimestampableResourceInterface
     public function getUuid(): ?Uuid
     {
         return $this->uuid;
+    }
+
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->setCompany($this);
+        }
+
+        return $this;
     }
 
     public function setUuid(?Uuid $uuid): self

@@ -1,5 +1,8 @@
 FROM php:8.4-fpm
 
+# libxml2-dev is required for soap extension
+# soap is for gusApi
+
 # Install dependencies
 RUN apt-get -q update && apt-get -qy install \
     zip \
@@ -16,7 +19,7 @@ RUN apt-get -q update && apt-get -qy install \
     libexif-dev \
     && pecl install pcov \
     && docker-php-ext-enable pcov \
-    && docker-php-ext-install intl opcache pdo pdo_mysql exif \
+    && docker-php-ext-install intl opcache pdo pdo_mysql exif soap \
     && docker-php-ext-configure gd --with-webp --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd \
     && pecl install xdebug \

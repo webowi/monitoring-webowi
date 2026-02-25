@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace App\Dashboard\Ui;
 
-use App\Account\Domain\User;
+use App\Identity\Domain\Company;
+use App\Identity\Domain\User;
 use App\Kernel\Flasher\FlasherInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityDeletedEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityPersistedEvent;
@@ -57,6 +58,7 @@ final readonly class DashboardFlasherListener implements EventSubscriberInterfac
     {
         return match (get_class($entity)) {
             User::class                                   => 'account',
+            Company::class                                => 'company',
             default                                       => '',
         };
     }

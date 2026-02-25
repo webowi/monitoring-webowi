@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Account\Infrastructure;
+namespace App\Identity\Infrastructure;
 
-use App\Account\Domain\PasswordToken;
-use App\Account\Domain\PasswordTokenRepositoryInterface;
+use App\Identity\Domain\PasswordToken;
+use App\Identity\Domain\PasswordTokenRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
