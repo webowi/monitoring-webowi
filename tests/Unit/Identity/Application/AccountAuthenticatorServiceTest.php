@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Account\Application;
+namespace App\Tests\Unit\Identity\Application;
 
-use App\Account\Application\AccountAuthenticatorService;
-use App\Account\Domain\User;
-use App\Account\Domain\UserRepositoryInterface;
+use App\Identity\Application\AccountAuthenticatorService;
+use App\Identity\Domain\User;
+use App\Identity\Domain\UserRepositoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\InputBag;

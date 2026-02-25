@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Kernel\EventSubscriber;
 
-use App\Account\Domain\User;
+use App\Identity\Domain\User;
 use App\Kernel\EventSubscriber\TimestampableResourceInterface;
 use App\Kernel\EventSubscriber\TimestampableSubscriber;
 use Doctrine\Persistence\Event\LifecycleEventArgs;

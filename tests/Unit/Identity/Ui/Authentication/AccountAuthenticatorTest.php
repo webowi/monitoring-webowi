@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Account\Ui\Authentication;
+namespace App\Tests\Unit\Identity\Ui\Authentication;
 
-use App\Account\Application\AccountAuthenticatorService;
-use App\Account\Ui\Authentication\AccountAuthenticator;
-use App\Account\Ui\Exception\EmailRequiredException;
-use App\Account\Ui\Exception\PasswordRequiredException;
+use App\Identity\Application\AccountAuthenticatorService;
+use App\Identity\Ui\Authentication\AccountAuthenticator;
+use App\Identity\Ui\Exception\EmailRequiredException;
+use App\Identity\Ui\Exception\PasswordRequiredException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\InputBag;
@@ -141,36 +141,8 @@ class AccountAuthenticatorTest extends TestCase
         $this->assertSame('password', $passport->getBadge(PasswordCredentials::class)->getPassword());
     }
 
-    public function testRedirectToLoginUrlWhenIsNotVerifiedOnSuccess(): void
-    {
-        $this->accountAuthenticatorService
-            ->expects($this->once())
-            ->method('isVerified')
-            ->with($this->request)
-            ->willReturn(false);
-        $this->accountAuthenticatorService
-            ->expects($this->once())
-            ->method('getLoginUrl')
-            ->willReturn('/login');
-        $this->request
-            ->expects($this->never())
-            ->method('getSession');
-        $this->accountAuthenticatorService
-            ->expects($this->never())
-            ->method('getPanelDashboardUrl');
-
-        $redirectResponse = $this->accountAuthenticator->onAuthenticationSuccess($this->request, $this->token, 'firewallName');
-
-        $this->assertSame('/login', $redirectResponse->getTargetUrl());
-    }
-
     public function testRedirectToTargetPathWhenIsTargetPathFoundOnSuccess(): void
     {
-        $this->accountAuthenticatorService
-            ->expects($this->once())
-            ->method('isVerified')
-            ->with($this->request)
-            ->willReturn(true);
         $this->accountAuthenticatorService
             ->expects($this->never())
             ->method('getLoginUrl')
@@ -195,11 +167,6 @@ class AccountAuthenticatorTest extends TestCase
 
     public function testRedirectToPanelDashboardWhenTargetPathNotFound(): void
     {
-        $this->accountAuthenticatorService
-            ->expects($this->once())
-            ->method('isVerified')
-            ->with($this->request)
-            ->willReturn(true);
         $this->accountAuthenticatorService
             ->expects($this->never())
             ->method('getLoginUrl')

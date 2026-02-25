@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Account\Ui\Authentication\Login;
+namespace App\Tests\Unit\Identity\Ui\Authentication\Login;
 
-use App\Account\Domain\User;
-use App\Account\Ui\Authentication\Login\LoginController;
-use App\Account\Ui\Authentication\Login\LoginFormType;
+use App\Identity\Domain\User;
+use App\Identity\Ui\Authentication\Login\LoginController;
+use App\Identity\Ui\Authentication\Login\LoginFormType;
 use App\Kernel\Flasher\FlasherInterface;
 use App\Tests\Unit\ConsecutiveParamsTrait;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -63,75 +63,6 @@ class LoginControllerTest extends TestCase
         $this->loginController->setContainer($this->container);
     }
 
-    public function testShowMustVerifyEmailToLogin(): void
-    {
-        $user = new User();
-
-        $this->container
-            ->expects($this->exactly(2))
-            ->method('has')
-            ->with(...$this->consecutiveParams(['security.token_storage'], ['twig']))
-            ->willReturn(true);
-        $this->container
-            ->expects($this->exactly(4))
-            ->method('get')
-            ->with(...$this->consecutiveParams(
-                ['security.token_storage'],
-                ['router'],
-                ['form.factory'],
-                ['twig'],
-            ))
-            ->willReturnOnConsecutiveCalls($this->tokenStorage, $this->router, $this->formFactory, $this->twig);
-        $this->tokenStorage
-            ->expects($this->once())
-            ->method('getToken')
-            ->willReturn($this->token);
-        $this->token
-            ->expects($this->once())
-            ->method('getUser')
-            ->willReturn($user);
-        $this->authenticationUtils
-            ->expects($this->once())
-            ->method('getLastAuthenticationError')
-            ->willReturn(null);
-        $this->router
-            ->expects($this->once())
-            ->method('generate')
-            ->willReturn('/register/resend-confirmation-email');
-        $this->flasher
-            ->expects($this->once())
-            ->method('error')
-            ->with('dashboard.authentication.login.verifyEmail', null, [], ['%resend_url%' => '/register/resend-confirmation-email']);
-        $this->authenticationUtils
-            ->expects($this->once())
-            ->method('getLastUsername')
-            ->willReturn('username');
-        $this->formFactory
-            ->expects($this->once())
-            ->method('create')
-            ->with(LoginFormType::class)
-            ->willReturn($this->form);
-        $this->form
-            ->expects($this->once())
-            ->method('createView')
-            ->willReturn($formView = $this->createMock(FormView::class));
-        $this->twig
-            ->expects($this->once())
-            ->method('render')
-            ->with(
-                'dashboard/authentication/login/login.html.twig',
-                [
-                    'last_username' => 'username',
-                    'error'         => null,
-                    'loginForm'     => $formView,
-                ]
-            )->willReturn('content');
-
-        $response = $this->loginController->login($this->authenticationUtils, $this->flasher);
-
-        $this->assertSame('content', $response->getContent());
-    }
-
     public function testRedirectToDashboardRouteWhenUserIsAdminAndIsVerified(): void
     {
         $user = new User();
@@ -169,7 +100,7 @@ class LoginControllerTest extends TestCase
             ->with('dashboard')
             ->willReturn('/dashboard');
 
-        $redirectResponse = $this->loginController->login($this->authenticationUtils, $this->flasher);
+        $redirectResponse = $this->loginController->login($this->authenticationUtils, );
         $this->assertStringContainsString('Redirecting to <a href="/dashboard">/dashboard</a>.', $redirectResponse->getContent());
     }
 
@@ -213,9 +144,16 @@ class LoginControllerTest extends TestCase
         $this->formFactory->expects($this->once())->method('create')->with(LoginFormType::class)->willReturn($this->form);
         $this->form->expects($this->once())->method('createView')->willReturn($this->createMock(FormView::class));
 
-        $this->twig->expects($this->once())->method('render')->willReturn('content');
+        $this->twig
+            ->expects($this->once())->method('render')
+            ->with('dashboard/authentication/login/login.html.twig', [
+                'last_username' => 'username',
+                'error'         => new AuthenticationException(),
+                'loginForm'     => $this->createMock(FormView::class),
+            ])
+            ->willReturn('content');
 
-        $response = $this->loginController->login($this->authenticationUtils, $this->flasher);
+        $response = $this->loginController->login($this->authenticationUtils);
 
         $this->assertSame('content', $response->getContent());
     }
@@ -250,7 +188,7 @@ class LoginControllerTest extends TestCase
         $this->form->expects($this->once())->method('createView')->willReturn($this->createMock(FormView::class));
         $this->twig->expects($this->once())->method('render')->willReturn('content');
 
-        $response = $this->loginController->login($this->authenticationUtils, $this->flasher);
+        $response = $this->loginController->login($this->authenticationUtils);
 
         $this->assertSame('content', $response->getContent());
     }
@@ -288,7 +226,7 @@ class LoginControllerTest extends TestCase
         $this->form->method('createView')->willReturn($this->createMock(FormView::class));
         $this->twig->method('render')->willReturn('content');
 
-        $response = $this->loginController->login($this->authenticationUtils, $this->flasher);
+        $response = $this->loginController->login($this->authenticationUtils);
 
         $this->assertSame('content', $response->getContent());
     }

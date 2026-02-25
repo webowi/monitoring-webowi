@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Account\Ui;
+namespace App\Tests\Unit\Identity\Ui;
 
-use App\Account\Application\CreateUserService;
-use App\Account\Ui\CreateUserCommand;
+use App\Identity\Application\CreateAccountCommand as HandlerCommand;
+use App\Identity\Application\CreateAccountHandler;
+use App\Identity\Ui\Command\CreateAccountCommand;
 use App\Kernel\CommandManager\CommandManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -13,20 +14,20 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class CreateUserCommandTest extends TestCase
 {
-    private MockObject&CreateUserService $createUserService;
+    private MockObject&CreateAccountHandler $createAccountHandler;
 
     private MockObject&CommandManagerInterface $commandManager;
 
-    private CreateUserCommand $command;
+    private CreateAccountCommand $command;
 
     private CommandTester $commandTester;
 
     protected function setUp(): void
     {
-        $this->createUserService = $this->createMock(CreateUserService::class);
+        $this->createAccountHandler = $this->createMock(CreateAccountHandler::class);
         $this->commandManager = $this->createMock(CommandManagerInterface::class);
 
-        $this->command = new CreateUserCommand($this->createUserService, $this->commandManager);
+        $this->command = new CreateAccountCommand($this->createAccountHandler, $this->commandManager);
         $this->commandTester = new CommandTester($this->command);
     }
 
@@ -39,13 +40,12 @@ class CreateUserCommandTest extends TestCase
             ->expects($this->once())
             ->method('error')
             ->with("Email and password are required.");
-        $this->createUserService
+        $this->createAccountHandler
             ->expects($this->never())
-            ->method('createUser');
+            ->method('create');
 
         $this->assertSame(1, $this->commandTester->execute([
             '--email'        => 'email@example.com',
-            '--force-verify' => true,
         ]));
     }
 
@@ -54,20 +54,23 @@ class CreateUserCommandTest extends TestCase
         $this->commandManager
             ->expects($this->once())
             ->method('initialize');
-        $this->createUserService
+        $this->createAccountHandler
             ->expects($this->once())
-            ->method('createUser')
-            ->with('email@example.com', 'pass', true, true)
+            ->method('create')
+            ->with($this->callback(
+                static fn (HandlerCommand $command) =>
+                'email@example.com' === $command->email
+                && 'pass' === $command->password
+            ))
             ->willThrowException(new \Exception('message'));
         $this->commandManager
             ->expects($this->once())
             ->method('error')
-            ->with("Creating new admin error: message");
+            ->with("Creating new account error: message");
 
         $this->assertSame(1, $this->commandTester->execute([
             '--email'        => 'email@example.com',
             '--password'     => 'pass',
-            '--force-verify' => true,
         ]));
     }
 
@@ -76,10 +79,14 @@ class CreateUserCommandTest extends TestCase
         $this->commandManager
             ->expects($this->once())
             ->method('initialize');
-        $this->createUserService
+        $this->createAccountHandler
             ->expects($this->once())
-            ->method('createUser')
-            ->with('email@example.com', 'pass', true, true);
+            ->method('create')
+            ->with($this->callback(
+                static fn (HandlerCommand $command) =>
+                'email@example.com' === $command->email
+                && 'pass' === $command->password
+            ));
         $this->commandManager
             ->expects($this->once())
             ->method('success')
@@ -95,7 +102,6 @@ class CreateUserCommandTest extends TestCase
         $this->assertSame(0, $this->commandTester->execute([
             '--email'        => 'email@example.com',
             '--password'     => 'pass',
-            '--force-verify' => true,
         ]));
     }
 }

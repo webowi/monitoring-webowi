@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Account\Domain;
+namespace App\Tests\Unit\Identity\Domain;
 
-use App\Account\Domain\PasswordToken;
-use App\Account\Domain\User;
+use App\Identity\Domain\PasswordToken;
+use App\Identity\Domain\User;
 use PHPUnit\Framework\TestCase;
 
 class PasswordTokenTest extends TestCase

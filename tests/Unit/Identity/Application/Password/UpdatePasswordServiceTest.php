@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Account\Application\Password;
+namespace App\Tests\Unit\Identity\Application\Password;
 
-use App\Account\Application\Password\UpdatePasswordService;
-use App\Account\Domain\User;
-use App\Account\Domain\UserRepositoryInterface;
+use App\Identity\Application\Password\UpdatePasswordService;
+use App\Identity\Domain\User;
+use App\Identity\Domain\UserRepositoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;

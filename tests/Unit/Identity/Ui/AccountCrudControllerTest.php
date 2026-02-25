@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Account\Ui;
+namespace App\Tests\Unit\Identity\Ui;
 
-use App\Account\Application\Password\DashboardPasswordService;
-use App\Account\Application\TwoFactorAuthenticationService;
-use App\Account\Domain\User;
-use App\Account\Ui\AccountCrudController;
+use App\Identity\Application\Password\DashboardPasswordService;
+use App\Identity\Application\TwoFactorAuthenticationService;
+use App\Identity\Domain\User;
+use App\Identity\Ui\Panel\AccountCrudController;
 use App\Kernel\Flasher\FlasherInterface;
 use DG\BypassFinals;
 use Doctrine\ORM\EntityManagerInterface;

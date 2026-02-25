@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Kernel;
 
-use App\Account\Domain\RoleEnum;
+use App\Identity\Domain\RoleEnum;
 use App\Kernel\Security\MultiplyRolesExpression;
 use Monolog\Test\TestCase;
 
