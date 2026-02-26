@@ -41,6 +41,7 @@ class TranslatorUXController extends AbstractController
         $translation = $this->cache->get($cacheKey, function (ItemInterface $item) use ($key) {
             $item->expiresAfter($this->cacheTTl);
 
+            // @phpstan-ignore-next-line method.notFound
             return self::ALL === strtoupper($key) ? $this->translator->getCatalogue()->all()['messages'] ?? [] : $this->translator->trans($key);
         });
 

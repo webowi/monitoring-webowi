@@ -55,7 +55,7 @@ class GusCompanyDataController extends AbstractController
             ]);
         } catch (CompanyNotFoundException) {
             throw new NotFoundHttpException($this->translator->trans('exception.gusApiNotFound'));
-        } catch (\Throwable $exception) {
+        } catch (\Throwable) {
             throw new CannotGetGusDataException();
         }
     }

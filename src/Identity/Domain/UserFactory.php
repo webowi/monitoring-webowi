@@ -15,6 +15,8 @@ class UserFactory
     }
 
     /**
+     * @param non-empty-string $email
+     *
      * @throws UserExistException
      */
     public function create(

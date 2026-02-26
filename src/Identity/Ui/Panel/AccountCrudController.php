@@ -47,7 +47,6 @@ class AccountCrudController extends AbstractBaseCrudController
 
     public function configureActions(Actions $actions): Actions
     {
-        /** @phpstan-ignore-next-line  */
         $fa2Action = true === $this->getUser()?->isTotpAuthenticationEnabled() ? $this->createDisable2FaAction() : $this->createEnable2FaAction();
 
         return parent::configureActions($actions)
@@ -69,7 +68,7 @@ class AccountCrudController extends AbstractBaseCrudController
         yield VichImageField::new('avatarFile', 'dashboard.account.avatar.title')
             ->setDownloadUri('public/uploads/images/avatars')
             ->setImageUri(null)
-            ->setUploadedFileNamePattern(sprintf('%s-[slug]-[timestamp].[extension]', $user?->getUuid()->toBinary()));
+            ->setUploadedFileNamePattern(sprintf('%s-[slug]-[timestamp].[extension]', $user?->getUuid()?->toBinary()));
         yield FormField::addFieldset('dashboard.account.changePassword.title')
             ->setCssClass('col-md-6 form-panel')
             ->collapsible();
@@ -136,8 +135,11 @@ class AccountCrudController extends AbstractBaseCrudController
     public function enable2Fa(FlasherInterface $flasher): Response
     {
         try {
-
             $user = $this->getUser();
+
+            if (null === $user) {
+                throw new \LogicException('User not found.');
+            }
 
             $this->twoFactorAuthenticationService->enable2fa($user);
 
@@ -155,6 +157,11 @@ class AccountCrudController extends AbstractBaseCrudController
     {
         try {
             $user = $this->getUser();
+
+            if (null === $user) {
+                throw new \LogicException('User not found.');
+            }
+
             $this->twoFactorAuthenticationService->disable2fa($user);
 
             $flasher

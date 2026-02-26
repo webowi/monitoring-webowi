@@ -9,6 +9,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 /**
  * @method UserInterface|null getUser()
+ *
+ * @extends AbstractCrudController<object>
  */
 abstract class AbstractBaseCrudController extends AbstractCrudController
 {

@@ -29,11 +29,18 @@ class DashboardPasswordService
     ) {
     }
 
+    /**
+     * @param AdminContext<object> $adminContext
+     */
     public function provideChangePasswordEventListener(
         FormBuilderInterface $formBuilder,
         AdminContext $adminContext,
     ): FormBuilderInterface {
         $user = $adminContext->getEntity()->getInstance();
+
+        if (!$user instanceof User) {
+            throw new \LogicException('Provided entity is not an instance of User.');
+        }
 
         return $formBuilder->addEventListener(
             FormEvents::POST_SUBMIT,

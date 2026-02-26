@@ -63,6 +63,7 @@ class User implements
     #[ORM\JoinColumn(nullable: false)]
     private Company $company;
 
+    /** @var non-empty-string */
     #[ORM\Column(type: Types::STRING, length: 180, unique: true, nullable: false)]
     #[Assert\NotNull]
     #[Assert\Length(
@@ -145,11 +146,17 @@ class User implements
         $this->company = $company;
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function getEmail(): string
     {
         return $this->email;
     }
 
+    /**
+     * @param non-empty-string $email
+     */
     public function setEmail(string $email): self
     {
         $this->email = $email;
@@ -161,6 +168,8 @@ class User implements
      * A visual identifier that represents this user.
      *
      * @see UserInterface
+     *
+     * @return non-empty-string
      */
     public function getUserIdentifier(): string
     {

@@ -33,6 +33,11 @@ class AccountAuthenticatorService
     public function isVerified(Request $request): bool
     {
         $email = $request->request->all('login_form')['email'] ?? '';
+
+        if (!is_string($email)) {
+            return false;
+        }
+
         $user = $this->userRepository->getByEmail($email);
 
         return (bool) $user?->isVerified();

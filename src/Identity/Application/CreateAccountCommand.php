@@ -8,6 +8,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 final readonly class CreateAccountCommand
 {
+    /**
+     * @param non-empty-string $email
+     */
     public function __construct(
         #[Assert\NotBlank]
         #[Assert\Email]

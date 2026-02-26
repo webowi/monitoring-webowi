@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Identity\Ui;
+namespace App\Tests\Unit\Identity\Ui\Command;
 
 use App\Identity\Application\CreateAccountCommand as HandlerCommand;
 use App\Identity\Application\CreateAccountHandler;
@@ -12,7 +12,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class CreateUserCommandTest extends TestCase
+class CreateAccountCommandTest extends TestCase
 {
     private MockObject&CreateAccountHandler $createAccountHandler;
 
@@ -46,6 +46,25 @@ class CreateUserCommandTest extends TestCase
 
         $this->assertSame(1, $this->commandTester->execute([
             '--email'        => 'email@example.com',
+        ]));
+    }
+
+    public function testFailureWhenPasswordEmptyStringProvided(): void
+    {
+        $this->commandManager
+            ->expects($this->once())
+            ->method('initialize');
+        $this->commandManager
+            ->expects($this->once())
+            ->method('error')
+            ->with("Email and password cannot be empty.");
+        $this->createAccountHandler
+            ->expects($this->never())
+            ->method('create');
+
+        $this->assertSame(1, $this->commandTester->execute([
+            '--email'           => 'email@example.com',
+            '--password'        => '',
         ]));
     }
 

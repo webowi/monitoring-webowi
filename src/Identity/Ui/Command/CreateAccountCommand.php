@@ -55,8 +55,14 @@ class CreateAccountCommand extends Command
             $password = $input->getOption(self::PASSWORD);
 
 
-            if (null === $email || null === $password) {
+            if (!is_string($email) || !is_string($password)) {
                 $this->commandManager->error('Email and password are required.');
+
+                return Command::FAILURE;
+            }
+
+            if ('' === $email || '' === $password) {
+                $this->commandManager->error('Email and password cannot be empty.');
 
                 return Command::FAILURE;
             }

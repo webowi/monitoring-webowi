@@ -1,9 +1,11 @@
 parameters:
-    level: 9
+    level: 10
     paths:
         - src
+        - tests
     excludePaths:
         - tests/*
+        - config/*
     parallel:
         jobSize: 20
         minimumNumberOfJobsPerProcess: 2

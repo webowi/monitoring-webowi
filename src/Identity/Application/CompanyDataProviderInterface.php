@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Identity\Application;
 
-use GusApi\Exception\NotFoundException;
+use App\Identity\Application\Exception\CompanyNotFoundException;
 
 interface CompanyDataProviderInterface
 {
     /**
-     * @throws NotFoundException
+     * @throws CompanyNotFoundException
      */
     public function getByTin(string $tin): CompanyDataDto;
 }

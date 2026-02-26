@@ -44,11 +44,11 @@ class AccountAuthenticator extends AbstractLoginFormAuthenticator
         $email = $loginFormData['email'] ?? null;
         $password = $loginFormData['password'] ?? null;
 
-        if (null === $email) {
+        if (!is_string($email)) {
             throw new EmailRequiredException();
         }
 
-        if (null === $password) {
+        if (!is_string($password)) {
             throw new PasswordRequiredException();
         }
 

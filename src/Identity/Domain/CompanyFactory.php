@@ -9,7 +9,7 @@ class CompanyFactory
     public function create(
         string $companyEmail,
     ): Company {
-        return new Company()
+        return (new Company())
             ->setCompanyEmail($companyEmail);
     }
 }

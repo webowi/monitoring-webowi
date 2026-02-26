@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<ruleset name="Clean Code customized"
+         xmlns="http://pmd.sf.net/ruleset/1.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
+         xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd">
+    <description>
+        The Clean Code ruleset adjusted to our needs
+    </description>
+
+    <exclude-pattern>/scripts/*</exclude-pattern>
+
+    <rule ref="rulesets/cleancode.xml">
+        <exclude name="StaticAccess" />
+        <exclude name="ElseExpression" />
+        <!-- MissingImport: Customized below -->
+        <exclude name="MissingImport" />
+        <exclude name="BooleanArgumentFlag" />
+    </rule>
+    <rule ref="rulesets/cleancode.xml/MissingImport">
+        <properties>
+            <property name="ignore-global">
+                <!-- Global namespaces are nice -->
+                <value>true</value>
+            </property>
+        </properties>
+    </rule>
+    <rule ref="rulesets/unusedcode.xml">
+        <!-- Added because of up() and down() migration classes -->
+        <exclude name="UnusedFormalParameter" />
+    </rule>
+    <rule ref="rulesets/codesize.xml">
+        <!-- TooManyMethods: Customized below -->
+        <exclude name="TooManyMethods" />
+        <!-- TooManyPublicMethods: Customized below -->
+        <exclude name="TooManyPublicMethods" />
+        <!-- TooManyFields: to be refactored -->
+        <exclude name="TooManyFields" />
+        <!-- CyclomaticComplexity: to be refactored -->
+        <exclude name="CyclomaticComplexity" />
+    </rule>
+    <rule ref="rulesets/codesize.xml/TooManyPublicMethods">
+        <properties>
+            <property name="ignorepattern">
+                <!-- Added 'should' for unit tests, also some Symfony methods -->
+                <value>
+                    (^(set|get|add|is|remove|should))i
+                </value>
+            </property>
+        </properties>
+    </rule>
+    <rule ref="rulesets/codesize.xml/TooManyMethods">
+        <properties>
+            <property name="ignorepattern">
+                <!-- Added 'should' for unit tests, also some Symfony methods -->
+                <value>
+                    (^(set|get|add|is|remove|should))i
+                </value>
+            </property>
+        </properties>
+    </rule>
+</ruleset>

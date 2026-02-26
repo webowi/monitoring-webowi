@@ -39,16 +39,25 @@ final readonly class DashboardFlasherListener implements EventSubscriberInterfac
         ];
     }
 
+    /**
+     * @param AfterEntityPersistedEvent<object> $event
+     */
     public function flashMessageAfterPersist(AfterEntityPersistedEvent $event): void
     {
         $this->generateFlashMessage($event->getEntityInstance(), self::CREATE_TYPE);
     }
 
+    /**
+     * @param AfterEntityUpdatedEvent<object> $event
+     */
     public function flashMessageAfterUpdate(AfterEntityUpdatedEvent $event): void
     {
         $this->generateFlashMessage($event->getEntityInstance());
     }
 
+    /**
+     * @param AfterEntityDeletedEvent<object> $event
+     */
     public function flashMessageAfterDelete(AfterEntityDeletedEvent $event): void
     {
         $this->generateFlashMessage($event->getEntityInstance(), self::DELETE_TYPE);

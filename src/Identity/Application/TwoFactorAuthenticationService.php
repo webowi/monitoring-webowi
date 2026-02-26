@@ -46,7 +46,7 @@ class TwoFactorAuthenticationService
     /**
      * @throws CannotChange2FaStateException
      */
-    public function disable2fa(User $user): void
+    public function disable2fa(UserInterface $user): void
     {
         try {
             if (true === $user->isTotpAuthenticationEnabled()) {

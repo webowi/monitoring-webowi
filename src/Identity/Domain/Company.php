@@ -7,6 +7,7 @@ namespace App\Identity\Domain;
 use App\Identity\Infrastructure\CompanyRepository;
 use App\Kernel\EventSubscriber\TimestampableResourceInterface;
 use App\Kernel\Traits\TimestampableTrait;
+use App\Projects\Domain\Project;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -39,6 +40,12 @@ class Company implements TimestampableResourceInterface
      */
     #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'company')]
     private Collection $users;
+
+    /**
+     * @var Collection<int, Project>
+     */
+    #[ORM\OneToMany(targetEntity: Project::class, mappedBy: 'company')]
+    private Collection $projects;
 
     #[ORM\Column(type: Types::STRING, length: 191, nullable: true)]
     #[Assert\NotNull]
@@ -105,12 +112,16 @@ class Company implements TimestampableResourceInterface
         return $this->name ?? '';
     }
 
-    public function getId(): ?int
+    public function getId(): int
     {
+        if (null === $this->id) {
+            throw new \DomainException('Company ID cannot be null');
+        }
+
         return $this->id;
     }
 
-    public function setId(?Uuid $id): self
+    public function setId(?int $id): self
     {
         $this->id = $id;
 
@@ -122,6 +133,9 @@ class Company implements TimestampableResourceInterface
         return $this->uuid;
     }
 
+    /**
+     * @return Collection<int, User>
+     */
     public function getUsers(): Collection
     {
         return $this->users;
@@ -132,6 +146,24 @@ class Company implements TimestampableResourceInterface
         if (!$this->users->contains($user)) {
             $this->users[] = $user;
             $user->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Project>
+     */
+    public function getProjects(): Collection
+    {
+        return $this->projects;
+    }
+
+    public function addProject(Project $project): self
+    {
+        if (!$this->projects->contains($project)) {
+            $this->projects[] = $project;
+            $project->setCompany($this);
         }
 
         return $this;
