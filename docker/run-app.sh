@@ -27,6 +27,7 @@ BASE_DIRECTORY=$(pwd)
 PUBLIC_DIRECTORY="$BASE_DIRECTORY/public"
 
 mkdir -p "$PUBLIC_DIRECTORY/uploads/images/avatars" -v
+mkdir -p "$PUBLIC_DIRECTORY/uploads/images/logos" -v
 chmod -R +777 public/uploads/images/
 
 echo "Building and starting containers..."

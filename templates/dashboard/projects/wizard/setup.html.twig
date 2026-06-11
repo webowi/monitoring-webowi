@@ -1,0 +1,226 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content_title %}
+    {{ project.name }}
+{% endblock %}
+
+{% block main %}
+    <div class="container-fluid px-0">
+        {% set warnings = app.flashes('warning') %}
+        {% set tokens = [] %}
+        {% for w in warnings %}
+            {% if w starts with 'TOKEN::' %}
+                {% set tokens = tokens|merge([w|replace({'TOKEN::':''})]) %}
+            {% endif %}
+        {% endfor %}
+
+        {% if tokens is not empty %}
+            <div class="alert alert-warning mb-4">
+                <div class="fw-bold mb-1">Nowy token został wygenerowany</div>
+                <div class="small opacity-75 mb-3">
+                    Skopiuj go teraz i wklej do konfiguracji projektu. Później nie będzie już widoczny.
+                </div>
+
+                {% for token in tokens %}
+                    <div class="d-flex gap-2 flex-wrap align-items-center">
+                        <code class="d-block px-3 py-2 rounded border bg-body-tertiary" id="tokenValue" style="word-break: break-all;">
+                            {{ token }}
+                        </code>
+                        <button class="btn btn-primary" type="button" data-copy="#tokenValue">Kopiuj</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="row g-4">
+            <div class="col-12 col-xl-8">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap mb-3">
+                            <div>
+                                <h2 class="h5 mb-1">Instrukcja integracji</h2>
+                                <div class="text-muted small">
+                                    Platforma: <strong>{{ project.platform.value }}</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if project.platform.value == 'symfony' %}
+                            <div class="mb-4">
+                                <div class="fw-semibold mb-2">1. Ustaw zmienne środowiskowe</div>
+                                <pre class="p-3 rounded border bg-body-tertiary mb-0"><code>MONITORING_INGEST_URL={{ ingestUrl }}
+MONITORING_TOKEN=&lt;WSTAW_TOKEN&gt;
+MONITORING_ENV=prod</code></pre>
+                            </div>
+
+                            <div class="mb-4">
+                                <div class="fw-semibold mb-2">2. Skonfiguruj Monolog</div>
+                                <pre class="p-3 rounded border bg-body-tertiary mb-0"><code># config/packages/monolog.yaml
+monolog:
+  handlers:
+    monitoring:
+      type: service
+      id: App\\Monitoring\\Monolog\\MonitoringHandler
+      level: error</code></pre>
+                            </div>
+
+                            <div>
+                                <div class="fw-semibold mb-2">3. Przetestuj integrację</div>
+                                <pre class="p-3 rounded border bg-body-tertiary mb-0"><code>$this->logger->error('Monitoring test error', ['service' => 'app']);</code></pre>
+                            </div>
+                        {% elseif project.platform.value == 'vite_react' %}
+                            <div class="mb-4">
+                                <div class="fw-semibold mb-2">1. Ustaw ENV</div>
+                                <pre class="p-3 rounded border bg-body-tertiary mb-0"><code>VITE_MONITORING_INGEST_URL={{ ingestUrl }}
+VITE_MONITORING_TOKEN=&lt;WSTAW_TOKEN&gt;
+VITE_MONITORING_ENV=prod</code></pre>
+                            </div>
+
+                            <div class="mb-4">
+                                <div class="fw-semibold mb-2">2. Dodaj klienta</div>
+                                <pre class="p-3 rounded border bg-body-tertiary mb-0"><code>// src/monitoring.ts
+export async function sendMonitoring(event, payload) {
+  const url = import.meta.env.VITE_MONITORING_INGEST_URL;
+  const token = import.meta.env.VITE_MONITORING_TOKEN;
+
+  await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + token,
+    },
+    body: JSON.stringify({
+      event,
+      payload,
+      env: import.meta.env.VITE_MONITORING_ENV ?? "prod",
+      ts: new Date().toISOString(),
+    }),
+  });
+}</code></pre>
+                            </div>
+
+                            <div>
+                                <div class="fw-semibold mb-2">3. Podepnij globalne błędy</div>
+                                <pre class="p-3 rounded border bg-body-tertiary mb-0"><code>window.addEventListener("error", (e) => {
+  sendMonitoring("frontend_error", {
+    message: e.message,
+    filename: e.filename,
+    lineno: e.lineno,
+    colno: e.colno,
+  });
+});</code></pre>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info mb-0">
+                                Brak instrukcji dla tej platformy.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-xl-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2 class="h6 mb-3">Projekt</h2>
+
+                        <dl class="row mb-0">
+                            <dt class="col-5 text-muted">Nazwa</dt>
+                            <dd class="col-7">{{ project.name }}</dd>
+
+                            <dt class="col-5 text-muted">Platforma</dt>
+                            <dd class="col-7">{{ project.platform.value }}</dd>
+
+                            <dt class="col-5 text-muted">Status</dt>
+                            <dd class="col-7">{{ project.status.value }}</dd>
+                        </dl>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <a class="btn btn-primary" href="{{ editProjectUrl }}">Edytuj projekt</a>
+                            <a class="btn btn-outline-secondary" href="{{ manageKeysUrl }}">Klucze API</a>
+                            <a class="btn btn-outline-secondary disabled" href="{{ logsUrl }}">Logi</a>
+                        </div>
+
+                        <div class="card border-danger-subtle mt-4">
+                            <div class="card-body">
+                                <h2 class="h6 text-danger mb-2">Danger zone</h2>
+                                <p class="text-muted small mb-3">
+                                    Usunięcie projektu jest nieodwracalne. Wszystkie powiązane klucze API i konfiguracja zostaną usunięte.
+                                </p>
+
+                                <button
+                                        type="button"
+                                        class="btn btn-outline-danger"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#deleteProjectModal"
+                                >
+                                    Usuń projekt
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="h6 mb-3">Co dalej?</h2>
+                        <ul class="mb-0 ps-3">
+                            <li>Skopiuj token do konfiguracji</li>
+                            <li>Uruchom testowy błąd</li>
+                            <li>Sprawdź czy log pojawił się w panelu</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteProjectModal" tabindex="-1" aria-labelledby="deleteProjectModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteProjectModalLabel">Usuń projekt</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zamknij"></button>
+                </div>
+
+                <div class="modal-body">
+                    <p class="mb-2">
+                        Czy na pewno chcesz usunąć projekt <strong>{{ project.name }}</strong>?
+                    </p>
+                    <p class="text-muted small mb-0">
+                        Ta operacja jest nieodwracalna.
+                    </p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light border" data-bs-dismiss="modal">
+                        Anuluj
+                    </button>
+
+                    <form method="post" action="{{ deleteProjectUrl }}" class="m-0">
+                        <input
+                                type="hidden"
+                                name="_token"
+                                value="{{ csrf_token('delete_project_' ~ project.id) }}"
+                        >
+                        <button type="submit" class="btn btn-danger">
+                            Usuń projekt
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('[data-copy]');
+            if (!btn) return;
+            const target = document.querySelector(btn.getAttribute('data-copy'));
+            if (!target) return;
+            navigator.clipboard.writeText(target.textContent.trim());
+            btn.textContent = 'Skopiowano';
+            setTimeout(() => btn.textContent = 'Kopiuj', 1200);
+        });
+    </script>
+{% endblock %}

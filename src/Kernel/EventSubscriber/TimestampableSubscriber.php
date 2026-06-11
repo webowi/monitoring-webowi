@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Kernel\EventSubscriber;
 
+use App\Kernel\Clock\ClockInterface;
+use App\Kernel\Security\CurrentUserFetcher;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Events;
@@ -17,8 +19,9 @@ use Symfony\Bundle\SecurityBundle\Security;
 final readonly class TimestampableSubscriber
 {
     public function __construct(
-        private Security $security,
+        private CurrentUserFetcher $currentUserFetcher,
         private LoggerInterface $logger,
+        private ClockInterface $clock,
     ) {
     }
 
@@ -41,19 +44,19 @@ final readonly class TimestampableSubscriber
         $entity->setUpdatedAt($dateTimeNow);
 
         try {
-            $user = $this->security->getUser();
+            $user = $this->currentUserFetcher->fetchUser();
 
-            if (null !== $user && null === $entity->getCreatedBy()) {
+            if (null === $entity->getCreatedBy()) {
                 $entity->setCreatedBy($user->getUserIdentifier());
             }
 
-            $entity->setUpdatedBy($user?->getUserIdentifier());
+            $entity->setUpdatedBy($user->getUserIdentifier());
         } catch (\Throwable $exception) {
             $this->logger->error(
                 'Setting user data for resource failed.',
                 [
                     'exception' => $exception,
-                    'class'     => TimestampableSubscriber::class,
+                    'class'     => __CLASS__,
                 ]
             );
         }
@@ -79,7 +82,7 @@ final readonly class TimestampableSubscriber
                 'Setting user data for resource failed.',
                 [
                     'exception' => $exception,
-                    'class'     => TimestampableSubscriber::class,
+                    'class'     => __CLASS__,
                 ]
             );
         }
@@ -105,7 +108,7 @@ final readonly class TimestampableSubscriber
                 'Setting user data for resource failed.',
                 [
                     'exception' => $exception,
-                    'class'     => TimestampableSubscriber::class,
+                    'class'     => __CLASS__,
                 ]
             );
         }
@@ -113,6 +116,6 @@ final readonly class TimestampableSubscriber
 
     private function getDateTimeNow(): ?\DateTimeImmutable
     {
-        return \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s')) ?: null;
+        return $this->clock->dateTime(\DateTimeImmutable::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s'))) ?: null;
     }
 }

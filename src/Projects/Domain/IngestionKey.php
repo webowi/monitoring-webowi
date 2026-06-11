@@ -33,9 +33,8 @@ class IngestionKey implements TimestampableResourceInterface, UuidResourceInterf
     #[ORM\Column(type: 'uuid', unique: true)]
     private ?Uuid $uuid = null;
 
-    #[ORM\ManyToOne(targetEntity: Project::class, inversedBy: 'ingestionKeys')]
-    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    private Project $project;
+    #[ORM\Column(type: 'uuid')]
+    private Uuid $projectId;
 
     #[ORM\Column(type: Types::STRING, length: 191, nullable: false)]
     #[Assert\NotBlank]
@@ -88,16 +87,6 @@ class IngestionKey implements TimestampableResourceInterface, UuidResourceInterf
         $this->uuid = $uuid;
 
         return $this;
-    }
-
-    public function getProject(): Project
-    {
-        return $this->project;
-    }
-
-    public function setProject(Project $project): void
-    {
-        $this->project = $project;
     }
 
     public function getName(): string

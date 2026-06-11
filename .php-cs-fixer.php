@@ -2,41 +2,47 @@
 
 declare(strict_types=1);
 
-$finder = (new PhpCsFixer\Finder())
-    ->in(__DIR__)
-    ->exclude(['var', 'docker', 'vendor', 'config', 'node_modules', 'public', 'storage'])
-;
-
 return (new PhpCsFixer\Config())
+    ->setParallelConfig(PhpCsFixer\Runner\Parallel\ParallelConfigFactory::detect(10, 300))
     ->setRiskyAllowed(true)
     ->setRules([
-        '@PSR12'                => true,
-        'strict_param'          => true,
-        'array_syntax'          => ['syntax' => 'short'],
-        'no_unused_imports'     => true,
-        'use_arrow_functions'   => true,
-        'no_useless_else'       => true,
-        'phpdoc_separation'     => true,
-        'method_argument_space' => [
-            'on_multiline'                     => 'ensure_fully_multiline',
-            'keep_multiple_spaces_after_comma' => false,
+        '@Symfony' => true,
+        '@PSR12' => true,
+        '@PSR12:risky' => true,
+        'concat_space' => ['spacing' => 'one'],
+        'declare_strict_types' => true,
+        'fully_qualified_strict_types' => true,
+        'global_namespace_import' => [
+            'import_classes' => false,
+            'import_constants' => false,
+            'import_functions' => false,
         ],
-        'ordered_imports'             => ['sort_algorithm' => 'alpha'],
-        'single_import_per_statement' => true,
-        'class_attributes_separation' => [
-            'elements' => ['const' => 'one', 'method' => 'one', 'property' => 'one'],
-        ],
-        'no_superfluous_phpdoc_tags' => ['remove_inheritdoc' => true],
-        'visibility_required'        => ['elements' => ['property', 'method', 'const']],
-        'phpdoc_order'               => true,
-        'yoda_style'                 => true,
-        'binary_operator_spaces'     => [
-            'default'   => 'single_space',
-            'operators' => ['=>' => 'align_single_space'],
-        ],
-        'trailing_comma_in_multiline' => ['elements' => ['arrays']],
-        'declare_strict_types'        => true,
-        'concat_space'                => ['spacing' => 'one'],
+        'modernize_strpos' => true,
+        'modernize_types_casting' => true,
+        'native_function_invocation' => true,
+        'native_constant_invocation' => true,
+        'no_unneeded_import_alias' => true,
+        'no_unset_cast' => true,
+        'no_unused_imports' => true,
+        'no_useless_else' => true,
+        'single_line_empty_body' => true,
+        'single_line_throw' => false,
+        'use_arrow_functions' => true,
     ])
-    ->setFinder($finder)
-;
+    ->setFinder(
+        (new PhpCsFixer\Finder())
+            ->in(__DIR__)
+            ->exclude([
+                'var',
+                'vendor',
+                '.gitlab',
+                'bin',
+                'config',
+                'docker',
+                'fixtures',
+                'public',
+                'terraform',
+                'translations',
+            ])
+            ->notName(['Kernel.php', 'bootstrap.php'])
+    );

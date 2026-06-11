@@ -36,7 +36,6 @@ RUN curl -sS https://get.symfony.com/cli/installer | bash
 
 # Copy application files
 COPY . /var/www/html
-COPY assets/dashboard-ui/authentication/assets/images/ /var/www/html/public/assets/dashboard-ui/authentication/assets/images/
 
 # Copy configuration files
 COPY .php-cs-fixer.php /var/www/html/.php-cs-fixer.php

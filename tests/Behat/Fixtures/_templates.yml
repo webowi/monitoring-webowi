@@ -1,0 +1,12 @@
+App\Identity\Domain\Organization:
+  organization (template):
+    uuid: <uuid()>
+    name: <firstName()>
+
+App\Account\Domain\User\User:
+  user (template):
+    uuid: <uuid()>
+    email: <email()>
+    password: <password()>
+    company: '@company'
+    updatedAt: <dateTimeBetween('-100 days','now')>

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Identity\Application;
 
 use App\Identity\Application\Exception\CannotChange2FaStateException;
-use App\Identity\Domain\User;
-use App\Identity\Domain\UserRepositoryInterface;
+use App\Identity\Domain\User\User;
+use App\Identity\Domain\User\UserRepositoryInterface;
 use App\Identity\Domain\ValueObject\TotpSecret;
 use App\Kernel\Security\UserInterface;
 use Endroid\QrCode\Builder\Builder;
@@ -27,7 +27,7 @@ class TwoFactorAuthenticationService
     /**
      * @throws CannotChange2FaStateException
      */
-    public function enable2fa(UserInterface $user): void
+    public function enable2fa(User $user): void
     {
         try {
             if (false === $user->isTotpAuthenticationEnabled()) {
@@ -71,9 +71,9 @@ class TwoFactorAuthenticationService
         $qrCodeContent = $this->totpAuthenticator->getQRContent($user);
 
         try {
-            return (new Builder(
+            return new Builder(
                 data: $qrCodeContent
-            ))->build();
+            )->build();
         } catch (ValidationException $e) {
             $this->logger->error('An error occurred while generating 2FA QR code.', ['exception' => $e]);
 

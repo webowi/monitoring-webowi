@@ -1,0 +1,107 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content_title %}Dodaj projekt{% endblock %}
+
+{% block main %}
+    <div class="projectCreate">
+        <div class="projectCreate__shell">
+            <div class="projectCreate__intro">
+                <div class="projectCreate__eyebrow">Nowe źródło logów</div>
+                <h1 class="projectCreate__title">Utwórz projekt i wybierz integrację</h1>
+                <p class="projectCreate__lead">
+                    Najpierw dodaj projekt, a w następnym kroku pokażemy Ci gotową instrukcję konfiguracji i wygenerujemy klucz API.
+                </p>
+            </div>
+
+            <div class="card projectCreate__card">
+                <div class="card-body p-4 p-lg-5">
+                    {{ form_start(form) }}
+
+                    <div class="projectCreate__section">
+                        <div class="projectCreate__sectionHeader">
+                            <h2 class="projectCreate__sectionTitle">Nazwa projektu</h2>
+                            <p class="projectCreate__sectionText">
+                                Nazwa widoczna w panelu, np. <code>sklep.pl</code>, <code>checkout-api</code> albo <code>app-frontend</code>.
+                            </p>
+                        </div>
+
+                        <div class="projectCreate__field">
+                            {{ form_label(form.name, null, { label_attr: { class: 'form-label fw-semibold' } }) }}
+                            {{ form_widget(form.name, {
+                                attr: {
+                                    class: 'form-control form-control-lg',
+                                    placeholder: 'np. sklep.pl'
+                                }
+                            }) }}
+                            {{ form_errors(form.name) }}
+                        </div>
+                    </div>
+
+                    <div class="projectCreate__divider"></div>
+
+                    <div class="projectCreate__section">
+                        <div class="projectCreate__sectionHeader">
+                            <h2 class="projectCreate__sectionTitle">Wybierz integrację</h2>
+                            <p class="projectCreate__sectionText">
+                                Wybierz technologię projektu. Na tej podstawie przygotujemy właściwą instrukcję wdrożenia.
+                            </p>
+                        </div>
+
+                        <div class="integrationGrid">
+                            {% for child in form.platform %}
+                                {% set v = child.vars.value %}
+                                <div class="integrationCard">
+                                    {{ form_widget(child, { attr: { class: 'integrationCard__input' } }) }}
+
+                                    <label class="integrationCard__label" for="{{ child.vars.id }}" data-platform="{{ v }}">
+                                        <div class="integrationCard__top">
+                                            <div class="integrationCard__icon"></div>
+                                            <div class="integrationCard__check" aria-hidden="true">
+                                                <i class="fa fa-check"></i>
+                                            </div>
+                                        </div>
+
+                                        <div class="integrationCard__content">
+                                            <div class="integrationCard__title">{{ child.vars.label }}</div>
+
+                                            {% if v == 'symfony' %}
+                                                <div class="integrationCard__desc">
+                                                    Integracja backendowa oparta o Monolog i HTTP ingest.
+                                                </div>
+                                                <div class="integrationCard__meta">PHP · Backend</div>
+                                            {% elseif v == 'vite_react' %}
+                                                <div class="integrationCard__desc">
+                                                    Integracja frontendu oparta o Vite, React i zgłaszanie błędów runtime.
+                                                </div>
+                                                <div class="integrationCard__meta">JS · Frontend</div>
+                                            {% else %}
+                                                <div class="integrationCard__desc">
+                                                    Integracja dla {{ v }}
+                                                </div>
+                                                <div class="integrationCard__meta">—</div>
+                                            {% endif %}
+                                        </div>
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        {{ form_errors(form.platform) }}
+                    </div>
+
+                    <div class="projectCreate__footer">
+                        <a class="btn btn-light border" href="{{ ea_url().setController('App\\Projects\\Ui\\Panel\\ProjectCrudController').setAction('index') }}">
+                            Anuluj
+                        </a>
+
+                        <button class="btn btn-primary btn-lg" type="submit">
+                            Utwórz projekt
+                        </button>
+                    </div>
+
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

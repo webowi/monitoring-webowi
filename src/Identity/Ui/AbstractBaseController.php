@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Identity\Ui;
 
-use App\Identity\Domain\User;
+use App\Identity\Domain\User\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**

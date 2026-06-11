@@ -1,0 +1,5 @@
+gesdinet_jwt_refresh_token:
+    refresh_token_class: App\Identity\Infrastructure\Persistence\Doctrine\Entity\RefreshToken
+    ttl: 2592000        # 30 dni
+    ttl_update: true    # przesuwa TTL przy każdym użyciu
+    token_parameter_name: refresh_token

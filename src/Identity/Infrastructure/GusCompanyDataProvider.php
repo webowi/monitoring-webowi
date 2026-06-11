@@ -26,7 +26,8 @@ final class GusCompanyDataProvider implements GusApiClientInterface
      */
     public function fetchByTin(string $tin): CompanyDataDto
     {
-        $searchReport = $this->gusApi->getByNip($this->gusApi->login(), $tin)[0];
+        $this->gusApi->login();
+        $searchReport = $this->gusApi->getByNip($tin)[0];
 
         return new CompanyDataDto(
             $tin,

@@ -2,6 +2,13 @@
 
 CONTAINER_NAME = monitoring-webowi-php
 
+.PHONY: init
+init: ## Shell into container
+	@read -p "This action will rebuild the project from scratch and create a new user. Continue? [y/N] " confirm && [ "$$confirm" = "y" ] || exit 1
+	bash docker/run-app.sh
+	docker exec -it -u root $(CONTAINER_NAME) bin/console app:create:account --email=admin@example.com --password=admin
+
+
 .PHONY: exec-root
 exec-root: ## Shell into container
 	docker exec -it -u root $(CONTAINER_NAME) /bin/bash

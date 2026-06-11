@@ -1,65 +1,172 @@
 {% extends '@EasyAdmin/page/content.html.twig' %}
+
 {% block content_title %}
     {{ page_title|default('Dashboard') }}
 {% endblock %}
 
 {% block main %}
-    <div class="mw">
-        <section class="grid grid--kpis">
-            {% for kpi in kpis %}
-                <article class="dashCard kpi">
-                    <div class="kpi__label">{{ kpi.label }}</div>
-                    <div class="kpi__value">{{ kpi.value }}</div>
-                    <div class="kpi__hint">{{ kpi.hint }}</div>
-                </article>
-            {% endfor %}
-        </section>
+    <div class="dashboardHome">
+        <div class="dashboardHome__shell">
 
-        <section class="grid grid--main">
-            <article class="dashCard">
-                <header class="card__header">
-                    <h2 class="card__title">Krytyczne błędy</h2>
-                    <p class="card__subtitle">Najważniejsze zdarzenia wymagające reakcji</p>
-                </header>
-
-                {% if critical is empty %}
-                    <div class="empty">
-                        Brak danych (na razie). Docelowo: ostatnie krytyczne logi, grupowanie, status „ack”.
+            {% if isDefaultOrganizationName %}
+                <div class="alert alert-info d-flex justify-content-between align-items-start gap-3 flex-wrap mb-4">
+                    <div>
+                        <div class="fw-bold">Uzupełnij nazwę organizacji</div>
+                        <div class="small opacity-75">
+                            Obecnie używana jest domyślna nazwa organizacji. Zmień ją, aby panel był czytelniejszy dla Ciebie i zespołu.
+                        </div>
                     </div>
-                {% else %}
-                    <div class="list">
-                        {% for item in critical %}
-                            <div class="listRow">
-                                <div class="badge badge--critical">CRITICAL</div>
-                                <div class="listRow__main">
-                                    <div class="listRow__title">{{ item.title }}</div>
-                                    <div class="listRow__meta">
-                                        {{ item.service }} · {{ item.env }} · {{ item.time|date('Y-m-d H:i') }}
+
+                    <a class="btn btn-sm btn-primary" href="{{ editOrganizationUrl }}">
+                        Zmień nazwę organizacji
+                    </a>
+                </div>
+            {% endif %}
+
+            <section class="dashboardHero card mb-4">
+                <div class="card-body p-4 p-lg-5">
+                    <div class="dashboardHero__content">
+                        <div>
+                            <div class="dashboardHero__eyebrow">Monitoring</div>
+                            <h1 class="dashboardHero__title">
+                                Witaj w panelu organizacji {{ organizationName }}
+                            </h1>
+                            <p class="dashboardHero__lead">
+                                Dodawaj projekty, konfiguruj integracje i zarządzaj logami z jednego miejsca.
+                            </p>
+                        </div>
+
+                        <div class="dashboardHero__actions">
+                            <a class="btn btn-primary btn-lg" href="{{ addProjectUrl }}">
+                                Dodaj projekt
+                            </a>
+                            <a class="btn btn-light border btn-lg" href="{{ projectsUrl }}">
+                                Zobacz projekty
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="dashboardStats mb-4">
+                <div class="dashboardStats__grid">
+                    {% for kpi in kpis %}
+                        <article class="dashboardStat card">
+                            <div class="card-body">
+                                <div class="dashboardStat__label">{{ kpi.label }}</div>
+                                <div class="dashboardStat__value">{{ kpi.value }}</div>
+                                <div class="dashboardStat__hint">{{ kpi.hint }}</div>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <section class="row g-4">
+                <div class="col-12 col-xl-8">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap mb-3">
+                                <div>
+                                    <h2 class="h5 mb-1">Projekty</h2>
+                                    <p class="text-muted small mb-0">
+                                        Ostatnio dodane źródła logów w tej organizacji.
+                                    </p>
+                                </div>
+
+                                <a class="btn btn-sm btn-outline-secondary" href="{{ projectsUrl }}">
+                                    Wszystkie projekty
+                                </a>
+                            </div>
+
+                            {% if projects is empty %}
+                                <div class="dashboardEmpty">
+                                    <div class="dashboardEmpty__title">Nie masz jeszcze żadnych projektów</div>
+                                    <div class="dashboardEmpty__text">
+                                        Dodaj pierwszy projekt, aby wygenerować token i zobaczyć instrukcję integracji.
+                                    </div>
+                                    <a class="btn btn-primary mt-3" href="{{ addProjectUrl }}">
+                                        Dodaj pierwszy projekt
+                                    </a>
+                                </div>
+                            {% else %}
+                                <div class="projectList">
+                                    {% for project in projects %}
+                                        <div class="projectList__item">
+                                            <div class="projectList__main">
+                                                <div class="projectList__title">{{ project.name }}</div>
+                                                <div class="projectList__meta">
+                                                    {{ project.platformLabel }} · {{ project.statusLabel }}
+                                                </div>
+                                            </div>
+
+                                            <div class="projectList__actions">
+                                                <a class="btn btn-sm btn-outline-secondary" href="{{ project.setupUrl }}">
+                                                    Setup
+                                                </a>
+                                                <a class="btn btn-sm btn-light border" href="{{ project.editUrl }}">
+                                                    Edytuj
+                                                </a>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-xl-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h2 class="h5 mb-3">Jak zacząć</h2>
+
+                            <div class="onboardingList">
+                                <div class="onboardingList__item">
+                                    <div class="onboardingList__index">1</div>
+                                    <div>
+                                        <div class="onboardingList__title">Dodaj projekt</div>
+                                        <div class="onboardingList__text">Utwórz nowe źródło logów dla aplikacji.</div>
                                     </div>
                                 </div>
-                                <a class="btn btn--ghost" href="{{ item.logUrl }}">Zobacz log</a>
+
+                                <div class="onboardingList__item">
+                                    <div class="onboardingList__index">2</div>
+                                    <div>
+                                        <div class="onboardingList__title">Skopiuj token</div>
+                                        <div class="onboardingList__text">Wygenerowany klucz API wklej do konfiguracji projektu.</div>
+                                    </div>
+                                </div>
+
+                                <div class="onboardingList__item">
+                                    <div class="onboardingList__index">3</div>
+                                    <div>
+                                        <div class="onboardingList__title">Podłącz integrację</div>
+                                        <div class="onboardingList__text">Skorzystaj z instrukcji setup dla Symfony lub Vite/React.</div>
+                                    </div>
+                                </div>
+
+                                <div class="onboardingList__item">
+                                    <div class="onboardingList__index">4</div>
+                                    <div>
+                                        <div class="onboardingList__title">Sprawdź pierwsze logi</div>
+                                        <div class="onboardingList__text">Wygeneruj testowy błąd i sprawdź czy log trafił do systemu.</div>
+                                    </div>
+                                </div>
                             </div>
-                        {% endfor %}
+                        </div>
                     </div>
-                {% endif %}
-            </article>
 
-            <article class="dashCard">
-                <header class="card__header">
-                    <h2 class="card__title">Szybkie akcje</h2>
-                    <p class="card__subtitle">Najczęstsze wejścia / skróty</p>
-                </header>
-
-                <div class="actions">
-                    <a class="btn btn--primary" href="#">Dodaj źródło logów</a>
-                    <a class="btn btn--ghost" href="#">Reguły alertów</a>
-                    <a class="btn btn--ghost" href="#">Integracje</a>
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="h6 mb-2">Co pojawi się później</h2>
+                            <p class="text-muted small mb-0">
+                                Alerty, integracje, podgląd logów, statystyki 24h i dashboardy błędów.
+                            </p>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="note">
-                    Tu później możesz dodać mini-dashboardy: wykresy, trendy, top error types, top services.
-                </div>
-            </article>
-        </section>
+            </section>
+        </div>
     </div>
 {% endblock %}

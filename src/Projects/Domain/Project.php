@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Projects\Domain;
 
-use App\Identity\Domain\Company;
+use App\Identity\Domain\Organization\Organization;
 use App\Kernel\EventSubscriber\TimestampableResourceInterface;
 use App\Kernel\EventSubscriber\UuidResourceInterface;
 use App\Kernel\Traits\TimestampableTrait;
 use App\Projects\Infrastructure\ProjectRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
@@ -19,6 +20,7 @@ use Symfony\Component\Uid\Uuid;
  * @infection-ignore-all
  */
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
+#[ORM\Table(name: 'project')]
 class Project implements TimestampableResourceInterface, UuidResourceInterface
 {
     use TimestampableTrait;
@@ -31,9 +33,8 @@ class Project implements TimestampableResourceInterface, UuidResourceInterface
     #[ORM\Column(type: 'uuid', unique: true)]
     private ?Uuid $uuid = null;
 
-    #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'projects')]
-    #[ORM\JoinColumn(nullable: false)]
-    private Company $company;
+    #[ORM\Column(type: 'uuid')]
+    private Uuid $organizationId;
 
     #[ORM\Column(type: Types::STRING, length: 500, unique: true, nullable: false)]
     private string $name;
@@ -46,6 +47,14 @@ class Project implements TimestampableResourceInterface, UuidResourceInterface
         options: ['default' => ProjectStatusEnum::ACTIVE],
     )]
     private ProjectStatusEnum $status = ProjectStatusEnum::ACTIVE;
+
+    #[ORM\Column(
+        type: 'string',
+        length: 50,
+        enumType: ProjectPlatformEnum::class,
+        options: ['default' => ProjectPlatformEnum::SYMFONY],
+    )]
+    private ProjectPlatformEnum $platform = ProjectPlatformEnum::SYMFONY;
 
     public function __toString(): string
     {
@@ -69,14 +78,32 @@ class Project implements TimestampableResourceInterface, UuidResourceInterface
         return $this;
     }
 
-    public function getCompany(): Company
+    public function getOrganization(): Organization
     {
-        return $this->company;
+        return $this->organization;
     }
 
-    public function setCompany(Company $company): void
+    public function setOrganization(Organization $organization): void
     {
-        $this->company = $company;
+        $this->organization = $organization;
+    }
+
+    /**
+     * @return Collection<int, IngestionKey>
+     */
+    public function getIngestionKeys(): Collection
+    {
+        return $this->ingestionKeys;
+    }
+
+    public function addIngestionKey(IngestionKey $ingestionKey): self
+    {
+        if (!$this->ingestionKeys->contains($ingestionKey)) {
+            $this->ingestionKeys[] = $ingestionKey;
+            $ingestionKey->setProject($this);
+        }
+
+        return $this;
     }
 
     public function getName(): string
@@ -101,5 +128,22 @@ class Project implements TimestampableResourceInterface, UuidResourceInterface
         $this->status = $status;
 
         return $this;
+    }
+
+    public function getPlatform(): ProjectPlatformEnum
+    {
+        return $this->platform;
+    }
+
+    public function setPlatform(ProjectPlatformEnum $platform): self
+    {
+        $this->platform = $platform;
+
+        return $this;
+    }
+
+    public function belongsToOrganization(Uuid $organizationId): bool
+    {
+        return $this->organization->getUuid()?->equals($organizationId);
     }
 }

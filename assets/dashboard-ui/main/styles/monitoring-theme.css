@@ -19,6 +19,51 @@
     --radius:16px;
 }
 
+/* Scope tylko pod Twoje widoki */
+.monitoringView{
+    --radius: 16px;
+    --shadow: 0 20px 60px rgba(0,0,0,.12);
+
+    /* light defaults */
+    --text: rgba(0,0,0,.92);
+    --muted: rgba(0,0,0,.62);
+
+    --card: rgba(255,255,255,.92);
+    --card-border: rgba(0,0,0,.10);
+
+    --surface: rgba(0,0,0,.03);         /* tło wewnątrz cardów */
+    --surface-border: rgba(0,0,0,.08);
+
+    --primary:#8d1519;
+    --primary-hover:#a61a20;
+}
+
+/* jeśli EA ustawia theme na html */
+html[data-bs-theme="dark"] .monitoringView{
+    --shadow: 0 20px 60px rgba(0,0,0,.55);
+    --text: rgba(255,255,255,.92);
+    --muted: rgba(255,255,255,.68);
+
+    --card: rgba(18,22,32,.62);
+    --card-border: rgba(255,255,255,.10);
+
+    --surface: rgba(255,255,255,.05);
+    --surface-border: rgba(255,255,255,.10);
+}
+
+/* fallback jeśli nie masz data-bs-theme */
+@media (prefers-color-scheme: dark){
+    .monitoringView{
+        --shadow: 0 20px 60px rgba(0,0,0,.55);
+        --text: rgba(255,255,255,.92);
+        --muted: rgba(255,255,255,.68);
+        --card: rgba(18,22,32,.62);
+        --card-border: rgba(255,255,255,.10);
+        --surface: rgba(255,255,255,.05);
+        --surface-border: rgba(255,255,255,.10);
+    }
+}
+
 /* =========================
    DASHBOARD HOME (Twoje kafelki)
    ========================= */
@@ -32,21 +77,24 @@
     .grid--main{ grid-template-columns: 1fr; }
 }
 
-/* Twoje karty – specjalna klasa, bez konfliktu z EA */
+@media (max-width: 560px){
+    .grid--kpis{ grid-template-columns: 1fr; }
+    .dashCard{ padding: 14px; }
+    .kpi__value{ font-size: 22px; }
+}
+
 .dashCard{
     border-radius: var(--radius);
     background: var(--card);
     border: 1px solid var(--card-border);
     box-shadow: var(--shadow);
     padding: 18px;
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
 }
 
 /* Nagłówki kart */
 .card__header{ display:grid; gap:6px; margin-bottom:12px; }
-.card__title{ margin:0; font-size:16px; letter-spacing:-0.01em; }
-.card__subtitle{ margin:0; color: var(--muted); font-size:13px; }
+.card__title{ color: var(--text); }
+.card__subtitle, .empty, .note, .kpi__label, .kpi__hint, .listRow__meta{ color: var(--muted); }
 
 /* KPI */
 .kpi__label{ color: var(--muted); font-size:12px; }
@@ -61,30 +109,45 @@
     padding-top:10px;
 }
 
+code.mono{
+    background: var(--surface);
+    border: 1px solid var(--surface-border);
+    color: var(--text);
+}
+
+.mono{
+    display:block;
+    padding:10px 12px;
+    border-radius:12px;
+    overflow-x:auto;
+    max-width:100%;
+    font-size: 12.5px;
+    line-height: 1.35;
+}
+
 /* Lista zdarzeń */
 .list{ display:grid; gap:10px; }
 .listRow{
-    display:grid;
-    grid-template-columns:auto 1fr auto;
-    gap:12px;
-    align-items:center;
-    padding:12px;
-    border-radius:14px;
-    background: rgba(255,255,255,.05);
-    border: 1px solid rgba(255,255,255,.08);
+    background: var(--surface);
+    border: 1px solid var(--surface-border);
 }
 
 .listRow__title{ font-size:14px; font-weight:650; }
 .listRow__meta{ font-size:12px; color: var(--muted); margin-top:2px; }
 
+@media (max-width: 560px){
+    .listRow{
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    .listRow__main{ order: 1; }
+    .badge{ justify-self: start; order: 0; }
+    .listRow a.btn{ justify-self: start; order: 2; width: 100%; }
+}
+
 .badge{
-    font-size:11px;
-    font-weight:700;
-    letter-spacing:.06em;
-    padding:6px 10px;
-    border-radius:999px;
-    border:1px solid rgba(255,255,255,.16);
-    color: rgba(255,255,255,.9);
+    border: 1px solid var(--surface-border);
+    color: var(--text);
 }
 .badge--critical{
     background: rgba(141,21,25,.25);
@@ -118,9 +181,9 @@
 .btn--primary:hover{ background: var(--primary-hover); }
 
 .btn--ghost{
-    background: rgba(255,255,255,.08);
-    color: rgba(255,255,255,.9);
-    border: 1px solid rgba(255,255,255,.14);
+    background: var(--surface);
+    border: 1px solid var(--surface-border);
+    color: var(--text);
 }
 .btn--ghost:hover{ background: rgba(255,255,255,.12); }
 
@@ -228,3 +291,592 @@
     border-color: rgba(255,193,7,.4);
     background: rgba(255,193,7,.12);
 }
+
+.monitoringView .form-check{
+    padding: 0;
+    margin: 0 0 10px 0;
+}
+
+.monitoringView .form-check-input{
+    position:absolute;
+    opacity:0;
+    pointer-events:none;
+}
+
+.monitoringView .form-check-label{
+    display:block;
+    padding:14px;
+    border-radius:14px;
+    border:1px solid var(--card-border);
+    background: var(--card);
+    cursor:pointer;
+}
+
+.monitoringView .form-check-input:checked + .form-check-label{
+    border-color: rgba(141,21,25,.55);
+    box-shadow: 0 0 0 .2rem rgba(141,21,25,.18);
+}
+
+.is-disabled{
+    opacity: .45;
+    filter: grayscale(0.2);
+    pointer-events: none;
+}
+
+.tiles .form-check-label{
+    /* tu możesz zrobić kafelki jak wcześniej */
+}
+
+/* ===== Platform tiles (EasyAdmin/Bootstrap radios) ===== */
+
+.tiles {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .75rem;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .tiles { grid-template-columns: 1fr; }
+}
+
+/* Bootstrap radios zwykle renderują .form-check */
+.tiles .form-check {
+    margin: 0;
+    padding: 0;
+}
+
+/* Ukrywamy natywny input, ale zostawiamy dostępność */
+.tiles .form-check-input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Label jako tile */
+.tiles .form-check-label {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+
+    padding: 1rem 1rem;
+    border-radius: 14px;
+
+    border: 1px solid var(--bs-border-color, rgba(0,0,0,.15));
+    background: var(--bs-body-bg, #fff);
+
+    cursor: pointer;
+    user-select: none;
+
+    transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+}
+
+/* Hover */
+.tiles .form-check-label:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 .5rem 1.25rem rgba(0,0,0,.08);
+}
+
+/* Selected */
+.tiles .form-check-input:checked + .form-check-label {
+    border-color: rgba(141, 21, 25, .55);
+    box-shadow: 0 0 0 .25rem rgba(141, 21, 25, .14);
+}
+
+/* Focus (keyboard) */
+.tiles .form-check-input:focus + .form-check-label,
+.tiles .form-check-input:focus-visible + .form-check-label {
+    box-shadow: 0 0 0 .25rem rgba(13,110,253,.18);
+}
+
+/* Disabled field (jeśli kiedykolwiek użyjesz) */
+.tiles .form-check-input:disabled + .form-check-label {
+    opacity: .6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Opcjonalnie: ikonka “S” dla Symfony (bez obrazków) */
+.tiles .form-check-label::before {
+    content: "⎈";
+    display: inline-flex;
+    width: 34px;
+    height: 34px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: var(--bs-tertiary-bg, rgba(0,0,0,.04));
+    border: 1px solid var(--bs-border-color, rgba(0,0,0,.12));
+    font-size: 16px;
+    flex: 0 0 auto;
+}
+
+/* ===== Platform Tiles (EasyAdmin/Bootstrap friendly) ===== */
+
+.platformTiles{
+    display:grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .75rem;
+}
+
+@media (max-width: 768px){
+    .platformTiles{ grid-template-columns: 1fr; }
+}
+
+.platformTile{ position: relative; }
+
+.platformTile__input{
+    position:absolute;
+    opacity:0;
+    pointer-events:none;
+}
+
+/* label = tile */
+.platformTile__label{
+    display:flex;
+    align-items:flex-start;
+    gap: .9rem;
+
+    padding: 1rem 1rem;
+    border-radius: 16px;
+
+    border: 1px solid var(--bs-border-color, rgba(0,0,0,.15));
+    background: var(--bs-body-bg, #fff);
+    cursor:pointer;
+
+    transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+}
+
+.platformTile__label:hover{
+    transform: translateY(-1px);
+    box-shadow: 0 .75rem 2rem rgba(0,0,0,.08);
+}
+
+.platformTile__icon{
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    background: var(--bs-tertiary-bg, rgba(0,0,0,.04));
+    border: 1px solid var(--bs-border-color, rgba(0,0,0,.12));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex: 0 0 auto;
+    font-weight: 800;
+}
+
+/* icon per platform */
+.platformTile__label[data-platform="symfony"] .platformTile__icon::before{ content:"S"; }
+.platformTile__label[data-platform="vite_react"] .platformTile__icon::before{ content:"⚡"; }
+
+.platformTile__body{ display:grid; gap:.15rem; min-width:0; }
+.platformTile__title{ font-weight: 750; line-height: 1.2; }
+.platformTile__desc{ font-size: .875rem; color: var(--bs-secondary-color, rgba(0,0,0,.65)); }
+.platformTile__meta{ font-size: .75rem; color: var(--bs-secondary-color, rgba(0,0,0,.55)); }
+
+.platformTile__check{
+    margin-left:auto;
+    width: 26px;
+    height: 26px;
+    border-radius: 999px;
+    border: 1px solid var(--bs-border-color, rgba(0,0,0,.12));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    opacity: .0;
+    transform: scale(.9);
+    transition: opacity .12s ease, transform .12s ease, border-color .12s ease;
+}
+
+/* selected */
+.platformTile__input:checked + .platformTile__label{
+    border-color: rgba(141, 21, 25, .55);
+    box-shadow: 0 0 0 .25rem rgba(141, 21, 25, .14);
+}
+.platformTile__input:checked + .platformTile__label .platformTile__check{
+    opacity: 1;
+    transform: scale(1);
+    border-color: rgba(141, 21, 25, .35);
+}
+
+/* keyboard focus */
+.platformTile__input:focus + .platformTile__label,
+.platformTile__input:focus-visible + .platformTile__label{
+    box-shadow: 0 0 0 .25rem rgba(13,110,253,.18);
+}
+
+
+.projectCreate {
+    padding: 8px 0 24px;
+}
+
+.projectCreate__shell {
+    max-width: 880px;
+}
+
+.projectCreate__intro {
+    margin-bottom: 1.25rem;
+}
+
+.projectCreate__eyebrow {
+    font-size: .8rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--bs-secondary-color);
+    margin-bottom: .5rem;
+}
+
+.projectCreate__title {
+    font-size: clamp(1.6rem, 2vw, 2.2rem);
+    line-height: 1.1;
+    margin: 0 0 .5rem;
+}
+
+.projectCreate__lead {
+    margin: 0;
+    color: var(--bs-secondary-color);
+    max-width: 62ch;
+}
+
+.projectCreate__card {
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.projectCreate__section + .projectCreate__section {
+    margin-top: 1.5rem;
+}
+
+.projectCreate__sectionHeader {
+    margin-bottom: 1rem;
+}
+
+.projectCreate__sectionTitle {
+    font-size: 1.05rem;
+    margin: 0 0 .35rem;
+}
+
+.projectCreate__sectionText {
+    margin: 0;
+    color: var(--bs-secondary-color);
+    font-size: .95rem;
+}
+
+.projectCreate__divider {
+    height: 1px;
+    background: var(--bs-border-color);
+    margin: 1.5rem 0;
+}
+
+.projectCreate__footer {
+    display: flex;
+    justify-content: space-between;
+    gap: .75rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+.integrationGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+@media (max-width: 768px) {
+    .integrationGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .projectCreate__footer {
+        flex-direction: column-reverse;
+    }
+
+    .projectCreate__footer .btn {
+        width: 100%;
+    }
+}
+
+.integrationCard {
+    position: relative;
+}
+
+.integrationCard__input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.integrationCard__label {
+    display: block;
+    height: 100%;
+    padding: 1rem;
+    border: 1px solid var(--bs-border-color);
+    border-radius: 18px;
+    background: var(--bs-body-bg);
+    cursor: pointer;
+    transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease;
+}
+
+.integrationCard__label:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 30px rgba(0,0,0,.06);
+}
+
+.integrationCard__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: .9rem;
+}
+
+.integrationCard__icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    border: 1px solid var(--bs-border-color);
+    background: var(--bs-tertiary-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+}
+
+.integrationCard__label[data-platform="symfony"] .integrationCard__icon::before {
+    content: "S";
+}
+
+.integrationCard__label[data-platform="vite_react"] .integrationCard__icon::before {
+    content: "⚡";
+    font-size: 1.1rem;
+}
+
+.integrationCard__check {
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    border: 1px solid var(--bs-border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(.9);
+    transition: all .15s ease;
+}
+
+.integrationCard__title {
+    font-weight: 700;
+    margin-bottom: .35rem;
+}
+
+.integrationCard__desc {
+    color: var(--bs-secondary-color);
+    font-size: .92rem;
+    line-height: 1.45;
+    margin-bottom: .5rem;
+}
+
+.integrationCard__meta {
+    font-size: .78rem;
+    color: var(--bs-secondary-color);
+}
+
+.integrationCard__input:checked + .integrationCard__label {
+    border-color: rgba(141, 21, 25, .55);
+    box-shadow: 0 0 0 .25rem rgba(141, 21, 25, .12);
+}
+
+.integrationCard__input:checked + .integrationCard__label .integrationCard__check {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.integrationCard__input:focus + .integrationCard__label {
+    box-shadow: 0 0 0 .25rem rgba(13, 110, 253, .18);
+}
+
+.dashboardHome__shell {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.dashboardHero {
+    border-radius: 22px;
+    overflow: hidden;
+}
+
+.dashboardHero__content {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.dashboardHero__eyebrow {
+    font-size: .8rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--bs-secondary-color);
+    margin-bottom: .5rem;
+}
+
+.dashboardHero__title {
+    font-size: clamp(1.8rem, 2.4vw, 2.6rem);
+    line-height: 1.05;
+    margin: 0 0 .5rem;
+}
+
+.dashboardHero__lead {
+    margin: 0;
+    color: var(--bs-secondary-color);
+    max-width: 60ch;
+}
+
+.dashboardHero__actions {
+    display: flex;
+    gap: .75rem;
+    flex-wrap: wrap;
+}
+
+.dashboardStats__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+@media (max-width: 1200px) {
+    .dashboardStats__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .dashboardStats__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboardHero__actions {
+        width: 100%;
+    }
+
+    .dashboardHero__actions .btn {
+        width: 100%;
+    }
+}
+
+.dashboardStat {
+    border-radius: 18px;
+}
+
+.dashboardStat__label {
+    font-size: .8rem;
+    color: var(--bs-secondary-color);
+    margin-bottom: .35rem;
+}
+
+.dashboardStat__value {
+    font-size: 2rem;
+    font-weight: 750;
+    line-height: 1.05;
+    margin-bottom: .35rem;
+}
+
+.dashboardStat__hint {
+    font-size: .85rem;
+    color: var(--bs-secondary-color);
+}
+
+.dashboardEmpty {
+    border: 1px dashed var(--bs-border-color);
+    border-radius: 16px;
+    padding: 1.25rem;
+    text-align: left;
+}
+
+.dashboardEmpty__title {
+    font-weight: 700;
+    margin-bottom: .35rem;
+}
+
+.dashboardEmpty__text {
+    color: var(--bs-secondary-color);
+    font-size: .95rem;
+}
+
+.projectList {
+    display: grid;
+    gap: .75rem;
+}
+
+.projectList__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--bs-border-color);
+    border-radius: 16px;
+    background: var(--bs-body-bg);
+    flex-wrap: wrap;
+}
+
+.projectList__title {
+    font-weight: 700;
+    margin-bottom: .2rem;
+}
+
+.projectList__meta {
+    font-size: .88rem;
+    color: var(--bs-secondary-color);
+}
+
+.projectList__actions {
+    display: flex;
+    gap: .5rem;
+    flex-wrap: wrap;
+}
+
+.onboardingList {
+    display: grid;
+    gap: 1rem;
+}
+
+.onboardingList__item {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: .85rem;
+    align-items: start;
+}
+
+.onboardingList__index {
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    border: 1px solid var(--bs-border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+.onboardingList__title {
+    font-weight: 700;
+    margin-bottom: .2rem;
+}
+
+.onboardingList__text {
+    color: var(--bs-secondary-color);
+    font-size: .92rem;
+}
+
+.organizationEdit__shell { max-width: 640px; }
+.organizationEdit__eyebrow { /* jak .dashboardHero__eyebrow */ }
+.organizationEdit__title { /* jak .dashboardHero__title */ }
+.organizationEdit__lead { color: var(--bs-secondary-color); }
+.organizationEdit__card { border-radius: 20px; overflow: hidden; }
+.organizationEdit__field { margin-bottom: 1.25rem; }
+.organizationEdit__divider { height: 1px; background: var(--bs-border-color); margin: 1.5rem 0; }
+.organizationEdit__footer { display: flex; justify-content: space-between; gap: .75rem; }
