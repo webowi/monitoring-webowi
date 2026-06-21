@@ -358,22 +358,22 @@ Two new migrations in this plan (`messenger_messages` in Phase 1, `log_entry` in
 
 #### Automated
 
-- [x] 1.1 Messenger config validates: `bin/console debug:config framework messenger`
-- [x] 1.2 Migration applies cleanly: `bin/console doctrine:migrations:migrate --no-interaction`
-- [x] 1.3 Static analysis passes: `./vendor/bin/phpstan analyse`
-- [x] 1.4 Existing unit tests still pass: `./vendor/bin/phpunit`
+- [x] 1.1 Messenger config validates: `bin/console debug:config framework messenger` — 8185209
+- [x] 1.2 Migration applies cleanly: `bin/console doctrine:migrations:migrate --no-interaction` — 8185209
+- [x] 1.3 Static analysis passes: `./vendor/bin/phpstan analyse` — 8185209
+- [x] 1.4 Existing unit tests still pass: `./vendor/bin/phpunit` — 8185209
 
 #### Manual
 
-- [ ] 1.5 Worker service starts and stays up, connected to the `async` transport
-- [ ] 1.6 A throwaway dispatched message is received and cleared from `messenger_messages`
+- [x] 1.5 Worker service starts and stays up, connected to the `async` transport — 8185209
+- [x] 1.6 A throwaway dispatched message is received and cleared from `messenger_messages` — 8185209
 
 ### Phase 2: Log domain & storage
 
 #### Automated
 
-- [ ] 2.1 Migration applies cleanly: `bin/console doctrine:migrations:migrate --no-interaction`
-- [ ] 2.2 Static analysis passes: `./vendor/bin/phpstan analyse`
+- [x] 2.1 Migration applies cleanly: `bin/console doctrine:migrations:migrate --no-interaction`
+- [x] 2.2 Static analysis passes: `./vendor/bin/phpstan analyse`
 
 #### Manual
 
