@@ -384,7 +384,7 @@ Two new migrations in this plan (`messenger_messages` in Phase 1, `log_entry` in
 #### Automated
 
 - [x] 3.1 Static analysis passes: `./vendor/bin/phpstan analyse` — 6e5cfe4
-- [x] 3.2 Handler normalization unit tests pass: `./vendor/bin/phpunit`
+- [x] 3.2 Handler normalization unit tests pass: `./vendor/bin/phpunit` — 095e138
 
 #### Manual
 
@@ -397,7 +397,7 @@ Two new migrations in this plan (`messenger_messages` in Phase 1, `log_entry` in
 #### Automated
 
 - [x] 4.1 Static analysis passes: `./vendor/bin/phpstan analyse` — 2b52f02
-- [x] 4.2 Ownership-check unit tests pass: `./vendor/bin/phpunit`
+- [x] 4.2 Ownership-check unit tests pass: `./vendor/bin/phpunit` — 095e138
 
 #### Manual
 
@@ -409,11 +409,11 @@ Two new migrations in this plan (`messenger_messages` in Phase 1, `log_entry` in
 
 #### Automated
 
-- [x] 5.1 Full Behat suite passes: `./vendor/bin/behat`
-- [x] 5.2 Full PHPUnit suite passes: `./vendor/bin/phpunit`
-- [x] 5.3 Static analysis passes: `./vendor/bin/phpstan analyse`
+- [x] 5.1 Full Behat suite passes: `./vendor/bin/behat` — 095e138
+- [x] 5.2 Full PHPUnit suite passes: `./vendor/bin/phpunit` — 095e138
+- [x] 5.3 Static analysis passes: `./vendor/bin/phpstan analyse` — 095e138
 
 #### Manual
 
-- [ ] 5.4 `bin/console hautelook:fixtures:load --no-interaction` succeeds against a fresh dev DB
-- [ ] 5.5 Full US-01 hand walkthrough succeeds end-to-end
+- [x] 5.4 `bin/console hautelook:fixtures:load --no-interaction` succeeds against a fresh dev DB — 095e138
+- [x] 5.5 Full US-01 hand walkthrough succeeds end-to-end — 095e138
