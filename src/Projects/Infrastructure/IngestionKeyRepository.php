@@ -27,4 +27,15 @@ class IngestionKeyRepository extends ServiceEntityRepository implements Ingestio
     {
         parent::__construct($registry, IngestionKey::class);
     }
+
+    public function findOneActiveByKeyHash(string $keyHash): ?IngestionKey
+    {
+        $ingestionKey = $this->findOneBy(['keyHash' => $keyHash]);
+
+        if (null === $ingestionKey || !$ingestionKey->isActive()) {
+            return null;
+        }
+
+        return $ingestionKey;
+    }
 }

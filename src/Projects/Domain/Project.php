@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace App\Projects\Domain;
 
-use App\Identity\Domain\Organization\Organization;
 use App\Kernel\EventSubscriber\TimestampableResourceInterface;
 use App\Kernel\EventSubscriber\UuidResourceInterface;
 use App\Kernel\Traits\TimestampableTrait;
 use App\Projects\Infrastructure\ProjectRepository;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
@@ -78,32 +76,9 @@ class Project implements TimestampableResourceInterface
         return $this;
     }
 
-    public function getOrganization(): Organization
+    public function getOrganizationId(): Uuid
     {
-        return $this->organization;
-    }
-
-    public function setOrganization(Organization $organization): void
-    {
-        $this->organization = $organization;
-    }
-
-    /**
-     * @return Collection<int, IngestionKey>
-     */
-    public function getIngestionKeys(): Collection
-    {
-        return $this->ingestionKeys;
-    }
-
-    public function addIngestionKey(IngestionKey $ingestionKey): self
-    {
-        if (!$this->ingestionKeys->contains($ingestionKey)) {
-            $this->ingestionKeys[] = $ingestionKey;
-            $ingestionKey->setProject($this);
-        }
-
-        return $this;
+        return $this->organizationId;
     }
 
     public function getName(): string
@@ -144,6 +119,6 @@ class Project implements TimestampableResourceInterface
 
     public function belongsToOrganization(Uuid $organizationId): bool
     {
-        return $this->organization->getUuid()?->equals($organizationId);
+        return $this->organizationId->equals($organizationId);
     }
 }

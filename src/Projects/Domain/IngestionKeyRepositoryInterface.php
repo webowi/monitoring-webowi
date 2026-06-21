@@ -6,4 +6,5 @@ namespace App\Projects\Domain;
 
 interface IngestionKeyRepositoryInterface
 {
+    public function findOneActiveByKeyHash(string $keyHash): ?IngestionKey;
 }

@@ -31,6 +31,20 @@ services:
     volumes:
       - ./:/var/www/html
 
+  monitoring-webowi-worker:
+    build:
+      context: .
+      dockerfile: ./docker/etc/php/main.Dockerfile
+    container_name: monitoring-webowi-worker
+    command: bin/console messenger:consume async -vv
+    networks:
+      - monitoring-webowi-network
+    depends_on:
+      - monitoring-webowi-mysql
+    restart: unless-stopped
+    volumes:
+      - ./:/var/www/html
+
   monitoring-webowi-mysql:
     container_name: monitoring-webowi-mysql
     image: mysql:8.0

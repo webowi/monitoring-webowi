@@ -22,3 +22,7 @@ services:
     GusApi\GusApi:
         arguments:
             $userKey: '%env(GUS_API_KEY)%'
+
+    App\Projects\Infrastructure\Security\IngestionKeyHasher:
+        arguments:
+            $appSecret: '%kernel.secret%'

@@ -89,6 +89,18 @@ class IngestionKey implements TimestampableResourceInterface
         return $this;
     }
 
+    public function getProjectId(): Uuid
+    {
+        return $this->projectId;
+    }
+
+    public function setProjectId(Uuid $projectId): self
+    {
+        $this->projectId = $projectId;
+
+        return $this;
+    }
+
     public function getName(): string
     {
         return $this->name;

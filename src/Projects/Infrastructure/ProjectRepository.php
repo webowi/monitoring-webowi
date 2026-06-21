@@ -33,8 +33,7 @@ class ProjectRepository extends ServiceEntityRepository implements ProjectReposi
     {
         return $this->createQueryBuilder('p')
             ->select('COUNT(p.id)')
-            ->innerJoin('p.organization', 'c')
-            ->andWhere('c.uuid = :organizationId')
+            ->andWhere('p.organizationId = :organizationId')
             ->setParameter('organizationId', $organizationId, 'uuid')
             ->getQuery()
             ->getSingleScalarResult();
@@ -46,8 +45,7 @@ class ProjectRepository extends ServiceEntityRepository implements ProjectReposi
     public function getByOrganizationId(Uuid $organizationId): iterable
     {
         return $this->createQueryBuilder('p')
-            ->innerJoin('p.organization', 'c')
-            ->andWhere('c.uuid = :organizationId')
+            ->andWhere('p.organizationId = :organizationId')
             ->setParameter('organizationId', $organizationId, 'uuid')
             ->orderBy('p.createdAt', 'DESC')
             ->getQuery()
@@ -57,7 +55,7 @@ class ProjectRepository extends ServiceEntityRepository implements ProjectReposi
     public function getById(Uuid $projectId): ?Project
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('c.uuid = :projectId')
+            ->andWhere('p.uuid = :projectId')
             ->setParameter('projectId', $projectId, 'uuid')
             ->getQuery()
             ->getOneOrNullResult();
