@@ -45,6 +45,8 @@ services:
       MYSQL_PASSWORD: ${DOCKER_MYSQL_PASSWORD}
     volumes:
       - mysql-data:/var/lib/mysql
+    ports:
+      - "${DOCKER_MYSQL_PORT:-34503}:3306"
 
   monitoring-webowi-mysql-test:
     container_name: monitoring-webowi-mysql-test

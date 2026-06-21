@@ -21,7 +21,7 @@ use Symfony\Component\Uid\Uuid;
  */
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
 #[ORM\Table(name: 'project')]
-class Project implements TimestampableResourceInterface, UuidResourceInterface
+class Project implements TimestampableResourceInterface
 {
     use TimestampableTrait;
 

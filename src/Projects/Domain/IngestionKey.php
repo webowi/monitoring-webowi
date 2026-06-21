@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: IngestionKeyRepository::class)]
 #[ORM\Index(name: 'idx_ingestion_key_hash', columns: ['key_hash'])]
 #[ORM\Index(name: 'idx_ingestion_key_status', columns: ['status'])]
-class IngestionKey implements TimestampableResourceInterface, UuidResourceInterface
+class IngestionKey implements TimestampableResourceInterface
 {
     use TimestampableTrait;
 

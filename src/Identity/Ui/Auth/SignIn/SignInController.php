@@ -11,6 +11,7 @@ use App\Identity\Application\Auth\SignIn\SignInHandler;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -23,7 +24,7 @@ final class SignInController
         private readonly LoggerInterface $logger,
     ) {}
 
-    public function __invoke(SignInInput $input): JsonResponse
+    public function __invoke(#[MapRequestPayload] SignInInput $input): JsonResponse
     {
         $this->validator->validate($input);
 
@@ -40,6 +41,7 @@ final class SignInController
                 status: Response::HTTP_BAD_REQUEST,
             );
         } catch (\Throwable $e) {
+            dd($e->getMessage());
             $this->logger->error(
                 sprintf('Error during sign-in process for %s', $input->email),
                 ['exception' => $e]

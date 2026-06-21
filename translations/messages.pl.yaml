@@ -1,6 +1,4 @@
-
-
-'Account not verified.' => 'Konto nie zweryfikowane.',
-'Invalid credentials.' => 'Nieprawidłowe dane logowania.',
-'Unexpected error occurred. Please try again later.' => 'Wystąpił nieoczekiwany błąd. Proszę spróbować ponownie później.',
-'User with this email already exists.' => 'Użytkownik z tym adresem e-mail już istnieje.',
+#'Account not verified.' => 'Konto nie zweryfikowane.',
+#'Invalid credentials.' => 'Nieprawidłowe dane logowania.',
+#'Unexpected error occurred. Please try again later.' => 'Wystąpił nieoczekiwany błąd. Proszę spróbować ponownie później.',
+#'User with this email already exists.' => 'Użytkownik z tym adresem e-mail już istnieje.',

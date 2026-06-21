@@ -1,8 +1,8 @@
-# Deploy Plan — monitoring-webowi → Hetzner VPS (CX33) + Coolify
+# Deploy Plan — monitoring-webowi → OVHcloud VPS + Coolify
 
 ## Context
 
-`context/foundation/infrastructure.md` already picked the platform: a Hetzner CX33 VPS managed by Coolify, chosen because the project's `tech-stack.md` declares `deployment_target: self-host`, the dev already works in Docker, and the PRD persona is "solo developer on a small managed server". This plan turns that recommendation into an executable, checkbox-tracked sequence: what the agent can do unattended, what requires a human at a keyboard (account creation, secret entry, DNS), the exact commands/webhooks for deploy, and how to verify the result. This file is the audit trail milestone-planning skills consume later (per this project's `context/changes/` convention).
+`context/foundation/infrastructure.md` already picked the platform: an OVHcloud VPS managed by Coolify, chosen because the project's `tech-stack.md` declares `deployment_target: self-host`, the dev already works in Docker, and the PRD persona is "solo developer on a small managed server". This plan turns that recommendation into an executable, checkbox-tracked sequence: what the agent can do unattended, what requires a human at a keyboard (account creation, secret entry, DNS), the exact commands/webhooks for deploy, and how to verify the result. This file is the audit trail milestone-planning skills consume later (per this project's `context/changes/` convention).
 
 **Why this isn't a trivial "git push and done":** the current repo is dev-shaped, not prod-shaped. Three gaps from `infrastructure.md`'s own risk register are *not yet closed* in code:
 - No `messenger.yaml` exists at all — Messenger is in `composer.json` but unconfigured (confirmed via `grep -rn messenger config/`). The PRD's async-ingestion requirement (FR-006, fail-open) and the freshness NFR depend on a worker that doesn't exist yet.
@@ -39,7 +39,7 @@ These are the concrete blockers `infrastructure.md`'s risk register and unknown-
 
 Per `infrastructure.md`'s "Approval" operational story: account creation, billing, and anything that could destroy data is a human-click action, not an agent action.
 
-- [ ] **Hetzner**: create account at Hetzner Cloud, create a project, add an SSH key, provision a CX33 in `nbg1` or `fsn1` (closest EU DC). Configure firewall: allow 22 (SSH), 80, 443 only.
+- [ ] **OVHcloud**: create account at OVHcloud, provision a VPS (sized comparably to a Hetzner CX33 — 4 vCPU / 8GB RAM tier, e.g. "VPS Comfort" or higher) in a EU datacenter (`GRA` Gravelines or `SBG` Strasbourg, closest to users), add an SSH key during provisioning. Configure firewall (OVHcloud Network Security Group or `ufw` on the VPS): allow 22 (SSH), 80, 443 only.
 - [ ] **DNS**: point the chosen production domain's A record at the new VPS IP (needed before Traefik can issue a Let's Encrypt cert).
 - [ ] **Coolify install**: SSH in, run `curl -fsSL https://cdn.coollabs.io/coolify/install.sh | bash`, create the admin account at `http://<vps-ip>:8000`.
 - [ ] **⚠️ Disable Coolify auto-updates** immediately after setup (Settings → Updates) — `infrastructure.md:84`/`108` flags self-updates as a mid-deploy disruption risk; apply updates manually after reading the changelog.
@@ -77,7 +77,7 @@ Per `infrastructure.md`'s "Approval" operational story: account creation, billin
 
 ## Phase 6 — Operational hardening (post-first-deploy)
 
-- [ ] **Nightly MySQL backup**: cron `mysqldump` inside the DB container piped to Hetzner Volume Snapshots or Backblaze B2 (closes the "no auto-backup, full data loss on corruption" risk register row).
+- [ ] **Nightly MySQL backup**: cron `mysqldump` inside the DB container piped to OVHcloud VPS Snapshots or Backblaze B2 (closes the "no auto-backup, full data loss on corruption" risk register row).
 - [ ] **External uptime monitor**: point UptimeRobot (free tier) at `https://<domain>/health` — this is what catches the pre-mortem's "worker dies, nobody notices for two weeks" scenario, since Coolify itself won't surface a silently-dead worker.
 - [ ] **Document the rollback path**: Coolify UI → Deployments → Redeploy previous build (~2 min). Note that DB migrations don't auto-rollback — confirm migrations stay backward-compatible or document manual down-migration steps.
 

@@ -55,7 +55,7 @@ class User implements
         public readonly Email $email,
 
         #[ORM\Column(type: Types::STRING, length: 191, nullable: true)]
-        private ?string $hashedPassword = null,
+        private ?string $password = null,
 
         /** @var RoleEnum[] */
         #[ORM\Column(enumType: RoleEnum::class)]
@@ -71,22 +71,22 @@ class User implements
     public static function register(
         Uuid $organizationId,
         Email $email,
-        ?string $hashedPassword = null,
+        ?string $password = null,
     ): self
     {
         return new self(
             uuid: Uuid::v4(),
             organizationId: $organizationId,
             email: $email,
-            hashedPassword: $hashedPassword,
+            password: $password,
             roles: [RoleEnum::USER],
             status: UserStatus::UNVERIFIED,
         );
     }
 
-    public function changePassword(string $hashedPassword): void
+    public function changePassword(string $password): void
     {
-        $this->password = $hashedPassword;
+        $this->password = $password;
     }
 
     public function enableTotp(TotpSecret $totpSecret): void
@@ -116,7 +116,7 @@ class User implements
 
     public function getPassword(): ?string
     {
-        return $this->password;
+        return $this->$password;
     }
 
     public function eraseCredentials(): void {}
@@ -151,6 +151,6 @@ class User implements
 
     public function isVerified(): bool
     {
-        return $this->status === UserStatus::UNVERIFIED;
+        return $this->status === UserStatus::ACTIVE;
     }
 }
