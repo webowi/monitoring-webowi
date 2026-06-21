@@ -69,6 +69,33 @@ class JSONRequestContext extends JSONMainContext
     }
 
     /**
+     * Sets an arbitrary request header applied to the next request.
+     *
+     * @Given I set the header :name to :value
+     */
+    public function setHeader(string $name, string $value): void
+    {
+        $this->headers->set($name, $value);
+    }
+
+    /**
+     * Signs in via the real auth endpoint and stores the access token as the Authorization header
+     * applied to subsequent requests.
+     *
+     * @Given I sign in as :email with password :password
+     */
+    public function signInAs(string $email, string $password): void
+    {
+        $body = new PyStringNode([(string) json_encode(['email' => $email, 'password' => $password])], 0);
+        $this->sendJsonRequestTo('POST', '/api/v1/auth/sign-in', $body);
+
+        /** @var array{access_token?: string} $payload */
+        $payload = json_decode($this->responseState->getResponse()?->getContent() ?: '{}', true) ?? [];
+
+        $this->headers->set('Authorization', 'Bearer ' . ($payload['access_token'] ?? ''));
+    }
+
+    /**
      * @param array<mixed, mixed> $param
      * @param array<mixed, mixed> $files
      */

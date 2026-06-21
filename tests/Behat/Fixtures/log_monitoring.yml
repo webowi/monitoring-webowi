@@ -1,0 +1,45 @@
+App\Identity\Domain\Organization\Organization:
+  log_org_owner:
+    uuid: <uuid('5cbef58b-8961-442e-bdf4-55dcba699374')>
+    name: 'Log Monitoring Owner Org'
+  log_org_other:
+    uuid: <uuid('d0880741-2719-43e8-b1f4-233cc76ef691')>
+    name: 'Log Monitoring Other Org'
+
+App\Identity\Domain\ValueObject\Email:
+  log_email_owner:
+    __construct: ['owner@monitoring-webowi.test']
+  log_email_other:
+    __construct: ['other@monitoring-webowi.test']
+
+App\Identity\Domain\User\User:
+  log_user_owner:
+    __factory:
+      register: ['@log_org_owner->uuid', '@log_email_owner', '\$2y\$13\$yyZLCV1Co0xmhm8RJKgQ1O3K9GsCycS64EMGbNXQdiqSPuVhJTb/6']
+    __calls:
+      - activate: []
+  log_user_other:
+    __factory:
+      register: ['@log_org_other->uuid', '@log_email_other', '\$2y\$13\$yyZLCV1Co0xmhm8RJKgQ1O3K9GsCycS64EMGbNXQdiqSPuVhJTb/6']
+    __calls:
+      - activate: []
+
+App\Projects\Domain\Project:
+  log_project_owner:
+    uuid: <uuid('135a465d-cf7a-4ca8-872a-c76272cbb16f')>
+    organizationId: '@log_org_owner->uuid'
+    name: 'Owner Monitored Project'
+
+App\Projects\Domain\IngestionKey:
+  log_key_active:
+    uuid: <uuid('352b9e34-7641-40a7-b7bb-a0f1dee3e9f9')>
+    projectId: '@log_project_owner->uuid'
+    name: 'Active Ingestion Key'
+    keyHash: '5ba4d1100b4ddbcfe3b7ad37af948c76b043e710c571bd81432a551151f2c99c'
+  log_key_revoked:
+    uuid: <uuid('9ed340ec-f47a-4f97-b6a5-860cb90e189d')>
+    projectId: '@log_project_owner->uuid'
+    name: 'Revoked Ingestion Key'
+    keyHash: '47782fcca6f185c64f7ebb80db7776480d96355c9cb63d640e94c4317011aa55'
+    __calls:
+      - revoke: []

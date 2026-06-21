@@ -384,7 +384,7 @@ Two new migrations in this plan (`messenger_messages` in Phase 1, `log_entry` in
 #### Automated
 
 - [x] 3.1 Static analysis passes: `./vendor/bin/phpstan analyse` — 6e5cfe4
-- [ ] 3.2 Handler normalization unit tests pass: `./vendor/bin/phpunit`
+- [x] 3.2 Handler normalization unit tests pass: `./vendor/bin/phpunit`
 
 #### Manual
 
@@ -396,22 +396,22 @@ Two new migrations in this plan (`messenger_messages` in Phase 1, `log_entry` in
 
 #### Automated
 
-- [x] 4.1 Static analysis passes: `./vendor/bin/phpstan analyse`
-- [ ] 4.2 Ownership-check unit tests pass: `./vendor/bin/phpunit`
+- [x] 4.1 Static analysis passes: `./vendor/bin/phpstan analyse` — 2b52f02
+- [x] 4.2 Ownership-check unit tests pass: `./vendor/bin/phpunit`
 
 #### Manual
 
-- [x] 4.3 Owner sees own project's logs reverse-chronologically
-- [x] 4.4 Different organization's user gets `404` for the same project UUID
-- [x] 4.5 `limit`/`offset` paginate correctly across multiple seeded rows
+- [x] 4.3 Owner sees own project's logs reverse-chronologically — 2b52f02
+- [x] 4.4 Different organization's user gets `404` for the same project UUID — 2b52f02
+- [x] 4.5 `limit`/`offset` paginate correctly across multiple seeded rows — 2b52f02
 
 ### Phase 5: Fixtures & test coverage
 
 #### Automated
 
-- [ ] 5.1 Full Behat suite passes: `./vendor/bin/behat`
-- [ ] 5.2 Full PHPUnit suite passes: `./vendor/bin/phpunit`
-- [ ] 5.3 Static analysis passes: `./vendor/bin/phpstan analyse`
+- [x] 5.1 Full Behat suite passes: `./vendor/bin/behat`
+- [x] 5.2 Full PHPUnit suite passes: `./vendor/bin/phpunit`
+- [x] 5.3 Static analysis passes: `./vendor/bin/phpstan analyse`
 
 #### Manual
 

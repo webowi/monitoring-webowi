@@ -89,6 +89,11 @@ class User implements
         $this->password = $password;
     }
 
+    public function activate(): void
+    {
+        $this->status = UserStatus::ACTIVE;
+    }
+
     public function enableTotp(TotpSecret $totpSecret): void
     {
         $this->totpSecret = $totpSecret;

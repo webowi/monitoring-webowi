@@ -38,3 +38,7 @@ services:
 
   App\Tests\Behat\Faker\Provider\PasswordHashProvider:
     tags: [ { name: nelmio_alice.faker.provider } ]
+
+  App\Projects\Infrastructure\Security\IngestionKeyHasher:
+    arguments:
+      $appSecret: '%kernel.secret%'
