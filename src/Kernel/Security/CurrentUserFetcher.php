@@ -5,6 +5,7 @@ namespace App\Kernel\Security;
 use App\Identity\Domain\Organization\Organization;
 use App\Identity\Domain\User\User;
 use App\Identity\Infrastructure\Db\OrganizationRepository;
+use App\Identity\Infrastructure\Security\SymfonyUserAdapter;
 use Symfony\Bundle\SecurityBundle\Security;
 
 class CurrentUserFetcher
@@ -19,11 +20,11 @@ class CurrentUserFetcher
     {
         $user = $this->security->getUser();
 
-        if (!$user instanceof User) {
+        if (!$user instanceof SymfonyUserAdapter) {
             throw new \LogicException('Current user is not an instance of User.');
         }
 
-        return $user;
+        return $user->getDomainUser();
     }
 
     public function fetchUserOrganization(): Organization

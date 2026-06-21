@@ -383,27 +383,27 @@ Two new migrations in this plan (`messenger_messages` in Phase 1, `log_entry` in
 
 #### Automated
 
-- [x] 3.1 Static analysis passes: `./vendor/bin/phpstan analyse`
+- [x] 3.1 Static analysis passes: `./vendor/bin/phpstan analyse` — 6e5cfe4
 - [ ] 3.2 Handler normalization unit tests pass: `./vendor/bin/phpunit`
 
 #### Manual
 
-- [ ] 3.3 Valid key → `202` immediately
-- [ ] 3.4 Invalid/missing key → `401`; malformed payload → `422`
-- [ ] 3.5 Row appears in `log_entry` within a few seconds with `httpStatusCode`/`exceptionClass` populated when present in `context`
+- [x] 3.3 Valid key → `202` immediately — 6e5cfe4
+- [x] 3.4 Invalid/missing key → `401`; malformed payload → `422` — 6e5cfe4
+- [x] 3.5 Row appears in `log_entry` within a few seconds with `httpStatusCode`/`exceptionClass` populated when present in `context` — 6e5cfe4
 
 ### Phase 4: List endpoint
 
 #### Automated
 
-- [ ] 4.1 Static analysis passes: `./vendor/bin/phpstan analyse`
+- [x] 4.1 Static analysis passes: `./vendor/bin/phpstan analyse`
 - [ ] 4.2 Ownership-check unit tests pass: `./vendor/bin/phpunit`
 
 #### Manual
 
-- [ ] 4.3 Owner sees own project's logs reverse-chronologically
-- [ ] 4.4 Different organization's user gets `404` for the same project UUID
-- [ ] 4.5 `limit`/`offset` paginate correctly across multiple seeded rows
+- [x] 4.3 Owner sees own project's logs reverse-chronologically
+- [x] 4.4 Different organization's user gets `404` for the same project UUID
+- [x] 4.5 `limit`/`offset` paginate correctly across multiple seeded rows
 
 ### Phase 5: Fixtures & test coverage
 

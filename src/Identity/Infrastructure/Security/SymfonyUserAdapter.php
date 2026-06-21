@@ -14,12 +14,12 @@ class SymfonyUserAdapter implements UserInterface, PasswordAuthenticatedUserInte
 
     public function getUserIdentifier(): string
     {
-        return $this->domainUser->getEmail()->value;
+        return $this->domainUser->email->email;
     }
 
     public function getRoles(): array
     {
-        return [$this->domainUser->getRole()->toSymfonyRole()];
+        return $this->domainUser->getRoles();
     }
 
     // Lexik wstrzykuje password do JWT payload przez ten interfejs
