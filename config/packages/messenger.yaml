@@ -11,7 +11,7 @@ framework:
 
         routing:
             # Route your messages to the transports
-            # 'App\Message\YourMessage': async
+            'App\Logging\Application\Ingest\IngestLogEntryMessage': async
 
 # when@test:
 #    framework:

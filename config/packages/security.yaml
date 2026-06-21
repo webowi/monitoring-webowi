@@ -19,6 +19,11 @@ security:
             logout:
                 path: app_logout
                 target: /
+        ingestion:
+            pattern: ^/api/v1/logs/ingest
+            stateless: true
+            custom_authenticators:
+                - App\Projects\Infrastructure\Security\IngestionKeyAuthenticator
         api:
             pattern: ^/api/v1
             stateless: true
@@ -26,4 +31,5 @@ security:
 
     access_control:
         - { path: ^/api/v1/auth, roles: PUBLIC_ACCESS }
+        - { path: ^/api/v1/logs/ingest, roles: ROLE_INGESTION }
         - { path: ^/api,         roles: IS_AUTHENTICATED_FULLY }

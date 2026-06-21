@@ -4,3 +4,7 @@ framework:
       policy: 'sliding_window'
       limit: '%env(int:GUS_API_LIMIT)%'
       interval: '1 hour'
+    log_ingestion:
+      policy: 'sliding_window'
+      limit: 300
+      interval: '1 minute'

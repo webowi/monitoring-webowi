@@ -372,18 +372,18 @@ Two new migrations in this plan (`messenger_messages` in Phase 1, `log_entry` in
 
 #### Automated
 
-- [x] 2.1 Migration applies cleanly: `bin/console doctrine:migrations:migrate --no-interaction`
-- [x] 2.2 Static analysis passes: `./vendor/bin/phpstan analyse`
+- [x] 2.1 Migration applies cleanly: `bin/console doctrine:migrations:migrate --no-interaction` — be90db5
+- [x] 2.2 Static analysis passes: `./vendor/bin/phpstan analyse` — be90db5
 
 #### Manual
 
-- [ ] 2.3 `bin/console doctrine:schema:validate` reports no mapping errors for `LogEntry`
+- [x] 2.3 `bin/console doctrine:schema:validate` reports no mapping errors for `LogEntry` — be90db5
 
 ### Phase 3: Ingestion endpoint
 
 #### Automated
 
-- [ ] 3.1 Static analysis passes: `./vendor/bin/phpstan analyse`
+- [x] 3.1 Static analysis passes: `./vendor/bin/phpstan analyse`
 - [ ] 3.2 Handler normalization unit tests pass: `./vendor/bin/phpunit`
 
 #### Manual
