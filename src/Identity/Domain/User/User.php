@@ -21,6 +21,7 @@ use Symfony\Component\Uid\Uuid;
 
 /**
  * @codeCoverageIgnore
+ *
  * @infection-ignore-all
  */
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -42,29 +43,25 @@ class User implements
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     #[ORM\Column(type: Types::INTEGER)]
+    /** @phpstan-ignore-next-line  property.unusedType */
     private int $id;
 
     private function __construct(
         #[ORM\Column(type: 'uuid', unique: true)]
         public readonly Uuid $uuid,
-
         #[ORM\Column(type: 'uuid')]
         public readonly Uuid $organizationId,
-
         #[ORM\Embedded(class: Email::class, columnPrefix: false)]
         public readonly Email $email,
-
         #[ORM\Column(type: Types::STRING, length: 191, nullable: true)]
         private ?string $password = null,
 
         /** @var RoleEnum[] */
         #[ORM\Column(enumType: RoleEnum::class)]
         private array $roles = [RoleEnum::USER],
-
         #[ORM\Embedded(class: TotpSecret::class, columnPrefix: false)]
         private ?TotpSecret $totpSecret = null,
-
-        #[ORM\Column(type: Types::STRING, length: 191, nullable: true, enumType: UserStatus::class, options: ['default' => UserStatus::UNVERIFIED],)]
+        #[ORM\Column(type: Types::STRING, length: 191, nullable: true, enumType: UserStatus::class, options: ['default' => UserStatus::UNVERIFIED], )]
         private ?UserStatus $status = UserStatus::UNVERIFIED,
     ) {}
 
@@ -72,8 +69,7 @@ class User implements
         Uuid $organizationId,
         Email $email,
         ?string $password = null,
-    ): self
-    {
+    ): self {
         return new self(
             uuid: Uuid::v4(),
             organizationId: $organizationId,
@@ -113,7 +109,7 @@ class User implements
 
     public function getRoles(): array
     {
-        $roles = array_map(fn(RoleEnum $role) => $role->value, $this->roles);
+        $roles = array_map(fn (RoleEnum $role) => $role->value, $this->roles);
         $roles[] = RoleEnum::USER->value;
 
         return array_unique($roles);
@@ -121,7 +117,7 @@ class User implements
 
     public function getPassword(): ?string
     {
-        return $this->$password;
+        return $this->password;
     }
 
     public function eraseCredentials(): void {}
@@ -138,7 +134,7 @@ class User implements
 
     public function getTotpAuthenticationConfiguration(): ?TotpConfigurationInterface
     {
-        if (null === $this->totpSecret) {
+        if (null === $this->totpSecret?->getSecret()) {
             return null;
         }
 
@@ -156,6 +152,6 @@ class User implements
 
     public function isVerified(): bool
     {
-        return $this->status === UserStatus::ACTIVE;
+        return UserStatus::ACTIVE === $this->status;
     }
 }

@@ -27,8 +27,7 @@ class TranslatorUXController extends AbstractController
         private readonly CacheInterface $cache,
         #[Autowire('%app.translation_cache_ttl%')]
         private readonly int $cacheTTl,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws InvalidArgumentException
@@ -36,7 +35,7 @@ class TranslatorUXController extends AbstractController
     #[Route('/trans/{key}', name: 'app_translation', methods: ['GET'])]
     public function trans(string $key): JsonResponse
     {
-        $cacheKey = self::ALL === $key ? 'translations_all' : sprintf('translations_%s', $key);
+        $cacheKey = self::ALL === $key ? 'translations_all' : \sprintf('translations_%s', $key);
 
         $translation = $this->cache->get($cacheKey, function (ItemInterface $item) use ($key) {
             $item->expiresAfter($this->cacheTTl);

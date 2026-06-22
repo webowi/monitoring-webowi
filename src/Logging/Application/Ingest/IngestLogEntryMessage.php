@@ -15,6 +15,5 @@ final class IngestLogEntryMessage
         public readonly string $severity,
         public readonly string $message,
         public readonly array $context,
-    ) {
-    }
+    ) {}
 }

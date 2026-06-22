@@ -25,8 +25,7 @@ final class IngestionKeyAuthenticator extends AbstractAuthenticator
         private readonly IngestionKeyRepositoryInterface $ingestionKeyRepository,
         private readonly ProjectRepositoryInterface $projectRepository,
         private readonly EntityManagerInterface $entityManager,
-    ) {
-    }
+    ) {}
 
     public function supports(Request $request): ?bool
     {

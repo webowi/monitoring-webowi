@@ -18,8 +18,7 @@ final class DbContext implements Context
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-    ) {
-    }
+    ) {}
 
     /**
      * @Then on the table from domain :domainName I can find a row:
@@ -27,7 +26,7 @@ final class DbContext implements Context
     public function onDomainTableICanFindARow(string $domainName, TableNode $table): void
     {
         $hash = $table->getRowsHash();
-        if (0 === (int)$this->executeQueryFromDomainTable($domainName, $hash)) {
+        if (0 === (int) $this->executeQueryFromDomainTable($domainName, $hash)) {
             throw new RowsNotFoundException($domainName, $hash);
         }
         unset($hash);
@@ -65,8 +64,8 @@ final class DbContext implements Context
             } elseif ('NOT NULL' === $value) {
                 $query->andWhere(\sprintf('e.%s IS NOT NULL', $column));
             } elseif (!\in_array($value, ['NULL', 'NOT NULL', 'TRUE', 'FALSE'], true)) {
-                $query->andWhere(\sprintf('e.%s = :%s', $column, \str_replace('.', '_', $column)));
-                $query->setParameter(\str_replace('.', '_', $column), $value);
+                $query->andWhere(\sprintf('e.%s = :%s', $column, str_replace('.', '_', $column)));
+                $query->setParameter(str_replace('.', '_', $column), $value);
             }
         }
 
@@ -75,7 +74,7 @@ final class DbContext implements Context
 
     private function prepareQueryFromDomainTable(string $domainName, string $alias = 'e'): QueryBuilder
     {
-        $domainPath = str_starts_with($domainName, 'App') ? $domainName : sprintf('App\%s\Domain\%s', $domainName, $domainName);
+        $domainPath = str_starts_with($domainName, 'App') ? $domainName : \sprintf('App\%s\Domain\%s', $domainName, $domainName);
         $query = $this->entityManager->createQueryBuilder();
         $query->from($domainPath, $alias);
 

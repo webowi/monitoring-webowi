@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Behat\Json;
 
-use Exception;
 use JsonSchema\SchemaStorage;
 use JsonSchema\Uri\UriResolver;
 use JsonSchema\Uri\UriRetriever;
@@ -20,17 +19,15 @@ final class Inspector
         $this->accessor = new PropertyAccessor(0, 1 | 2);
     }
 
-    /**
-     */
     public function evaluate(Json $json, string $expression)
     {
         if ('javascript' === $this->evaluationMode) {
-            $expression = \str_replace('->', '.', $expression);
+            $expression = str_replace('->', '.', $expression);
         }
 
         try {
             return $json->read($expression, $this->accessor);
-        } catch (Exception) {
+        } catch (\Exception) {
             throw new \Exception("Failed to evaluate expression '$expression'");
         }
     }

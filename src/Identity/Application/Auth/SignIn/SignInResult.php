@@ -1,15 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Identity\Application\Auth\SignIn;
 
 final readonly class SignInResult
 {
     public function __construct(
-        public string             $accessToken,
-        public string             $refreshToken,
+        public string $accessToken,
+        public string $refreshToken,
         public \DateTimeImmutable $expiresAt,
-    ) {
-    }
+    ) {}
 
     /**
      * @return string[]

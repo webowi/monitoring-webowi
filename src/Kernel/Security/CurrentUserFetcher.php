@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Kernel\Security;
 
 use App\Identity\Domain\Organization\Organization;
+use App\Identity\Domain\Organization\OrganizationRepositoryInterface;
 use App\Identity\Domain\User\User;
-use App\Identity\Infrastructure\Db\OrganizationRepository;
 use App\Identity\Infrastructure\Security\SymfonyUserAdapter;
 use Symfony\Bundle\SecurityBundle\Security;
 
@@ -12,9 +14,8 @@ class CurrentUserFetcher
 {
     public function __construct(
         private readonly Security $security,
-        private readonly OrganizationRepository $organizationRepository,
-    ) {
-    }
+        private readonly OrganizationRepositoryInterface $organizationRepository,
+    ) {}
 
     public function fetchUser(): User
     {

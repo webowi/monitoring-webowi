@@ -14,6 +14,5 @@ final readonly class CompanyDataDto
         public string $street,
         public string $zipCode,
         public string $city,
-    ) {
-    }
+    ) {}
 }

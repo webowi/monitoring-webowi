@@ -58,9 +58,6 @@ class Organization implements TimestampableResourceInterface
     #[ORM\Column(nullable: true)]
     private ?int $logoSize = null;
 
-    #[ORM\Column]
-    private bool $isVerified = false;
-
     public function __construct(
     ) {
         $this->uuid = Uuid::v4();
@@ -92,7 +89,7 @@ class Organization implements TimestampableResourceInterface
         return $this->uuid;
     }
 
-    public function setUuid(?Uuid $uuid): self
+    public function setUuid(Uuid $uuid): self
     {
         $this->uuid = $uuid;
 
@@ -104,7 +101,7 @@ class Organization implements TimestampableResourceInterface
         return $this->name;
     }
 
-    public function setName(?string $name): self
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -122,7 +119,6 @@ class Organization implements TimestampableResourceInterface
 
         return $this;
     }
-
 
     /**
      * @infection-ignore-all
@@ -163,7 +159,7 @@ class Organization implements TimestampableResourceInterface
             return $this->logo;
         }
 
-        return sprintf('/uploads/images/logos/%s', $this->logo);
+        return \sprintf('/uploads/images/logos/%s', $this->logo);
     }
 
     public function setLogoSize(?int $logoSize): void

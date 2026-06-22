@@ -12,7 +12,7 @@ class YamlParser implements YamlParserInterface
     public function getDataFromFile(string $filePath): mixed
     {
         if (false === file_exists($filePath)) {
-            throw new FileNotFoundException(sprintf('File path not found in %s path.', $filePath));
+            throw new FileNotFoundException(\sprintf('File path not found in %s path.', $filePath));
         }
         $fileContent = file_get_contents($filePath);
 

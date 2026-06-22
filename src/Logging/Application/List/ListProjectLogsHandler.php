@@ -16,8 +16,7 @@ final class ListProjectLogsHandler
         private readonly ProjectRepositoryInterface $projectRepository,
         private readonly LogEntryRepositoryInterface $logEntryRepository,
         private readonly CurrentUserFetcher $currentUserFetcher,
-    ) {
-    }
+    ) {}
 
     /**
      * @return iterable<LogEntry>

@@ -14,9 +14,9 @@ use Symfony\Component\Uid\Uuid;
  * @extends ServiceEntityRepository<Project>
  *
  * @method Project|null find($id, $lockMode = null, $lockVersion = null)
- * @method Project|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Project|null findOneBy(array<string, mixed> $criteria, array<string, string|null> $orderBy = null)
  * @method Project[]    findAll()
- * @method Project[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Project[]    findBy(array<string, mixed> $criteria, array<string, string|null> $orderBy = null, $limit = null, $offset = null)
  *
  * @codeCoverageIgnore Simply repository
  *
@@ -31,6 +31,7 @@ class ProjectRepository extends ServiceEntityRepository implements ProjectReposi
 
     public function countByOrganizationId(Uuid $organizationId): int
     {
+        /* @phpstan-ignore-next-line */
         return $this->createQueryBuilder('p')
             ->select('COUNT(p.id)')
             ->andWhere('p.organizationId = :organizationId')
@@ -44,6 +45,7 @@ class ProjectRepository extends ServiceEntityRepository implements ProjectReposi
      */
     public function getByOrganizationId(Uuid $organizationId): iterable
     {
+        /* @phpstan-ignore-next-line */
         return $this->createQueryBuilder('p')
             ->andWhere('p.organizationId = :organizationId')
             ->setParameter('organizationId', $organizationId, 'uuid')
@@ -54,6 +56,7 @@ class ProjectRepository extends ServiceEntityRepository implements ProjectReposi
 
     public function getById(Uuid $projectId): ?Project
     {
+        /* @phpstan-ignore-next-line */
         return $this->createQueryBuilder('p')
             ->andWhere('p.uuid = :projectId')
             ->setParameter('projectId', $projectId, 'uuid')

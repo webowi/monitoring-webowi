@@ -17,25 +17,25 @@ final readonly class MeController
 {
     public function __construct(
         private Security $security,
-//        private GetMeHandler $handler,
+        //        private GetMeHandler $handler,
     ) {}
 
     public function __invoke(): JsonResponse
     {
         $user = $this->security->getUser();
 
-        if ($user === null) {
+        if (null === $user) {
             return new JsonResponse(
                 ['error' => 'Unauthorized'],
                 Response::HTTP_UNAUTHORIZED,
             );
         }
 
-//        $result = $this->handler->handle(
-//            new GetMeQuery(
-//                accountId: AccountId::fromString($user->getUserIdentifier()),
-//            )
-//        );
+        //        $result = $this->handler->handle(
+        //            new GetMeQuery(
+        //                accountId: AccountId::fromString($user->getUserIdentifier()),
+        //            )
+        //        );
 
         $result = [
             'id' => $user->getUserIdentifier(),

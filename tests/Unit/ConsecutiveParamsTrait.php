@@ -14,9 +14,9 @@ trait ConsecutiveParamsTrait
     public function consecutiveParams(array ...$args): array
     {
         $callbacks = [];
-        $count = count(max($args));
+        $count = \count(max($args));
 
-        for ($index = 0; $index < $count; $index++) {
+        for ($index = 0; $index < $count; ++$index) {
             $returns = [];
 
             foreach ($args as $arg) {
@@ -24,27 +24,26 @@ trait ConsecutiveParamsTrait
                     throw new \InvalidArgumentException('Every array must be a list');
                 }
 
-                if (!array_key_exists($index, $arg)) {
-                    throw new \InvalidArgumentException(sprintf('Every array must contain %d parameters', $count));
+                if (!\array_key_exists($index, $arg)) {
+                    throw new \InvalidArgumentException(\sprintf('Every array must contain %d parameters', $count));
                 }
 
                 $returns[] = $arg[$index];
             }
 
             $callbacks[] = $this->callback(new class ($returns) {
-                public function __construct(protected array $returns)
-                {
-                }
+                public function __construct(protected array $returns) {}
 
                 public function __invoke(mixed $actual): bool
                 {
-                    if (0 === count($this->returns)) {
+                    if (0 === \count($this->returns)) {
                         return true;
                     }
 
                     $next = array_shift($this->returns);
                     if ($next instanceof Constraint) {
                         $next->evaluate($actual);
+
                         return true;
                     }
 

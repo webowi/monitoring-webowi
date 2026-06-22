@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Projects\Domain;
 
 use App\Kernel\EventSubscriber\TimestampableResourceInterface;
-use App\Kernel\EventSubscriber\UuidResourceInterface;
 use App\Kernel\Traits\TimestampableTrait;
 use App\Projects\Infrastructure\IngestionKeyRepository;
 use Doctrine\DBAL\Types\Types;
@@ -28,8 +27,7 @@ class IngestionKey implements TimestampableResourceInterface
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     #[ORM\Column(type: Types::INTEGER)]
-    private ?int $id = null;
-
+    private ?int $id = null; /** @phpstan-ignore property.unusedType */
     #[ORM\Column(type: 'uuid', unique: true)]
     private ?Uuid $uuid = null;
 

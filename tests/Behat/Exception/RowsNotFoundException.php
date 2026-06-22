@@ -8,6 +8,6 @@ class RowsNotFoundException extends \Exception
 {
     public function __construct(string $dbname, array $hash)
     {
-        parent::__construct(sprintf('Not found in %s any rows like %s', $dbname, print_r($hash, true)));
+        parent::__construct(\sprintf('Not found in %s any rows like %s', $dbname, print_r($hash, true)));
     }
 }

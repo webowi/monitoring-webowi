@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Kernel\TranslatableException;
 
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
@@ -12,8 +14,7 @@ final class TranslatableExceptionListener
 {
     public function __construct(
         private readonly TranslatorInterface $translator,
-    ) {
-    }
+    ) {}
 
     public function __invoke(ExceptionEvent $event): void
     {

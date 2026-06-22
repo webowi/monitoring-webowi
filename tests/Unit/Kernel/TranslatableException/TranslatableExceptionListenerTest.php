@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Unit\Kernel\TranslatableException;
 
+use App\Identity\Application\Auth\SignIn\InvalidCredentialsException;
 use App\Kernel\TranslatableException\TranslatableExceptionListener;
-use App\RealEstate\Domain\RealEstateNotFoundException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,18 +28,18 @@ class TranslatableExceptionListenerTest extends TestCase
 
     public function testTransTranslatableException(): void
     {
-        $kernel = $this->createMock(HttpKernelInterface::class);
-        $request = $this->createMock(Request::class);
+        $kernel = $this->createStub(HttpKernelInterface::class);
+        $request = $this->createStub(Request::class);
         $event = new ExceptionEvent(
             $kernel,
             $request,
             1,
-            new RealEstateNotFoundException()
+            new InvalidCredentialsException()
         );
         $this->translator
             ->expects($this->once())
             ->method('trans')
-            ->with('error.realEstate.notFound')
+            ->with('Invalid credentials.')
             ->willReturn('translated text');
 
         $this->exceptionListener->__invoke($event);

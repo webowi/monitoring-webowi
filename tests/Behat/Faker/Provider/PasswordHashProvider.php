@@ -10,9 +10,8 @@ use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
 class PasswordHashProvider
 {
     public function __construct(
-        private readonly PasswordHasherFactoryInterface $passwordHasherFactory
-    ) {
-    }
+        private readonly PasswordHasherFactoryInterface $passwordHasherFactory,
+    ) {}
 
     public function hashPassword(User $user, string $plainPassword): string
     {

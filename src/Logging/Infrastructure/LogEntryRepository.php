@@ -14,9 +14,9 @@ use Symfony\Component\Uid\Uuid;
  * @extends ServiceEntityRepository<LogEntry>
  *
  * @method LogEntry|null find($id, $lockMode = null, $lockVersion = null)
- * @method LogEntry|null findOneBy(array $criteria, array $orderBy = null)
+ * @method LogEntry|null findOneBy(array<string, mixed> $criteria, array<string, string|null> $orderBy = null)
  * @method LogEntry[]    findAll()
- * @method LogEntry[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method LogEntry[]    findBy(array<string, mixed> $criteria, array<string, string|null> $orderBy = null, $limit = null, $offset = null)
  *
  * @codeCoverageIgnore Simply repository
  *

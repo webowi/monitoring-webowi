@@ -20,8 +20,7 @@ class CompanyDataProvider implements CompanyDataProviderInterface
         private readonly LoggerInterface $logger,
         #[Autowire('%env(CACHE_EXPIRATION_TIME)%')]
         private readonly int $cacheExpirationTime,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws \Throwable
@@ -32,9 +31,10 @@ class CompanyDataProvider implements CompanyDataProviderInterface
     {
         try {
             return $this->cache->get(
-                sprintf('gus_company_data_%s', $tin),
+                \sprintf('gus_company_data_%s', $tin),
                 function (ItemInterface $item) use ($tin) {
                     $item->expiresAfter($this->cacheExpirationTime);
+
                     return $this->gusApiClient->fetchByTin($tin);
                 }
             );

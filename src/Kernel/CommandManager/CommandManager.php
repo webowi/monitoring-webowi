@@ -21,8 +21,7 @@ class CommandManager implements CommandManagerInterface
 
     public function __construct(
         private readonly LoggerInterface $logger,
-    ) {
-    }
+    ) {}
 
     public function initialize(InputInterface $input, OutputInterface $output): self
     {

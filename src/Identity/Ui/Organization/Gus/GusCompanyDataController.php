@@ -30,14 +30,13 @@ class GusCompanyDataController extends AbstractController
         #[Autowire(service: 'limiter.gus_api')]
         private readonly RateLimiterFactory $gusApiLimiter,
         private readonly TranslatorInterface $translator,
-    ) {
-    }
+    ) {}
 
     #[Route('/dashboard/billingType/fetch-gus-data', name: 'app_company_gus_data', methods: ['POST'])]
     public function __invoke(
         #[MapRequestPayload]
         GusDataInput $input,
-        Request                           $request,
+        Request $request,
     ): JsonResponse {
         $limiter = $this->gusApiLimiter->create($request->getClientIp() ?? 'unknown');
         if (false === $limiter->consume()->isAccepted()) {

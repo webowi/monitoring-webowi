@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Behat\Context;
 
 use App\Tests\Behat\Exception\ExpectedOutputContainException;
@@ -65,6 +67,6 @@ class CommandContext implements Context
 
     private function prepareAsFlag(string $value): string
     {
-        return str_starts_with($value, '--') ? $value : sprintf('--%s', $value);
+        return str_starts_with($value, '--') ? $value : \sprintf('--%s', $value);
     }
 }

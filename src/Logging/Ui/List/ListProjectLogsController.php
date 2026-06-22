@@ -17,8 +17,7 @@ final class ListProjectLogsController
 {
     public function __construct(
         private readonly ListProjectLogsHandler $handler,
-    ) {
-    }
+    ) {}
 
     public function __invoke(
         string $projectUuid,

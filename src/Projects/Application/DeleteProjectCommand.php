@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Projects\Application;
 
 use Symfony\Component\Uid\Uuid;
@@ -10,6 +12,5 @@ final readonly class DeleteProjectCommand
         public Uuid $projectId,
         public Uuid $organizationId,
         public ?Uuid $userId = null,
-    ) {
-    }
+    ) {}
 }

@@ -24,8 +24,7 @@ final class IngestLogController
         private readonly MessageBusInterface $messageBus,
         #[Autowire(service: 'limiter.log_ingestion')]
         private readonly RateLimiterFactory $logIngestionLimiter,
-    ) {
-    }
+    ) {}
 
     public function __invoke(#[MapRequestPayload] IngestLogInput $input): JsonResponse
     {

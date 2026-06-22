@@ -18,8 +18,7 @@ final readonly class LocaleListener implements EventSubscriberInterface
 {
     public function __construct(
         private TranslatorInterface $translator,
-    ) {
-    }
+    ) {}
 
     public static function getSubscribedEvents(): array
     {
@@ -34,7 +33,7 @@ final readonly class LocaleListener implements EventSubscriberInterface
         $locale = $request->headers->get('Content-Language');
 
         if ($locale) {
-            /** @phpstan-ignore-next-line */
+            /* @phpstan-ignore-next-line */
             $this->translator->setLocale($locale);
         }
     }

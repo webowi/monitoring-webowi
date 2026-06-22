@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Identity\Application\Auth\SignIn;
+declare(strict_types=1);
 
-use SensitiveParameter;
+namespace App\Identity\Application\Auth\SignIn;
 
 final readonly class SignInCommand
 {
     public function __construct(
         public string $email,
-        #[SensitiveParameter]
+        #[\SensitiveParameter]
         public string $password,
-    ) {
-    }
+    ) {}
 }

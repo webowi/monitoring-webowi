@@ -17,7 +17,7 @@ class JSONResponseContext extends JSONMainContext
     public function __construct(
         KernelInterface $kernel,
         ResponseState $responseState,
-        string $evaluationMode = 'javascript'
+        string $evaluationMode = 'javascript',
     ) {
         $this->inspector = new Inspector($evaluationMode);
         parent::__construct($kernel, $responseState);
@@ -183,7 +183,7 @@ class JSONResponseContext extends JSONMainContext
 
         $element = match ($index) {
             'first' => $parentActual[0],
-            'last'  => $parentActual[count($parentActual) - 1],
+            'last'  => $parentActual[\count($parentActual) - 1],
             default => $parentActual[$index],
         };
 

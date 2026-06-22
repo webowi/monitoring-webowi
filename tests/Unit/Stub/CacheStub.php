@@ -15,9 +15,8 @@ class CacheStub implements TagAwareCacheInterface
     private ItemInterface $item;
 
     public function __construct(
-        private readonly CacheInterface $cache
-    ) {
-    }
+        private readonly CacheInterface $cache,
+    ) {}
 
     public function get(string $key, callable $callback, ?float $beta = null, ?array &$metadata = null): mixed
     {

@@ -15,8 +15,7 @@ final class IngestLogEntryMessageHandler
 {
     public function __construct(
         private readonly LogEntryRepositoryInterface $logEntryRepository,
-    ) {
-    }
+    ) {}
 
     public function __invoke(IngestLogEntryMessage $message): void
     {

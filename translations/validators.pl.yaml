@@ -10,3 +10,7 @@ validation:
         invalid: "Token wygasł lub jest niepoprawny"
     tin:
         invalid: "Niepoprawny numer identyfikacji podatkowej (NIP)"
+    severity:
+        invalid: "Niepoprawny poziom istotności: {{ value }}"
+    httpStatusCode:
+        invalid: "Niepoprawny kod HTTP: {{ value }}"

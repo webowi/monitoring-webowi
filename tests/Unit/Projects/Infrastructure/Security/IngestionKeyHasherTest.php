@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Unit\Projects\Infrastructure\Security;
 
 use App\Projects\Infrastructure\Security\IngestionKeyHasher;

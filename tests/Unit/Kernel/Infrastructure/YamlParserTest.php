@@ -19,8 +19,8 @@ class YamlParserTest extends TestCase
 
     public function testGetDataFromFile(): void
     {
-        $this->assertNotEmpty($this->yamlParser->getDataFromFile(sprintf('%s/%s', __DIR__, '../../../../config/services.yaml')));
-        $this->assertEmpty($this->yamlParser->getDataFromFile(sprintf('%s/%s', __DIR__, 'emptyFile.yaml')));
+        $this->assertNotEmpty($this->yamlParser->getDataFromFile(\sprintf('%s/%s', __DIR__, '../../../../config/services.yaml')));
+        $this->assertEmpty($this->yamlParser->getDataFromFile(\sprintf('%s/%s', __DIR__, 'emptyFile.yaml')));
     }
 
     public function testFileNotFoundInGetDataFromFile(): void

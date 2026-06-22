@@ -17,14 +17,10 @@ final readonly class IngestLogInput
     public function __construct(
         #[Assert\NotNull]
         public \DateTimeImmutable $datetime,
-
         #[Assert\NotNull]
         public LogSeverityEnum $level,
-
         #[Assert\NotBlank]
         public string $message,
-
         public array $context = [],
-    ) {
-    }
+    ) {}
 }

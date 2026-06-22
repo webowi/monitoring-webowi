@@ -8,8 +8,7 @@ final class IngestionKeyHasher
 {
     public function __construct(
         private readonly string $appSecret,
-    ) {
-    }
+    ) {}
 
     public function hash(string $plaintext): string
     {

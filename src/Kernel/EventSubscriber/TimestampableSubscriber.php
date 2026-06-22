@@ -11,7 +11,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Psr\Log\LoggerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 
 #[AsDoctrineListener(event: Events::prePersist, priority: 0, connection: 'default')]
 #[AsDoctrineListener(event: Events::preUpdate, priority: 0, connection: 'default')]
@@ -22,8 +21,7 @@ final readonly class TimestampableSubscriber
         private CurrentUserFetcher $currentUserFetcher,
         private LoggerInterface $logger,
         private ClockInterface $clock,
-    ) {
-    }
+    ) {}
 
     /**
      * @param LifecycleEventArgs<EntityManagerInterface> $args
@@ -75,8 +73,8 @@ final readonly class TimestampableSubscriber
         $entity->setUpdatedAt($this->getDateTimeNow());
 
         try {
-            $user = $this->security->getUser();
-            $entity->setUpdatedBy($user?->getUserIdentifier());
+            $user = $this->currentUserFetcher->fetchUser();
+            $entity->setUpdatedBy($user->getUserIdentifier());
         } catch (\Throwable $exception) {
             $this->logger->error(
                 'Setting user data for resource failed.',
@@ -101,8 +99,8 @@ final readonly class TimestampableSubscriber
         $entity->setDeletedAt($this->getDateTimeNow());
 
         try {
-            $user = $this->security->getUser();
-            $entity->setDeletedBy($user?->getUserIdentifier());
+            $user = $this->currentUserFetcher->fetchUser();
+            $entity->setDeletedBy($user->getUserIdentifier());
         } catch (\Throwable $exception) {
             $this->logger->error(
                 'Setting user data for resource failed.',
@@ -114,8 +112,13 @@ final readonly class TimestampableSubscriber
         }
     }
 
-    private function getDateTimeNow(): ?\DateTimeImmutable
+    private function getDateTimeNow(): \DateTimeImmutable
     {
-        return $this->clock->dateTime(\DateTimeImmutable::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s'))) ?: null;
+        $now = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s'));
+        if (false === $now) {
+            throw new \LogicException('Getting current date and time failed.');
+        }
+
+        return $this->clock->dateTime($now);
     }
 }

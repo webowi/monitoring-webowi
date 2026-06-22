@@ -99,7 +99,7 @@ class JSONRequestContext extends JSONMainContext
      * @param array<mixed, mixed> $param
      * @param array<mixed, mixed> $files
      */
-    private function sendRequestTo(string $method, string $url, PyStringNode $body = null, array $param = [], array $files = []): void
+    private function sendRequestTo(string $method, string $url, ?PyStringNode $body = null, array $param = [], array $files = []): void
     {
         $request = Request::create($url, $method, $param, [], $files, [], $this->processBody($body)?->getRaw());
         $this->applyHeaders($request);

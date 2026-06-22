@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Identity\Domain\ValueObject;
 
 use Doctrine\DBAL\Types\Types;
@@ -16,9 +18,11 @@ final class Email
     public function __construct(string $email)
     {
         $normalized = strtolower(trim($email));
-        if (!filter_var($normalized, FILTER_VALIDATE_EMAIL)) {
+        if ('' === $normalized || !filter_var($normalized, \FILTER_VALIDATE_EMAIL)) {
             throw new \InvalidArgumentException("Invalid email: $normalized");
         }
+
+        /* @var non-empty-string $normalized */
         $this->email = $normalized;
     }
 

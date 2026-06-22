@@ -13,8 +13,7 @@ final class IngestionPrincipal implements UserInterface
     public function __construct(
         private readonly Project $project,
         private readonly IngestionKey $ingestionKey,
-    ) {
-    }
+    ) {}
 
     public function getProject(): Project
     {
@@ -39,7 +38,5 @@ final class IngestionPrincipal implements UserInterface
         return ['ROLE_INGESTION'];
     }
 
-    public function eraseCredentials(): void
-    {
-    }
+    public function eraseCredentials(): void {}
 }

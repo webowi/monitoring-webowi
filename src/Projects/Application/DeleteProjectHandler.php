@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Projects\Application;
 
 use App\Projects\Domain\ProjectRepositoryInterface;
@@ -16,7 +18,7 @@ class DeleteProjectHandler
     {
         $project = $this->projectRepository->getById($command->projectId);
 
-        if ($project === null) {
+        if (null === $project) {
             throw new ProjectNotFoundException();
         }
 
@@ -28,7 +30,7 @@ class DeleteProjectHandler
             $this->projectRepository->remove($project);
         } catch (\Throwable $exception) {
             $this->logger->error(
-                sprintf('Failed to delete project. %s', $exception->getMessage()),
+                \sprintf('Failed to delete project. %s', $exception->getMessage()),
                 [
                     'exception' => $exception,
                     'projectId' => $project->getUuid(),

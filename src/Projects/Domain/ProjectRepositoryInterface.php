@@ -10,9 +10,12 @@ interface ProjectRepositoryInterface
 {
     public function countByOrganizationId(Uuid $organizationId): int;
 
+    /**
+     * @return iterable<Project>
+     */
     public function getByOrganizationId(Uuid $organizationId): iterable;
 
-    public function getById(Uuid $projectId,): ?Project;
+    public function getById(Uuid $projectId): ?Project;
 
     public function remove(Project $project): void;
 }

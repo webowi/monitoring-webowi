@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Unit\Logging\Application\List;
 
 use App\Identity\Domain\User\User;

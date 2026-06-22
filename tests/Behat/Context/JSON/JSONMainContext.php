@@ -20,7 +20,7 @@ class JSONMainContext implements Context
 
     public function __construct(
         protected KernelInterface $kernel,
-        protected ResponseState $responseState
+        protected ResponseState $responseState,
     ) {
         $this->headers = new HeaderBag();
     }
@@ -53,7 +53,7 @@ class JSONMainContext implements Context
         }
     }
 
-    protected function processBody(PyStringNode $body = null): ?PyStringNode
+    protected function processBody(?PyStringNode $body = null): ?PyStringNode
     {
         if (null === $body) {
             return null;

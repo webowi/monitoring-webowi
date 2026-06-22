@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Kernel\EventSubscriber;
 
 use App\Identity\Domain\User\User;
+use App\Kernel\Clock\ClockInterface;
 use App\Kernel\EventSubscriber\TimestampableResourceInterface;
 use App\Kernel\EventSubscriber\TimestampableSubscriber;
+use App\Kernel\Security\CurrentUserFetcher;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 
 class TimestampableSubscriberTest extends TestCase
 {
@@ -19,9 +20,10 @@ class TimestampableSubscriberTest extends TestCase
 
     private MockObject&LifecycleEventArgs $event;
 
-    private MockObject&Security $security;
+    private MockObject&CurrentUserFetcher $currentUserFetcher;
 
     private MockObject&LoggerInterface $logger;
+    private MockObject&ClockInterface $clock;
 
     private MockObject&User $user;
 
@@ -31,11 +33,12 @@ class TimestampableSubscriberTest extends TestCase
     {
         $this->entity = $this->createMock(TimestampableResourceInterface::class);
         $this->event = $this->createMock(LifecycleEventArgs::class);
-        $this->security = $this->createMock(Security::class);
+        $this->currentUserFetcher = $this->createMock(CurrentUserFetcher::class);
         $this->logger = $this->createMock(LoggerInterface::class);
         $this->user = $this->createMock(User::class);
+        $this->clock = $this->createMock(ClockInterface::class);
 
-        $this->subscriber = new TimestampableSubscriber($this->security, $this->logger);
+        $this->subscriber = new TimestampableSubscriber($this->currentUserFetcher, $this->logger, $this->clock);
     }
 
     public function testPrePersistWrongEntity(): void
@@ -58,6 +61,10 @@ class TimestampableSubscriberTest extends TestCase
     public function testPrePersistTimestampableFields(): void
     {
         $dateTime = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s'));
+        $this->clock
+            ->expects($this->once())
+            ->method('dateTime')
+            ->willReturn($dateTime);
 
         $this->event->expects($this->once())->method('getObject')->willReturn($this->entity);
         $this->entity
@@ -81,6 +88,10 @@ class TimestampableSubscriberTest extends TestCase
     public function testPrePersistUserNotFound(): void
     {
         $dateTime = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s'));
+        $this->clock
+            ->expects($this->once())
+            ->method('dateTime')
+            ->willReturn($dateTime);
 
         $this->event->expects($this->once())->method('getObject')->willReturn($this->entity);
         $this->entity
@@ -97,20 +108,27 @@ class TimestampableSubscriberTest extends TestCase
             ->method('setUpdatedAt')
             ->with($dateTime)
             ->willReturnSelf();
-        $this->security
+        $this->currentUserFetcher
             ->expects($this->once())
-            ->method('getUser')
-            ->willReturn(null);
+            ->method('fetchUser')
+            ->willThrowException($exception = new \LogicException());
         $this->entity
             ->expects($this->never())
             ->method('setCreatedBy');
         $this->entity
-            ->expects($this->once())
+            ->expects($this->never())
             ->method('setUpdatedBy')
             ->with(null);
         $this->logger
-            ->expects($this->never())
-            ->method('error');
+            ->expects($this->once())
+            ->method('error')
+            ->with(
+                'Setting user data for resource failed.',
+                [
+                    'exception' => $exception,
+                    'class'     => TimestampableSubscriber::class,
+                ]
+            );
 
         $this->subscriber->prePersist($this->event);
     }
@@ -118,6 +136,10 @@ class TimestampableSubscriberTest extends TestCase
     public function testLogErrorWhenSettingUserFailsOnPrePersist(): void
     {
         $dateTime = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s'));
+        $this->clock
+            ->expects($this->once())
+            ->method('dateTime')
+            ->willReturn($dateTime);
 
         $this->event->expects($this->once())->method('getObject')->willReturn($this->entity);
         $this->entity
@@ -134,9 +156,9 @@ class TimestampableSubscriberTest extends TestCase
             ->method('setUpdatedAt')
             ->with($dateTime)
             ->willReturnSelf();
-        $this->security
+        $this->currentUserFetcher
             ->expects($this->once())
-            ->method('getUser')
+            ->method('fetchUser')
             ->willReturn($this->user);
         $this->user
             ->expects($this->once())
@@ -164,6 +186,10 @@ class TimestampableSubscriberTest extends TestCase
     public function testLogErrorWhenSettingUserFailsOnPreUpdate(): void
     {
         $dateTime = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s'));
+        $this->clock
+            ->expects($this->once())
+            ->method('dateTime')
+            ->willReturn($dateTime);
 
         $this->event->expects($this->once())->method('getObject')->willReturn($this->entity);
         $this->entity
@@ -171,9 +197,9 @@ class TimestampableSubscriberTest extends TestCase
             ->method('setUpdatedAt')
             ->with($dateTime)
             ->willReturnSelf();
-        $this->security
+        $this->currentUserFetcher
             ->expects($this->once())
-            ->method('getUser')
+            ->method('fetchUser')
             ->willReturn($this->user);
         $this->user
             ->expects($this->once())
@@ -201,6 +227,10 @@ class TimestampableSubscriberTest extends TestCase
     public function testPreUpdateUserNotFound(): void
     {
         $dateTime = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s'));
+        $this->clock
+            ->expects($this->once())
+            ->method('dateTime')
+            ->willReturn($dateTime);
 
         $this->event->expects($this->once())->method('getObject')->willReturn($this->entity);
         $this->entity
@@ -208,20 +238,27 @@ class TimestampableSubscriberTest extends TestCase
             ->method('setUpdatedAt')
             ->with($dateTime)
             ->willReturnSelf();
-        $this->security
+        $this->currentUserFetcher
             ->expects($this->once())
-            ->method('getUser')
-            ->willReturn(null);
+            ->method('fetchUser')
+            ->willThrowException($exception = new \LogicException());
         $this->user
             ->expects($this->never())
             ->method('getUserIdentifier');
         $this->entity
-            ->expects($this->once())
+            ->expects($this->never())
             ->method('setUpdatedBy')
             ->with(null);
         $this->logger
-            ->expects($this->never())
-            ->method('error');
+            ->expects($this->once())
+            ->method('error')
+            ->with(
+                'Setting user data for resource failed.',
+                [
+                    'exception' => $exception,
+                    'class'     => TimestampableSubscriber::class,
+                ]
+            );
 
         $this->subscriber->preUpdate($this->event);
     }
@@ -229,6 +266,10 @@ class TimestampableSubscriberTest extends TestCase
     public function testLogErrorWhenSettingUserFailsOnPreRemove(): void
     {
         $dateTime = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s'));
+        $this->clock
+            ->expects($this->once())
+            ->method('dateTime')
+            ->willReturn($dateTime);
 
         $this->event->expects($this->once())->method('getObject')->willReturn($this->entity);
         $this->entity
@@ -236,9 +277,9 @@ class TimestampableSubscriberTest extends TestCase
             ->method('setDeletedAt')
             ->with($dateTime)
             ->willReturnSelf();
-        $this->security
+        $this->currentUserFetcher
             ->expects($this->once())
-            ->method('getUser')
+            ->method('fetchUser')
             ->willReturn($this->user);
         $this->user
             ->expects($this->once())
@@ -266,6 +307,10 @@ class TimestampableSubscriberTest extends TestCase
     public function testOnPreRemoveUserNotFound(): void
     {
         $dateTime = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s'));
+        $this->clock
+            ->expects($this->once())
+            ->method('dateTime')
+            ->willReturn($dateTime);
 
         $this->event->expects($this->once())->method('getObject')->willReturn($this->entity);
         $this->entity
@@ -273,20 +318,27 @@ class TimestampableSubscriberTest extends TestCase
             ->method('setDeletedAt')
             ->with($dateTime)
             ->willReturnSelf();
-        $this->security
+        $this->currentUserFetcher
             ->expects($this->once())
-            ->method('getUser')
-            ->willReturn(null);
+            ->method('fetchUser')
+            ->willThrowException($exception = new \LogicException());
         $this->user
             ->expects($this->never())
             ->method('getUserIdentifier');
         $this->entity
-            ->expects($this->once())
+            ->expects($this->never())
             ->method('setDeletedBy')
             ->with(null);
         $this->logger
-            ->expects($this->never())
-            ->method('error');
+            ->expects($this->once())
+            ->method('error')
+            ->with(
+                'Setting user data for resource failed.',
+                [
+                    'exception' => $exception,
+                    'class'     => TimestampableSubscriber::class,
+                ]
+            );
 
         $this->subscriber->preRemove($this->event);
     }

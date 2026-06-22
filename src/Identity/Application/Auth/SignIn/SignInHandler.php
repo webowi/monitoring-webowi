@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Identity\Application\Auth\SignIn;
 
 use App\Identity\Domain\Auth\RefreshTokenManagerInterface;
@@ -12,7 +14,7 @@ class SignInHandler
 {
     public function __construct(
         private readonly UserRepositoryInterface $userRepository,
-        private readonly TokenGeneratorInterface     $tokenGenerator,
+        private readonly TokenGeneratorInterface $tokenGenerator,
         private readonly RefreshTokenManagerInterface $refreshTokenManager,
         private readonly ClockInterface $clock,
     ) {}
@@ -26,7 +28,7 @@ class SignInHandler
     {
         $user = $this->userRepository->getByEmail(new Email($command->email));
 
-        if ($user === null || !$user->verifyPassword($command->password)) {
+        if (null === $user || !$user->verifyPassword($command->password)) {
             throw new InvalidCredentialsException();
         }
 

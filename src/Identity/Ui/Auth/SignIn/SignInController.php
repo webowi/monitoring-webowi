@@ -41,9 +41,8 @@ final class SignInController
                 status: Response::HTTP_BAD_REQUEST,
             );
         } catch (\Throwable $e) {
-            dd($e->getMessage());
             $this->logger->error(
-                sprintf('Error during sign-in process for %s', $input->email),
+                \sprintf('Error during sign-in process for %s', $input->email),
                 ['exception' => $e]
             );
 

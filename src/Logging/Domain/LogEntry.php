@@ -21,7 +21,7 @@ class LogEntry implements TimestampableResourceInterface
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     #[ORM\Column(type: Types::INTEGER)]
-    private ?int $id = null;
+    private ?int $id = null; /** @phpstan-ignore property.unusedType */
 
     /**
      * @param array<string, mixed> $context
@@ -29,32 +29,23 @@ class LogEntry implements TimestampableResourceInterface
     private function __construct(
         #[ORM\Column(type: 'uuid', unique: true)]
         public readonly Uuid $uuid,
-
         #[ORM\Column(name: 'project_id', type: 'uuid')]
         public readonly Uuid $projectId,
-
         #[ORM\Column(name: 'occurred_at', type: Types::DATETIME_IMMUTABLE)]
         public readonly \DateTimeImmutable $occurredAt,
-
         #[ORM\Column(name: 'received_at', type: Types::DATETIME_IMMUTABLE)]
         public readonly \DateTimeImmutable $receivedAt,
-
         #[ORM\Column(type: Types::STRING, length: 32, enumType: LogSeverityEnum::class)]
         public readonly LogSeverityEnum $severity,
-
         #[ORM\Column(type: Types::TEXT)]
         public readonly string $message,
-
         #[ORM\Column(name: 'http_status_code', type: Types::SMALLINT, nullable: true)]
         public readonly ?int $httpStatusCode,
-
         #[ORM\Column(name: 'exception_class', type: Types::STRING, length: 255, nullable: true)]
         public readonly ?string $exceptionClass,
-
         #[ORM\Column(type: Types::JSON)]
         public readonly array $context,
-    ) {
-    }
+    ) {}
 
     /**
      * @param array<string, mixed> $context

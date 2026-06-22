@@ -13,8 +13,7 @@ class AuthenticationContext implements Context
 {
     public function __construct(
         private readonly UserProviderMock $userProvider,
-    ) {
-    }
+    ) {}
 
     /**
      * @Given I am authorized as :role

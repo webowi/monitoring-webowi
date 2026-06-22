@@ -9,7 +9,7 @@ use Symfony\Component\Uid\Uuid as SymfonyUuid;
 
 final class UuidProvider extends Uuid
 {
-    public static function uuid(string $fromString = null): SymfonyUuid
+    public static function uuid(?string $fromString = null): SymfonyUuid
     {
         if (null === $fromString) {
             return SymfonyUuid::v4();

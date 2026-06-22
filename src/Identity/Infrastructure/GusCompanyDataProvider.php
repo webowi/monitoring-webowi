@@ -18,8 +18,7 @@ final class GusCompanyDataProvider implements GusApiClientInterface
 {
     public function __construct(
         private readonly GusApi $gusApi,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws NotFoundException

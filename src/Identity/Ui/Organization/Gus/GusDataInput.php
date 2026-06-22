@@ -19,7 +19,6 @@ final readonly class GusDataInput
             max: 10
         )]
         #[Assert\Regex(pattern: '/^\d{10}$/', message: 'tin.invalid')]
-        public string $tin
-    ) {
-    }
+        public string $tin,
+    ) {}
 }

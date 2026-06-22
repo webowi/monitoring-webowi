@@ -11,8 +11,7 @@ class UserFactory
 {
     public function __construct(
         private readonly UserRepositoryInterface $userRepository,
-    ) {
-    }
+    ) {}
 
     /**
      * @param non-empty-string $email
