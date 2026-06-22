@@ -214,13 +214,13 @@ None beyond what S-01 already established — added `andWhere` clauses on alread
 
 #### Automated
 
-- [x] 1.1 Static analysis passes: `./vendor/bin/phpstan analyse`
+- [x] 1.1 Static analysis passes: `./vendor/bin/phpstan analyse` — a85e5a1
 
 #### Manual
 
-- [ ] 1.2 Invalid severity value returns 422 with translated Polish error message
-- [ ] 1.3 Invalid httpStatusCode value (exact and class format) returns 422
-- [ ] 1.4 Valid combined filter request returns 200 (pre-filtering, validates cleanly)
+- [x] 1.2 Invalid severity value returns 422 with translated Polish error message — a85e5a1
+- [x] 1.3 Invalid httpStatusCode value (exact and class format) returns 422 — a85e5a1
+- [x] 1.4 Valid combined filter request returns 200 (pre-filtering, validates cleanly) — a85e5a1
 
 ### Phase 2: Repository + handler wiring
 
