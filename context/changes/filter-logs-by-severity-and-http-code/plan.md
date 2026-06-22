@@ -226,14 +226,14 @@ None beyond what S-01 already established — added `andWhere` clauses on alread
 
 #### Automated
 
-- [x] 2.1 Static analysis passes: `./vendor/bin/phpstan analyse`
+- [x] 2.1 Static analysis passes: `./vendor/bin/phpstan analyse` — b57597f
 
 #### Manual
 
-- [x] 2.2 Single and multi-severity filters narrow results correctly
-- [x] 2.3 Exact and class-shorthand httpStatusCode filters narrow results correctly
-- [x] 2.4 Combined severity+httpStatusCode filter applies AND semantics
-- [x] 2.5 Omitting both filters preserves prior unfiltered behavior
+- [x] 2.2 Single and multi-severity filters narrow results correctly — b57597f
+- [x] 2.3 Exact and class-shorthand httpStatusCode filters narrow results correctly — b57597f
+- [x] 2.4 Combined severity+httpStatusCode filter applies AND semantics — b57597f
+- [x] 2.5 Omitting both filters preserves prior unfiltered behavior — b57597f
 
 ### Phase 3: Tests
 
