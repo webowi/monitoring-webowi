@@ -6,6 +6,7 @@ namespace App\Logging\Infrastructure;
 
 use App\Logging\Domain\LogEntry;
 use App\Logging\Domain\LogEntryRepositoryInterface;
+use App\Logging\Domain\LogSeverityEnum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
@@ -36,14 +37,37 @@ class LogEntryRepository extends ServiceEntityRepository implements LogEntryRepo
     }
 
     /**
+     * @param LogSeverityEnum[] $severities
+     *
      * @return iterable<LogEntry>
      */
-    public function getByProjectId(Uuid $projectId, int $limit, int $offset): iterable
-    {
-        /** @var iterable<LogEntry> $result */
-        $result = $this->createQueryBuilder('l')
+    public function getByProjectId(
+        Uuid $projectId,
+        int $limit,
+        int $offset,
+        array $severities = [],
+        ?int $httpStatusCodeMin = null,
+        ?int $httpStatusCodeMax = null,
+    ): iterable {
+        $queryBuilder = $this->createQueryBuilder('l')
             ->andWhere('l.projectId = :projectId')
-            ->setParameter('projectId', $projectId, 'uuid')
+            ->setParameter('projectId', $projectId, 'uuid');
+
+        if ([] !== $severities) {
+            $queryBuilder
+                ->andWhere('l.severity IN (:severities)')
+                ->setParameter('severities', array_map(static fn (LogSeverityEnum $severity): string => $severity->value, $severities));
+        }
+
+        if (null !== $httpStatusCodeMin && null !== $httpStatusCodeMax) {
+            $queryBuilder
+                ->andWhere('l.httpStatusCode BETWEEN :httpStatusCodeMin AND :httpStatusCodeMax')
+                ->setParameter('httpStatusCodeMin', $httpStatusCodeMin)
+                ->setParameter('httpStatusCodeMax', $httpStatusCodeMax);
+        }
+
+        /** @var iterable<LogEntry> $result */
+        $result = $queryBuilder
             ->orderBy('l.occurredAt', 'DESC')
             ->setMaxResults($limit)
             ->setFirstResult($offset)

@@ -24,7 +24,16 @@ final class ListProjectLogsController
         #[MapQueryString(validationFailedStatusCode: Response::HTTP_UNPROCESSABLE_ENTITY)]
         ListProjectLogsInput $input,
     ): JsonResponse {
-        $logEntries = $this->handler->handle(Uuid::fromString($projectUuid), $input->limit, $input->offset);
+        $httpStatusCodeRange = $input->httpStatusCodeRange();
+
+        $logEntries = $this->handler->handle(
+            Uuid::fromString($projectUuid),
+            $input->limit,
+            $input->offset,
+            $input->severities(),
+            $httpStatusCodeRange[0] ?? null,
+            $httpStatusCodeRange[1] ?? null,
+        );
 
         $rows = [];
         foreach ($logEntries as $logEntry) {
