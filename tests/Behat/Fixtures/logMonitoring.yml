@@ -39,6 +39,7 @@ App\Projects\Domain\IngestionKey:
     projectId: '@project1->uuid'
     name: 'Active Ingestion Key'
     keyHash: '5ba4d1100b4ddbcfe3b7ad37af948c76b043e710c571bd81432a551151f2c99c'
+    keyValue: 'mon_ing_demo0000000000000000000000000000'
   ingestionKeyActiveRevoked:
     uuid: <uuid('9ed340ec-f47a-4f97-b6a5-860cb90e189d')>
     projectId: '@project1->uuid'

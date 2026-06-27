@@ -8,6 +8,7 @@ use App\Projects\Domain\IngestionKey;
 use App\Projects\Domain\IngestionKeyRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @extends ServiceEntityRepository<IngestionKey>
@@ -37,5 +38,22 @@ class IngestionKeyRepository extends ServiceEntityRepository implements Ingestio
         }
 
         return $ingestionKey;
+    }
+
+    public function findActiveByProjectId(Uuid $projectId): ?IngestionKey
+    {
+        $ingestionKey = $this->findOneBy(['projectId' => $projectId]);
+
+        if (null === $ingestionKey || !$ingestionKey->isActive()) {
+            return null;
+        }
+
+        return $ingestionKey;
+    }
+
+    public function save(IngestionKey $key): void
+    {
+        $this->getEntityManager()->persist($key);
+        $this->getEntityManager()->flush();
     }
 }

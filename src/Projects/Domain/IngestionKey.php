@@ -65,6 +65,21 @@ class IngestionKey implements TimestampableResourceInterface
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $expiresAt = null;
 
+    #[ORM\Column(name: 'key_value', type: Types::STRING, length: 255, nullable: true)]
+    private ?string $keyValue = null;
+
+    public function getKeyValue(): ?string
+    {
+        return $this->keyValue;
+    }
+
+    public function setKeyValue(?string $keyValue): self
+    {
+        $this->keyValue = $keyValue;
+
+        return $this;
+    }
+
     public function __toString(): string
     {
         return $this->name;
