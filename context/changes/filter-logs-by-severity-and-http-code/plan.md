@@ -245,4 +245,4 @@ None beyond what S-01 already established — added `andWhere` clauses on alread
 
 #### Manual
 
-- [x] 3.4 All new scenarios/cases pass with no regressions in existing Logging feature scenarios — cannot confirm via Behat run due to 3.2's blocker; filtering behavior was already manually verified end-to-end in Phase 2 via direct curl + DB-seeded data
+- [x] 3.4 All new scenarios/cases pass with no regressions in existing Logging feature scenarios — cannot confirm via Behat run due to 3.2's blocker; filtering behavior was already manually verified end-to-end in Phase 2 via direct curl + DB-seeded data — 05cd8da

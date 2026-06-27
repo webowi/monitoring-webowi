@@ -1,9 +1,9 @@
 ---
 change_id: filter-logs-by-severity-and-http-code
 title: Filter logs by severity and http code
-status: implementing
+status: implemented
 created: 2026-06-22
-updated: 2026-06-22
+updated: 2026-06-27
 archived_at: null
 ---
 
