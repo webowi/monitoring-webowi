@@ -36,6 +36,18 @@ class LogEntryRepository extends ServiceEntityRepository implements LogEntryRepo
         $this->getEntityManager()->flush();
     }
 
+    public function getLastReceivedAtByProjectId(Uuid $projectId): ?\DateTimeImmutable
+    {
+        $raw = $this->createQueryBuilder('l')
+            ->select('MAX(l.receivedAt)')
+            ->andWhere('l.projectId = :projectId')
+            ->setParameter('projectId', $projectId, 'uuid')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return \is_string($raw) ? new \DateTimeImmutable($raw) : null;
+    }
+
     /**
      * @param LogSeverityEnum[] $severities
      *

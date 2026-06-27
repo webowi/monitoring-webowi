@@ -14,6 +14,7 @@ use Symfony\Component\Uid\Uuid;
 #[ORM\Entity(repositoryClass: LogEntryRepository::class)]
 #[ORM\Table(name: 'log_entry')]
 #[ORM\Index(name: 'idx_log_entry_project_occurred_at', columns: ['project_id', 'occurred_at'])]
+#[ORM\Index(name: 'idx_log_entry_project_received_at', columns: ['project_id', 'received_at'])]
 class LogEntry implements TimestampableResourceInterface
 {
     use TimestampableTrait;

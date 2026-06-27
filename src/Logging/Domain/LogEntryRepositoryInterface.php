@@ -10,6 +10,8 @@ interface LogEntryRepositoryInterface
 {
     public function add(LogEntry $logEntry): void;
 
+    public function getLastReceivedAtByProjectId(Uuid $projectId): ?\DateTimeImmutable;
+
     /**
      * @param LogSeverityEnum[] $severities
      *
