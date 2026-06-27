@@ -1,7 +1,7 @@
 ---
 change_id: view-and-copy-project-api-key
 title: View and copy project API key
-status: implementing
+status: implemented
 created: 2026-06-27
 updated: 2026-06-27
 archived_at: null

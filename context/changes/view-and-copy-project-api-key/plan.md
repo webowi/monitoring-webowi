@@ -397,12 +397,12 @@ Injects: `ProjectRepositoryInterface`, `IngestionKeyRepositoryInterface`, `Curre
 
 #### Automated
 
-- [x] 3.1 Static analysis passes: `./vendor/bin/phpstan analyse`
-- [x] 3.2 Unit tests pass: `./vendor/bin/phpunit`
-- [x] 3.3 Behat suite passes: `./vendor/bin/behat`
+- [x] 3.1 Static analysis passes: `./vendor/bin/phpstan analyse` — 2952a9e
+- [x] 3.2 Unit tests pass: `./vendor/bin/phpunit` — 2952a9e
+- [x] 3.3 Behat suite passes: `./vendor/bin/behat` — 2952a9e
 
 #### Manual
 
-- [x] 3.4 Rotation returns new key value and snippet; GET reflects the new key
-- [x] 3.5 Old key returns 401 on ingest after rotation
-- [x] 3.6 Wrong-org JWT returns 404 on all three endpoints
+- [x] 3.4 Rotation returns new key value and snippet; GET reflects the new key — 2952a9e
+- [x] 3.5 Old key returns 401 on ingest after rotation — 2952a9e
+- [x] 3.6 Wrong-org JWT returns 404 on all three endpoints — 2952a9e
