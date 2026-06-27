@@ -371,27 +371,27 @@ Injects: `ProjectRepositoryInterface`, `IngestionKeyRepositoryInterface`, `Curre
 
 #### Automated
 
-- [x] 1.1 Migration applies cleanly: `php bin/console doctrine:migrations:migrate --no-interaction`
-- [x] 1.2 Schema diff is empty: `php bin/console doctrine:schema:validate`
-- [x] 1.3 Static analysis passes: `./vendor/bin/phpstan analyse`
-- [x] 1.4 Behat fixture loads without error: `./vendor/bin/behat --dry-run`
+- [x] 1.1 Migration applies cleanly: `php bin/console doctrine:migrations:migrate --no-interaction` — d386d44
+- [x] 1.2 Schema diff is empty: `php bin/console doctrine:schema:validate` — d386d44
+- [x] 1.3 Static analysis passes: `./vendor/bin/phpstan analyse` — d386d44
+- [x] 1.4 Behat fixture loads without error: `./vendor/bin/behat --dry-run` — d386d44
 
 #### Manual
 
-- [x] 1.5 `DESCRIBE ingestion_key` shows `key_value VARCHAR(255) NULL`
-- [x] 1.6 Fixture row `ingestionKeyActive` has `key_value = 'mon_ing_demo0000000000000000000000000000'`
+- [x] 1.5 `DESCRIBE ingestion_key` shows `key_value VARCHAR(255) NULL` — d386d44
+- [x] 1.6 Fixture row `ingestionKeyActive` has `key_value = 'mon_ing_demo0000000000000000000000000000'` — d386d44
 
 ### Phase 2: GET Endpoints
 
 #### Automated
 
-- [ ] 2.1 Static analysis passes: `./vendor/bin/phpstan analyse`
-- [ ] 2.2 Unit tests pass: `./vendor/bin/phpunit`
+- [x] 2.1 Static analysis passes: `./vendor/bin/phpstan analyse`
+- [x] 2.2 Unit tests pass: `./vendor/bin/phpunit`
 
 #### Manual
 
-- [ ] 2.3 `GET /api/v1/projects/{uuid}` returns correct project name and status
-- [ ] 2.4 `GET /api/v1/projects/{uuid}/ingestion-key` returns `value` = `"mon_ing_demo0000000000000000000000000000"` and snippet with ingestion URL
+- [x] 2.3 `GET /api/v1/projects/{uuid}` returns correct project name and status
+- [x] 2.4 `GET /api/v1/projects/{uuid}/ingestion-key` returns `value` = `"mon_ing_demo0000000000000000000000000000"` and snippet with ingestion URL
 
 ### Phase 3: POST Rotate and Behat
 
