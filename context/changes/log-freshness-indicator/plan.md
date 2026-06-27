@@ -212,10 +212,10 @@ Add the unit and Behat coverage exercising every path introduced in Phase 1.
 
 #### Automated
 
-- [x] 2.1 Unit tests pass: `./vendor/bin/phpunit`
+- [x] 2.1 Unit tests pass: `./vendor/bin/phpunit` — 47f2877
 - [ ] 2.2 Behat suite passes: `./vendor/bin/behat`
-- [x] 2.3 Static analysis passes: `./vendor/bin/phpstan analyse`
+- [x] 2.3 Static analysis passes: `./vendor/bin/phpstan analyse` — 47f2877
 
 #### Manual
 
-- [x] 2.4 All new test cases pass with no regressions in existing Logging feature scenarios
+- [x] 2.4 All new test cases pass with no regressions in existing Logging feature scenarios — 47f2877
