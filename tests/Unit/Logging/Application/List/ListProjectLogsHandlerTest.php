@@ -10,6 +10,7 @@ use App\Kernel\Security\CurrentUserFetcher;
 use App\Logging\Application\List\ListProjectLogsHandler;
 use App\Logging\Application\List\ProjectNotFoundOrAccessDeniedException;
 use App\Logging\Domain\LogEntryRepositoryInterface;
+use App\Logging\Domain\LogSeverityEnum;
 use App\Projects\Domain\Project;
 use App\Projects\Domain\ProjectRepositoryInterface;
 use PHPUnit\Framework\Attributes\Test;
@@ -82,6 +83,70 @@ class ListProjectLogsHandlerTest extends TestCase
         $result = $this->handler->handle($projectUuid, 50, 0);
 
         $this->assertSame($expectedLogEntries, $result);
+    }
+
+    #[Test]
+    public function passesSeveritiesFilterThroughToTheRepositoryUnchanged(): void
+    {
+        $organizationId = Uuid::v4();
+        $projectUuid = Uuid::v4();
+        $project = $this->buildProject($projectUuid, $organizationId);
+        $user = $this->buildUser($organizationId);
+
+        $this->projectRepository->method('getById')->with($projectUuid)->willReturn($project);
+        $this->currentUserFetcher->method('fetchUser')->willReturn($user);
+
+        $severities = [LogSeverityEnum::ERROR, LogSeverityEnum::CRITICAL];
+
+        $this->logEntryRepository
+            ->expects($this->once())
+            ->method('getByProjectId')
+            ->with($projectUuid, 50, 0, $severities, null, null)
+            ->willReturn([]);
+
+        $this->handler->handle($projectUuid, 50, 0, $severities);
+    }
+
+    #[Test]
+    public function passesHttpStatusCodeRangeThroughToTheRepositoryUnchanged(): void
+    {
+        $organizationId = Uuid::v4();
+        $projectUuid = Uuid::v4();
+        $project = $this->buildProject($projectUuid, $organizationId);
+        $user = $this->buildUser($organizationId);
+
+        $this->projectRepository->method('getById')->with($projectUuid)->willReturn($project);
+        $this->currentUserFetcher->method('fetchUser')->willReturn($user);
+
+        $this->logEntryRepository
+            ->expects($this->once())
+            ->method('getByProjectId')
+            ->with($projectUuid, 50, 0, [], 500, 599)
+            ->willReturn([]);
+
+        $this->handler->handle($projectUuid, 50, 0, [], 500, 599);
+    }
+
+    #[Test]
+    public function passesBothFiltersThroughToTheRepositoryUnchanged(): void
+    {
+        $organizationId = Uuid::v4();
+        $projectUuid = Uuid::v4();
+        $project = $this->buildProject($projectUuid, $organizationId);
+        $user = $this->buildUser($organizationId);
+
+        $this->projectRepository->method('getById')->with($projectUuid)->willReturn($project);
+        $this->currentUserFetcher->method('fetchUser')->willReturn($user);
+
+        $severities = [LogSeverityEnum::ERROR];
+
+        $this->logEntryRepository
+            ->expects($this->once())
+            ->method('getByProjectId')
+            ->with($projectUuid, 50, 0, $severities, 500, 500)
+            ->willReturn([]);
+
+        $this->handler->handle($projectUuid, 50, 0, $severities, 500, 500);
     }
 
     #[Test]

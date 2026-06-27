@@ -55,7 +55,6 @@ class User implements
         public readonly Email $email,
         #[ORM\Column(type: Types::STRING, length: 191, nullable: true)]
         private ?string $password = null,
-
         /** @var RoleEnum[] */
         #[ORM\Column(enumType: RoleEnum::class)]
         private array $roles = [RoleEnum::USER],

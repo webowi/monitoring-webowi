@@ -21,8 +21,9 @@ class JSONMainContext implements Context
     public function __construct(
         protected KernelInterface $kernel,
         protected ResponseState $responseState,
+        protected HeaderState $headerState,
     ) {
-        $this->headers = new HeaderBag();
+        $this->headers = $headerState->getBag();
     }
 
     protected function getJson(): Json
@@ -39,7 +40,7 @@ class JSONMainContext implements Context
 
     public function clearHeaders(): void
     {
-        $this->headers = new HeaderBag();
+        $this->headerState->clear();
     }
 
     protected function applyHeaders(Request $request): void
@@ -78,5 +79,28 @@ class JSONMainContext implements Context
         if ($this->kernel instanceof TerminableInterface) {
             $this->kernel->terminate($request, $this->responseState->getResponse());
         }
+    }
+
+    /**
+     * @param array<mixed, mixed> $param
+     * @param array<mixed, mixed> $files
+     */
+    protected function sendRequest(string $method, string $url, ?PyStringNode $body = null, array $param = [], array $files = []): void
+    {
+        $request = Request::create($url, $method, $param, [], $files, [], $this->processBody($body)?->getRaw());
+        $this->applyHeaders($request);
+        $this->handleRequest($request);
+    }
+
+    /**
+     * @param array<mixed, mixed> $param
+     * @param array<mixed, mixed> $files
+     */
+    protected function sendJsonRequest(string $method, string $url, ?PyStringNode $body = null, array $param = [], array $files = []): void
+    {
+        $this->headers->set('Content-Type', 'application/json');
+        $this->headers->set('Accept', 'application/ld+json');
+
+        $this->sendRequest($method, $url, $body, $param, $files);
     }
 }

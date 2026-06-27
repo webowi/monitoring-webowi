@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Mock;
 
-use App\Account\Domain\User\User;
+use App\Identity\Domain\User\User;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;

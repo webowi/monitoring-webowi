@@ -239,10 +239,10 @@ None beyond what S-01 already established — added `andWhere` clauses on alread
 
 #### Automated
 
-- [ ] 3.1 Unit tests pass: `./vendor/bin/phpunit`
-- [ ] 3.2 Behat suite passes: `./vendor/bin/behat`
-- [ ] 3.3 Static analysis passes: `./vendor/bin/phpstan analyse`
+- [x] 3.1 Unit tests pass: `./vendor/bin/phpunit`
+- [ ] 3.2 Behat suite passes: `./vendor/bin/behat` — blocked by pre-existing test DB migration drift, unrelated to this change (see memory: project-test-db-migration-drift); skipped per user decision
+- [x] 3.3 Static analysis passes: `./vendor/bin/phpstan analyse`
 
 #### Manual
 
-- [ ] 3.4 All new scenarios/cases pass with no regressions in existing Logging feature scenarios
+- [ ] 3.4 All new scenarios/cases pass with no regressions in existing Logging feature scenarios — cannot confirm via Behat run due to 3.2's blocker; filtering behavior was already manually verified end-to-end in Phase 2 via direct curl + DB-seeded data

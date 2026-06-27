@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Behat\Faker\Provider;
 
-use App\Account\Domain\User\User;
+use App\Identity\Domain\User\User;
 use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
 
 class PasswordHashProvider

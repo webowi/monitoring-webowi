@@ -7,10 +7,10 @@ default:
                 - App\Tests\Behat\Context\FixturesContext
                 - App\Tests\Behat\Context\DbContext
                 - App\Tests\Behat\Context\CommandContext
-                - App\Tests\Behat\Context\AuthenticationContext
                 - App\Tests\Behat\Context\JSON\JSONMainContext
                 - App\Tests\Behat\Context\JSON\JSONRequestContext
                 - App\Tests\Behat\Context\JSON\JSONResponseContext
+                - App\Tests\Behat\Context\JSON\AuthenticationContext
     extensions:
         FriendsOfBehat\SymfonyExtension:
             bootstrap: tests/bootstrap.php

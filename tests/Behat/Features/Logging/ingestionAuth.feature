@@ -4,7 +4,7 @@ Feature:
 
   Background:
     Given the following fixtures are loaded from the files:
-      | log_monitoring |
+      | logMonitoring |
 
   Scenario: A missing ingestion key is rejected
     Given I send a "POST" JSON request to "/api/v1/logs/ingest" with body:

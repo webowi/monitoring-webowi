@@ -4,7 +4,7 @@ Feature:
 
   Background:
     Given the following fixtures are loaded from the files:
-      | log_monitoring |
+      | logMonitoring |
 
   Scenario: A valid key ingests a log entry and the owner sees it normalized in the list
     Given I set the header "X-Ingestion-Key" to "mon_ing_demo0000000000000000000000000000"
@@ -14,7 +14,7 @@ Feature:
       """
     Then the response status code should be 202
     And the JSON node "status" should be equal to "accepted"
-    Given I sign in as "owner@monitoring-webowi.test" with password "demo-password-please-change"
+    Then I am authorized as "owner@monitoring-webowi.test" with password "demo1234"
     And I send a "GET" JSON request to "/api/v1/projects/135a465d-cf7a-4ca8-872a-c76272cbb16f/logs"
     Then the response status code should be 200
     And the JSON node "[0].message" should be equal to "Ingest and list happy path"

@@ -1,12 +1,10 @@
-App\Identity\Domain\Organization:
+App\Identity\Domain\Organization\Organization:
   organization (template):
     uuid: <uuid()>
     name: <firstName()>
 
-App\Account\Domain\User\User:
-  user (template):
-    uuid: <uuid()>
-    email: <email()>
-    password: <password()>
-    company: '@company'
-    updatedAt: <dateTimeBetween('-100 days','now')>
+App\Projects\Domain\Project:
+  project (template):
+    uuid: <uuid('135a465d-cf7a-4ca8-872a-c76272cbb16f')>
+    organizationId: '@organization->uuid'
+    name: <firstname()>

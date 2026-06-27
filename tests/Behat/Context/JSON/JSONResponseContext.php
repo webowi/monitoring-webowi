@@ -17,10 +17,11 @@ class JSONResponseContext extends JSONMainContext
     public function __construct(
         KernelInterface $kernel,
         ResponseState $responseState,
+        HeaderState $headerState,
         string $evaluationMode = 'javascript',
     ) {
         $this->inspector = new Inspector($evaluationMode);
-        parent::__construct($kernel, $responseState);
+        parent::__construct($kernel, $responseState, $headerState);
     }
 
     private function theJsonNodeShouldHaveValue(string $node, string $text, bool $strict = true): void

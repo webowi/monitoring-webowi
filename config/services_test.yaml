@@ -25,10 +25,6 @@ services:
   user_provider:
     class: 'App\Tests\Mock\UserProviderMock'
 
-  App\Tests\Behat\Context\AuthenticationContext:
-    arguments:
-      $userProvider: '@user_provider'
-
   App\Tests\Behat\Context\FixturesContext:
     arguments:
       $ORMLoader: '@fidry_alice_data_fixtures.loader.doctrine'
