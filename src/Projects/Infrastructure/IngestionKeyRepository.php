@@ -6,6 +6,7 @@ namespace App\Projects\Infrastructure;
 
 use App\Projects\Domain\IngestionKey;
 use App\Projects\Domain\IngestionKeyRepositoryInterface;
+use App\Projects\Domain\IngestionKeyStatusEnum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
@@ -42,13 +43,7 @@ class IngestionKeyRepository extends ServiceEntityRepository implements Ingestio
 
     public function findActiveByProjectId(Uuid $projectId): ?IngestionKey
     {
-        $ingestionKey = $this->findOneBy(['projectId' => $projectId]);
-
-        if (null === $ingestionKey || !$ingestionKey->isActive()) {
-            return null;
-        }
-
-        return $ingestionKey;
+        return $this->findOneBy(['projectId' => $projectId, 'status' => IngestionKeyStatusEnum::ACTIVE]) ?: null;
     }
 
     public function save(IngestionKey $key): void

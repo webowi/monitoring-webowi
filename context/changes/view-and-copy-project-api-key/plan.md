@@ -385,24 +385,24 @@ Injects: `ProjectRepositoryInterface`, `IngestionKeyRepositoryInterface`, `Curre
 
 #### Automated
 
-- [x] 2.1 Static analysis passes: `./vendor/bin/phpstan analyse`
-- [x] 2.2 Unit tests pass: `./vendor/bin/phpunit`
+- [x] 2.1 Static analysis passes: `./vendor/bin/phpstan analyse` — 7510921
+- [x] 2.2 Unit tests pass: `./vendor/bin/phpunit` — 7510921
 
 #### Manual
 
-- [x] 2.3 `GET /api/v1/projects/{uuid}` returns correct project name and status
-- [x] 2.4 `GET /api/v1/projects/{uuid}/ingestion-key` returns `value` = `"mon_ing_demo0000000000000000000000000000"` and snippet with ingestion URL
+- [x] 2.3 `GET /api/v1/projects/{uuid}` returns correct project name and status — 7510921
+- [x] 2.4 `GET /api/v1/projects/{uuid}/ingestion-key` returns `value` = `"mon_ing_demo0000000000000000000000000000"` and snippet with ingestion URL — 7510921
 
 ### Phase 3: POST Rotate and Behat
 
 #### Automated
 
-- [ ] 3.1 Static analysis passes: `./vendor/bin/phpstan analyse`
-- [ ] 3.2 Unit tests pass: `./vendor/bin/phpunit`
-- [ ] 3.3 Behat suite passes: `./vendor/bin/behat`
+- [x] 3.1 Static analysis passes: `./vendor/bin/phpstan analyse`
+- [x] 3.2 Unit tests pass: `./vendor/bin/phpunit`
+- [x] 3.3 Behat suite passes: `./vendor/bin/behat`
 
 #### Manual
 
-- [ ] 3.4 Rotation returns new key value and snippet; GET reflects the new key
-- [ ] 3.5 Old key returns 401 on ingest after rotation
-- [ ] 3.6 Wrong-org JWT returns 404 on all three endpoints
+- [x] 3.4 Rotation returns new key value and snippet; GET reflects the new key
+- [x] 3.5 Old key returns 401 on ingest after rotation
+- [x] 3.6 Wrong-org JWT returns 404 on all three endpoints

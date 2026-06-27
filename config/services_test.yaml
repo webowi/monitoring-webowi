@@ -38,3 +38,7 @@ services:
   App\Projects\Infrastructure\Security\IngestionKeyHasher:
     arguments:
       $appSecret: '%kernel.secret%'
+
+  App\Projects\Application\GetIngestionKey\InstallSnippetBuilder:
+    arguments:
+      $appUrl: '%env(APP_URL)%'
