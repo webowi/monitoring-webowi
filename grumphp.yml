@@ -28,6 +28,7 @@ grumphp:
       level: max
       configuration: './phpstan.neon'
       memory_limit: "-1"
+      use_grumphp_paths: false
     #            TODO not support for php 8.4
     #        phpmd-for-tests:
     #            whitelist_patterns:

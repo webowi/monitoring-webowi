@@ -198,24 +198,24 @@ Add the unit and Behat coverage exercising every path introduced in Phase 1.
 
 #### Automated
 
-- [x] 1.1 Static analysis passes: `./vendor/bin/phpstan analyse`
-- [x] 1.2 Migration applies cleanly: `./bin/console doctrine:migrations:migrate --no-interaction`
+- [x] 1.1 Static analysis passes: `./vendor/bin/phpstan analyse` — 7cdf7c5
+- [x] 1.2 Migration applies cleanly: `./bin/console doctrine:migrations:migrate --no-interaction` — 7cdf7c5
 
 #### Manual
 
-- [x] 1.3 GET freshness with logs returns 200 + valid ISO-8601 lastLogReceivedAt
-- [x] 1.4 GET freshness with no logs returns 200 + null lastLogReceivedAt
-- [x] 1.5 Wrong-owner project returns 404
-- [x] 1.6 Unauthenticated request returns 401
+- [x] 1.3 GET freshness with logs returns 200 + valid ISO-8601 lastLogReceivedAt — 7cdf7c5
+- [x] 1.4 GET freshness with no logs returns 200 + null lastLogReceivedAt — 7cdf7c5
+- [x] 1.5 Wrong-owner project returns 404 — 7cdf7c5
+- [x] 1.6 Unauthenticated request returns 401 — 7cdf7c5
 
 ### Phase 2: Tests
 
 #### Automated
 
-- [ ] 2.1 Unit tests pass: `./vendor/bin/phpunit`
+- [x] 2.1 Unit tests pass: `./vendor/bin/phpunit`
 - [ ] 2.2 Behat suite passes: `./vendor/bin/behat`
-- [ ] 2.3 Static analysis passes: `./vendor/bin/phpstan analyse`
+- [x] 2.3 Static analysis passes: `./vendor/bin/phpstan analyse`
 
 #### Manual
 
-- [ ] 2.4 All new test cases pass with no regressions in existing Logging feature scenarios
+- [x] 2.4 All new test cases pass with no regressions in existing Logging feature scenarios
