@@ -1,0 +1,122 @@
+{
+    "name": "kkedzierski/monitoring-webowi",
+    "description": "The project is a web application for monitoring.",
+    "type": "project",
+    "license": "proprietary",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=8.4",
+        "ext-ctype": "*",
+        "ext-exif": "*",
+        "ext-gd": "*",
+        "ext-iconv": "*",
+        "doctrine/dbal": "^4.4.1",
+        "doctrine/doctrine-bundle": "^3.2.2",
+        "doctrine/doctrine-migrations-bundle": "^4.0.0",
+        "doctrine/orm": "^3.6.2",
+        "easycorp/easyadmin-bundle": "4.28.1",
+        "endroid/qr-code": "^6.0",
+        "gedmo/doctrine-extensions": "^3.22.0",
+        "hautelook/alice-bundle": "*",
+        "nelmio/cors-bundle": "^2.4",
+        "php-flasher/flasher-symfony": "^2.0",
+        "phpdocumentor/reflection-docblock": "^5.4",
+        "phpstan/phpdoc-parser": "^1.29",
+        "scheb/2fa-bundle": "^8.3.0",
+        "scheb/2fa-totp": "^8.3.0",
+        "sensiolabs/typescript-bundle": "^0.2.1",
+        "stof/doctrine-extensions-bundle": "^1.12",
+        "symfony/apache-pack": "^1.0",
+        "symfony/asset": "8.0.*",
+        "symfony/asset-mapper": "8.0.*",
+        "symfony/console": "8.0.*",
+        "symfony/dotenv": "8.0.*",
+        "symfony/expression-language": "8.0.*",
+        "symfony/flex": "^2",
+        "symfony/form": "8.0.*",
+        "symfony/framework-bundle": "8.0.*",
+        "symfony/http-client": "8.0.*",
+        "symfony/lock": "8.0.*",
+        "symfony/mailer": "8.0.*",
+        "symfony/monolog-bundle": "^4.0.1",
+        "symfony/property-access": "8.0.*",
+        "symfony/property-info": "8.0.*",
+        "symfony/rate-limiter": "8.0.*",
+        "symfony/runtime": "8.0.*",
+        "symfony/security-bundle": "8.0.*",
+        "symfony/serializer": "8.0.*",
+        "symfony/twig-bundle": "8.0.*",
+        "symfony/uid": "8.0.*",
+        "symfony/ux-turbo": "^2.22",
+        "symfony/validator": "8.0.*",
+        "symfony/yaml": "8.0.*",
+        "thecodingmachine/safe": "^3.3",
+        "twig/extra-bundle": "^2.12|^3.0",
+        "twig/twig": "^3.23.0",
+        "vich/uploader-bundle": "^2.3"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true,
+            "symfony/flex": true,
+            "symfony/runtime": true,
+            "infection/extension-installer": true,
+            "phpro/grumphp": true
+        },
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Tests\\": "tests/"
+        }
+    },
+    "replace": {
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-iconv": "*",
+        "symfony/polyfill-php72": "*",
+        "symfony/polyfill-php73": "*",
+        "symfony/polyfill-php74": "*",
+        "symfony/polyfill-php80": "*",
+        "symfony/polyfill-php81": "*",
+        "symfony/polyfill-php82": "*"
+    },
+    "scripts": {
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd",
+            "importmap:install": "symfony-cmd"
+        },
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ]
+    },
+    "conflict": {
+        "symfony/symfony": "*"
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": false,
+            "require": "8.0.*"
+        }
+    },
+    "require-dev": {
+        "dg/bypass-finals": "^1.8",
+        "friendsofphp/php-cs-fixer": "^3.57",
+        "infection/infection": "^0.32.3",
+        "phpro/grumphp": "^2.5",
+        "phpstan/phpstan": "^1.11",
+        "phpunit/phpunit": "^10",
+        "symfony/maker-bundle": "^1.60",
+        "symfony/stopwatch": "8.0.*",
+        "symfony/web-profiler-bundle": "8.0.*"
+    }
+}

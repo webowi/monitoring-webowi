@@ -1,0 +1,66 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content_title %}
+    {{ page_title|default('Dashboard') }}
+{% endblock %}
+
+{% block main %}
+    <div class="mw">
+        <section class="grid grid--kpis">
+            {% for kpi in kpis %}
+                <article class="dashCard kpi">
+                    <div class="kpi__label">{{ kpi.label }}</div>
+                    <div class="kpi__value">{{ kpi.value }}</div>
+                    <div class="kpi__hint">{{ kpi.hint }}</div>
+                </article>
+            {% endfor %}
+        </section>
+
+        <section class="grid grid--main">
+            <article class="dashCard">
+                <header class="card__header">
+                    <h2 class="card__title">Krytyczne błędy</h2>
+                    <p class="card__subtitle">Najważniejsze zdarzenia wymagające reakcji</p>
+                </header>
+
+                {% if critical is empty %}
+                    <div class="empty">
+                        Brak danych (na razie). Docelowo: ostatnie krytyczne logi, grupowanie, status „ack”.
+                    </div>
+                {% else %}
+                    <div class="list">
+                        {% for item in critical %}
+                            <div class="listRow">
+                                <div class="badge badge--critical">CRITICAL</div>
+                                <div class="listRow__main">
+                                    <div class="listRow__title">{{ item.title }}</div>
+                                    <div class="listRow__meta">
+                                        {{ item.service }} · {{ item.env }} · {{ item.time|date('Y-m-d H:i') }}
+                                    </div>
+                                </div>
+                                <a class="btn btn--ghost" href="{{ item.logUrl }}">Zobacz log</a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </article>
+
+            <article class="dashCard">
+                <header class="card__header">
+                    <h2 class="card__title">Szybkie akcje</h2>
+                    <p class="card__subtitle">Najczęstsze wejścia / skróty</p>
+                </header>
+
+                <div class="actions">
+                    <a class="btn btn--primary" href="#">Dodaj źródło logów</a>
+                    <a class="btn btn--ghost" href="#">Reguły alertów</a>
+                    <a class="btn btn--ghost" href="#">Integracje</a>
+                </div>
+
+                <div class="note">
+                    Tu później możesz dodać mini-dashboardy: wykresy, trendy, top error types, top services.
+                </div>
+            </article>
+        </section>
+    </div>
+{% endblock %}

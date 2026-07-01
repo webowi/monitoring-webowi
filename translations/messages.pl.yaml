@@ -1,0 +1,246 @@
+Email: "Adres e-mail"
+Password: "Hasło"
+dashboard:
+  meta:
+    title: "Panel administracyjny"
+    description: "Panel administracyjny dla firm"
+  save: "Zapisz"
+  panel:
+    categories: "Kategorie"
+    mainInformation: "Główne informacje"
+    images: "Zdjęcia"
+    notes: 'Notatki'
+    mainTitle: "monitoring-webowi"
+    home: "Strona główna"
+    advancedSettings: 'Ustawienia zaawansowane'
+    realizations: 'Realizacje'
+    another: 'Inne'
+  authentication:
+    back: 'Powrót'
+    login:
+      title: "Logowanie"
+      email: "Adres e-mail"
+      password: "Hasło"
+      submit: "Zaloguj się"
+      forgotPassword: "Zapomniałeś hasła?"
+      verifyEmail: "Odwiedź swoją skrzynkę i kliknij w link, aby zweryfikować adres e-mail. Jeżeli nie otrzymałeś e-maila, kliknij w <a href=\"%resend_url%\">ten link</a>."
+      fields:
+        email: "Adres e-mail"
+        password: "Hasło"
+    email:
+      template:
+        ignoreInfo: 'Jeśli nie wykonywałeś żadnej akcji, zignoruj tę wiadomość.'
+    register:
+      title: "Rejestracja"
+      password:
+        title: "Hasło"
+        error:
+          passwordRequired:
+            title: 'Hasło jest wymagane'
+      passwordConfirmation: "Potwierdź hasło"
+      submit: "Zarejestruj się"
+      alreadyRegistered: "Masz już konto?"
+      verificationEmailSent: "Na podany adres e-mail został wysłany link weryfikacyjny. Sprawdź swoją skrzynkę."
+      tokenIsInvalid: "Token wygasł lub jest niepoprawny."
+      fields:
+        email: "Adres e-mail"
+        password: "Hasło"
+        repeatPassword: "Potwierdź hasło"
+      confirmation:
+        title: 'Potwierdź adres e-mail'
+      email:
+        template:
+          description: 'Potwierdź swój adres e-mail, klikając w link poniżej. Jeśli nie prosiłeś o potwierdzenia adresu e-mail, zignoruj tę wiadomość.'
+          submit: 'Kliknij w link, aby potwierdzić adres e-mail'
+        error:
+          emailRequired:
+            title: 'Adres e-mail jest wymagany'
+      success:
+        title: 'Udało się zarejestrować'
+        description: 'Na podany adres e-mail został wysłany link weryfikacyjny. Sprawdź swoją skrzynkę.'
+      error:
+        title: 'Nie udało się zarejestrować'
+        description: 'Nie udało się zarejestrować. Spróbuj ponownie.'
+      confirm:
+        template:
+          description: 'Kliknij w link, aby potwierdzić adres e-mail.'
+          submit: 'Kliknij w link, aby potwierdzić adres e-mail'
+        error:
+          title: 'Nie udało się potwierdzić adresu e-mail'
+          description: 'Nie udało się potwierdzić adresu e-mail. Spróbuj ponownie.'
+          tokenNotFound:
+            title: 'Token wygasł lub jest niepoprawny'
+        success:
+          title: 'Adres e-mail został potwierdzony'
+          description: 'Dziękujemy za potwierdzenie adresu e-mail.'
+    resetPassword:
+      title: "Zresetuj hasło"
+      description: "Zresetuj hasło"
+      success:
+        title: "Hasło zostało zresetowane"
+        description: "Twoje hasło zostało zresetowane. Możesz się teraz zalogować."
+      error:
+        title: "Nie udało się zresetować hasła"
+        description: "Nie udało się zresetować hasła. Spróbuj ponownie."
+        passwordRequired:
+          title: 'Hasło jest wymagane'
+        resetPassword:
+          title: 'Nie udało się zresetować hasła'
+        tokenNotFound:
+          title: 'Token wygasł lub jest niepoprawny'
+        userNotFound:
+          title: 'Użytkownik nie został znaleziony'
+        cannotSendEmail:
+          title: 'Nie udało się wysłać e-maila'
+        tokenGenerating:
+          title: 'Nie udało się wygenerować tokenu'
+        emailRequired:
+          title: 'Adres e-mail jest wymagany'
+      email:
+        description: "Podaj adres e-mail, na który wyślemy link do zresetowania hasła"
+        sent:
+          title: 'Link do zresetowania hasła został wysłany'
+          description: 'Na podany adres e-mail został wysłany link do zresetowania hasła. Sprawdź swoją skrzynkę.'
+        error:
+          title: 'Nie udało się zresetować hasła'
+          description: 'Nie udało się zresetować hasła. Spróbuj ponownie.'
+        submit: "Wyślij"
+        template:
+          description: 'Wygląda na to, że poprosiłeś o zresetowanie hasła. Kliknij w link, aby zresetować hasło. Jeśli nie prosiłeś o zresetowanie hasła, zignoruj tę wiadomość.'
+          submit: 'Kliknij w link, aby zresetować hasło'
+          ignoreInfo: 'Jeśli nie prosiłeś o zresetowanie hasła, zignoruj tę wiadomość.'
+    resendConfirmation:
+      title: "Link weryfikacyjny"
+      email:
+        description: "Podaj adres e-mail, na który wyślemy link weryfikacyjny"
+        submit: "Wyślij"
+      success:
+        title: "Link weryfikacyjny został wysłany"
+        description: "Na podany adres e-mail został wysłany link weryfikacyjny. Sprawdź swoją skrzynkę."
+      error:
+        title: "Nie udało się wysłać linku weryfikacyjnego"
+        description: "Nie udało się wysłać linku weryfikacyjnego. Spróbuj ponownie."
+        emailRequired:
+          title: 'Adres e-mail jest wymagany.'
+        tokenNotFound:
+          title: 'Token wygasł lub jest niepoprawny.'
+        cannotSendEmail:
+          title: 'Nie udało się wysłać e-maila.'
+  account:
+    passwordNotMatch: 'Podane aktualne hasło nie jest prawidłowe.'
+    section:
+      title: "Edytuj profil"
+    title: "Profil"
+    email:
+      title: "Adres e-mail"
+    avatar:
+      title: "Avatar"
+    changePassword:
+      title: "Zmień hasło"
+    newPassword:
+        title: "Nowe hasło"
+    confirmPassword:
+        title: "Potwierdź hasło"
+    actualPassword:
+        title: "Aktualne hasło"
+    edit:
+      success:
+        title: "Profil został zaktualizowany"
+        description: "Twoje dane zostały zaktualizowane."
+      error:
+        title: "Nie udało się zaktualizować profilu"
+        description: "Nie udało się zaktualizować profilu. Spróbuj ponownie."
+    2fa:
+      title: 'Dwuetapowe uwierzytelnianie'
+      description: "Skorzystaj z kodu z aplikacji Authy lub Google Authentication"
+      code: 'Kod'
+      enable:
+        title: 'Włącz dwuetapowe uwierzytelnianie'
+        description: 'Użyj aplikacji Authy lub Google Authentication, aby zeskanować kod QR'
+        remind: 'Pamiętaj, jeśli nie zeskanujesz tego kodu QR to po wylogowaniu, nie będziesz mógł zalogować się do panelu bez kodu z aplikacji.'
+        scanned: "Zeskanowane"
+      disable:
+        title: 'Wyłącz dwuetapowe uwierzytelnianie'
+      turnOn:
+        success:
+          title: 'Dwuetapowe uwierzytelnianie zostało włączone'
+          description: 'Dwuetapowe uwierzytelnianie zostało włączone. Teraz, aby zalogować się do swojego konta, będziesz musiał podać kod z aplikacji autentykacyjnej.'
+        error:
+          title: 'Nie udało się włączyć dwuetapowego uwierzytelniania'
+          description: 'Nie udało się włączyć dwuetapowego uwierzytelniania. Spróbuj ponownie.'
+      turnOff:
+        success:
+          title: 'Dwuetapowe uwierzytelnianie zostało wyłączone'
+          description: 'Dwuetapowe uwierzytelnianie zostało wyłączone.'
+        error:
+          title: 'Nie udało się wyłączyć dwuetapowego uwierzytelniania'
+          description: 'Nie udało się wyłączyć dwuetapowego uwierzytelniania. Spróbuj ponownie.'
+  company:
+    section:
+      title: "Twoja firma"
+    name:
+      title: "Nazwa firmy"
+    phoneNumber:
+      title: "Numer telefonu"
+    companyEmail:
+      title: "Adres e-mail"
+    city:
+      title: "Miasto"
+    street:
+      title: "Ulica"
+    zipCode:
+      title: "Kod pocztowy"
+    province:
+      title: "Województwo"
+    taxIdentificationNumber:
+      title: "NIP"
+      help: "Po wpisaniu NIP-u, dane firmy zostaną automatycznie uzupełnione na podstawie informacji z GUS'u"
+    logo:
+      title: "Logo"
+    title: "Dane firmy"
+  realization:
+    mainRealizationImage: 'Głowne zdjęcie realizacji'
+    images: 'Zdjęcia realizacji'
+    description: 'Opis'
+    name: 'Nazwa'
+    add: 'Dodaj realizację'
+    realization:
+      title: 'Realizacje'
+    create:
+      success:
+        title: 'Realizacja został dodana'
+        description: 'Realizacja została zapisana.'
+      error:
+        title: 'Nie udało się zapisać realizacji'
+        description: 'Nie udało się zapisać realizacji. Spróbuj ponownie.'
+    delete:
+      title: 'Usuń'
+      confirm: 'Czy na pewno chcesz usunąć realizację?'
+      success:
+        title: 'Realizacja został usunięta'
+        description: 'Realizacja została usunięta.'
+      error:
+        title: 'Nie udało się usunąć realizacji'
+        description: 'Nie udało się usunąć realizacji. Spróbuj ponownie.'
+    edit:
+      title: 'Edytuj'
+      success:
+        title: 'Realizacja został zaktualizowana'
+        description: 'Realizacja została zaktualizowana.'
+      error:
+        title: 'Nie udało się zaktualizować realizacji'
+        description: 'Nie udało się zaktualizować realizacji. Spróbuj ponownie.'
+exception:
+  cannotSendEmail: "Nie udało się wysłać e-maila."
+  emailRequired: "Adres e-mail jest wymagany."
+  userNotFound: "Użytkownik nie został znaleziony."
+  resetPassword: "Nie udało się zresetować hasła."
+  passwordRequired: "Hasło jest wymagane."
+  tokenGeneratingFailed: "Nie udało się wygenerować tokenu."
+  createNewUserFailed: "Nie udało się utworzyć nowego użytkownika."
+  tokenNotFound: "Token wygasł lub jest niepoprawny."
+  companyNotFound: "Firma nie została znaleziona."
+  cannotChange2FaState: "Nie udało się zmienić stanu dwuetapowego uwierzytelniania."
+  realizationNotFound: 'Realizacji nie znaleziono.'
+  userExist: 'Użytkownik już istnieje.'
+  softDeleteFailed: 'Nie udało się usunąć.'

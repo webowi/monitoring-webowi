@@ -1,0 +1,15 @@
+controllers_dashboard:
+    resource:
+        path: ../src/Dashboard/Ui/
+        namespace: App\Dashboard\Ui
+    type: attribute
+controllers_account:
+    resource:
+        path: ../src/Account/Ui/
+        namespace: App\Account\Ui
+    type: attribute
+translation_controller:
+    resource:
+        path: ../src/Kernel/Translator/
+        namespace: App\Kernel\Translator
+    type: attribute

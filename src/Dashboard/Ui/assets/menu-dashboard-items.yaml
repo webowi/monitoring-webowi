@@ -1,0 +1,5 @@
+dashboard.panel.categories:
+  controller: 'App\Realization\Ui\RealizationCrudController'
+  svg: 'assets/dashboard-ui/main/assets/images/boxes.svg'
+  translate: 'dashboard.panel.realizations'
+# website used to svg: https://www.svgrepo.com/

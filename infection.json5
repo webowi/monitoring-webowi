@@ -1,0 +1,23 @@
+{
+    "$schema": "vendor/infection/infection/resources/schema.json",
+    "source": {
+        "directories": [
+            "src"
+        ],
+        "excludes": [
+            "Kernel.php",
+            "Kernel/EmailLabsSymfonyBundle/EmailBuilder.php",
+            "Kernel/EmailLabsSymfonyBundle/EmailLabIntegration/EmailLabBodyFactory.php",
+            "Kernel/EmailLabsSymfonyBundle/EmailLabIntegration/EmailLabClient.php",
+            "Kernel/EmailLabsSymfonyBundle/EmailLabIntegration/EmailLabRequestBuilder.php",
+        ]
+    },
+    "logs": {
+        "text": "infection.log"
+    },
+    "mutators": {
+        "@default": true
+    },
+    "minMsi": 80,
+    "minCoveredMsi": 90
+}

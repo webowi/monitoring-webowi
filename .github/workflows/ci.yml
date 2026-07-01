@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      DOCKER_MYSQL_USER: user
+      DOCKER_MYSQL_PASSWORD: password
+      DOCKER_MYSQL_ROOT_PASSWORD: password
+      DOCKER_MYSQL_DB_TEST: monitoring-webowi-test
+      DOCKER_MYSQL_TEST_PORT: 34503
+      DOCKER_MYSQL_DB: monitoring-webowi
+      DATABASE_URL: "mysql://user:password@monitoring-webowi-mysql-test:3306/monitoring-webowi-test?serverVersion=8.0"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: docker build -t monitoring-webowi-php -f ./docker/etc/php/main.Dockerfile .
+
+      - name: Set up Docker Compose
+        run: docker compose up -d
+
+      - name: Install PHP dependencies
+        run: docker compose exec -T monitoring-webowi-php composer install --no-scripts
+
+      - name: Run PHPUnit
+        run: docker compose exec -T monitoring-webowi-php ./vendor/bin/phpunit --configuration phpunit.xml.dist
+
+      - name: Run grumphp (composer, phpcsfixer, phpstan, infection)
+        run: docker compose exec -T monitoring-webowi-php ./vendor/bin/grumphp run
+
+      - name: Shutdown Docker Compose
+        run: docker compose down

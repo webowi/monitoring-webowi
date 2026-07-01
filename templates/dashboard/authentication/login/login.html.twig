@@ -1,0 +1,80 @@
+{% extends "dashboard/authentication/base-authentication.html.twig" %}
+
+{% block body %}
+    <section class="auth">
+        <div class="auth__bg" aria-hidden="true">
+            <img
+                    src="{{ asset('assets/dashboard-ui/authentication/assets/images/background-monitoring.webp') }}"
+                    alt=""
+                    class="auth__bgImage"
+                    loading="lazy"
+                    decoding="async"
+            />
+        </div>
+
+        <div class="auth__content">
+            <div class="authCard" role="region" aria-label="Logowanie">
+                <header class="authCard__header">
+                    <h1 class="authCard__title">
+                        {% trans %}dashboard.authentication.login.title{% endtrans %}
+                    </h1>
+                    <p class="authCard__subtitle">Zaloguj się</p>
+                </header>
+
+                {# Globalne błędy #}
+                {% if form_errors(loginForm) %}
+                    <div class="alert alert--error" role="alert">
+                        {{ form_errors(loginForm) }}
+                    </div>
+                {% endif %}
+                {% if error %}
+                    <div class="alert alert--error" role="alert">
+                        {{ error.messageKey|trans(error.messageData, 'security') }}
+                    </div>
+                {% endif %}
+
+                {{ form_start(loginForm, { attr: { class: 'authForm', novalidate: 'novalidate' } }) }}
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
+
+                <div class="authField">
+                    {{ form_row(loginForm.email, {
+                        label: 'Email',
+                        name: 'email',
+                        value: last_username,
+                        id: 'email',
+                        row_attr: { class: 'authField__row' },
+                        attr: {
+                            class: 'authInput',
+                            autocomplete: 'email',
+                            inputmode: 'email'
+                        }
+                    }) }}
+                </div>
+
+                <div class="authField">
+                    {{ form_row(loginForm.password, {
+                        label: 'Password',
+                        name: 'password',
+                        id: 'password',
+                        row_attr: { class: 'authField__row' },
+                        attr: {
+                            class: 'authInput',
+                            autocomplete: 'current-password'
+                        }
+                    }) }}
+                </div>
+
+                <button class="btn btn--primary btn--block" type="submit">
+                    {% trans %}dashboard.authentication.login.submit{% endtrans %}
+                </button>
+
+                <div class="authCard__footer">
+                    <a href="{{ path('app_forgot_password') }}" class="authLink">
+                        {% trans %}dashboard.authentication.login.forgotPassword{% endtrans %}
+                    </a>
+                </div>
+                {{ form_end(loginForm) }}
+            </div>
+        </div>
+    </section>
+{% endblock %}

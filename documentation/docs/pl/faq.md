@@ -1,0 +1,1 @@
+Często zadawane pytania: FAQ

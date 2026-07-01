@@ -1,0 +1,50 @@
+{% extends "dashboard/authentication/base-authentication.html.twig" %}
+
+{% block title %}{% trans %}dashboard.account.2fa.title{% endtrans %}{% endblock %}
+
+{% block body %}
+    <section class="auth">
+        <div class="auth__bg" aria-hidden="true">
+            <img
+                    src="{{ asset('assets/dashboard-ui/authentication/assets/images/background-monitoring.webp') }}"
+                    alt=""
+                    class="auth__bgImage"
+                    loading="lazy"
+                    decoding="async"
+            />
+        </div>
+
+        <div class="auth__content">
+            <div class="authCard" role="region" aria-label="{% trans %}dashboard.account.2fa.title{% endtrans %}">
+                <header class="authCard__header">
+                    <h1 class="authCard__title">{% trans %}dashboard.account.2fa.title{% endtrans %}</h1>
+                    <p class="authCard__subtitle">{% trans %}dashboard.account.2fa.enable.description{% endtrans %}</p>
+                </header>
+
+                <div class="qrBlock" aria-label="Kod QR do konfiguracji 2FA">
+                    <img
+                            src="{{ path('app_qr_code') }}"
+                            alt="Kod QR do konfiguracji 2FA"
+                            class="qrBlock__img"
+                            loading="eager"
+                            decoding="async"
+                    />
+                </div>
+
+                <p class="authHint authHint--spaced">
+                    {% trans %}dashboard.account.2fa.enable.remind{% endtrans %}
+                </p>
+
+                <div class="authActions authActions--single">
+                    <a href="{{ app.request.headers.get('referer') }}" class="btn btn--primary btn--block">
+                        {% trans %}dashboard.account.2fa.enable.scanned{% endtrans %}
+                    </a>
+                </div>
+
+                <div class="authCard__footer authCard__footer--center">
+                    <span class="authFooterText">© 2026 — webowi.pl</span>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

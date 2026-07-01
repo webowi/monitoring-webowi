@@ -1,0 +1,49 @@
+site_name: webowi.pl
+docs_dir: ./docs
+site_dir: ./site
+site_url: https://webowi.pl/
+nav:
+  - Home: index.md
+  - About: about.md
+  - FAQ: faq.md
+  - Technical guide:
+      - Installation: technicalGuide/installation.md
+      - Api documentation: technicalGuide/api.md
+      - Code documentation: technicalGuide/code.md
+      - This documentation: technicalGuide/thisDocumentation.md
+      - Tests: technicalGuide/tests.md
+  - Authors: authors.md
+theme:
+  language: pl
+  name: material
+  palette:
+      primary: green
+      accent: blue
+  font:
+      text: "Roboto"
+      code: "Roboto Mono"
+plugins:
+  - search:
+      lang: en
+  - i18n:
+      docs_structure: folder
+      languages:
+        - locale: en
+          default: true
+          name: English
+          build: true
+        - locale: pl
+          name: Polski
+          build: true
+          default: true
+          nav_translations:
+            Home: Strona główna
+            About: O projekcie
+            FAQ: FAQ
+            Technical guide: Podręcznik techniczny
+            Installation: Instalacja
+            Api documentation: Dokumentacja API
+            Code documentation: Dokumentacja kodu
+            This documentation: Ta dokumentacja
+            Tests: Testy
+            Authors: Autorzy

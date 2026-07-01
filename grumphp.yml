@@ -1,0 +1,19 @@
+grumphp:
+    stop_on_failure: true
+    tasks:
+        composer:
+            file: composer.json
+        phpcsfixer:
+            config: './.php-cs-fixer.php'
+            verbose: true
+#        phpstan:
+#            level: max
+#            configuration: './phpstan.neon'
+#            memory_limit: "-1"
+#        phpunit:
+#            always_execute: true
+#        infection:
+#            threads: 4
+#            min_msi: 95
+#            min_covered_msi: 95
+#            triggered_by: [php]

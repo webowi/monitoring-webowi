@@ -1,0 +1,43 @@
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+/.env
+/.env.test
+/myenv/*
+/infection.log
+
+###< symfony/framework-bundle ###
+
+###> phpstrom ###
+/.idea
+###< phpstrom ###
+
+###> docker ###
+/docker/.env
+###< docker ###
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
+
+###> friendsofphp/php-cs-fixer ###
+/.php-cs-fixer.cache
+###< friendsofphp/php-cs-fixer ###
+
+###> Macos ###
+.DS_Store
+/assets/.DS_Store
+/assets/client-ui/.DS_Store
+/assets/client-ui/src/.DS_Store
+/assets/client-ui/src/assets/.DS_Store
+###< Macos ###
+
+###> symfony/asset-mapper ###
+/public/assets/
+/assets/vendor/
+###< symfony/asset-mapper ###
