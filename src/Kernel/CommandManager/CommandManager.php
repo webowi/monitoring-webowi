@@ -78,22 +78,4 @@ class CommandManager implements CommandManagerInterface
     {
         return new ProgressBar($output);
     }
-
-    public function ask(string $string, ?string $default = null): mixed
-    {
-        if (null === $this->io) {
-            throw new \LogicException('SymfonyStyle is not initialized. Call initialize() method first.');
-        }
-
-        return $this->io->ask($string, $default);
-    }
-
-    public function askHidden(string $string): mixed
-    {
-        if (null === $this->io) {
-            throw new \LogicException('SymfonyStyle is not initialized. Call initialize() method first.');
-        }
-
-        return $this->io->askHidden($string);
-    }
 }

@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+CONTAINER_NAME="monitoring-webowi-php"
+
 set -e
 
 echo "======================================="
@@ -25,6 +27,13 @@ read -p "Adres e-mail: " EMAIL
 while true; do
     read -s -p "Hasło: " PASSWORD
     echo
+
+    if [[ ${#PASSWORD} -lt 8 ]]; then
+        echo
+        echo "❌ Hasło musi mieć co najmniej 8 znaków."
+        echo
+        continue
+    fi
 
     read -s -p "Powtórz hasło: " PASSWORD_REPEAT
     echo

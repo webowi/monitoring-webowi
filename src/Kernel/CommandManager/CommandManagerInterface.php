@@ -21,8 +21,4 @@ interface CommandManagerInterface
     public function danger(string $danger): self;
 
     public function generateProgressBar(OutputInterface $output): ProgressBar;
-
-    public function ask(string $string, ?string $default = null): mixed;
-
-    public function askHidden(string $string): mixed;
 }

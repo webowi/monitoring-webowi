@@ -20,6 +20,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 class CreateAccountCommand extends Command
 {
+    private const MIN_PASSWORD_LENGTH = 8;
+
     public function __construct(
         private readonly CreateAccountHandler $handler,
         private readonly CommandManagerInterface $commandManager,
@@ -39,12 +41,8 @@ class CreateAccountCommand extends Command
     {
         $this->commandManager->initialize($input, $output);
 
-        $email = $input->getOption('email')
-            ?: $this->commandManager->ask('Email address');
-
-        $plainPassword = $input->getOption('password')
-            ?: $this->commandManager->askHidden('Password');
-
+        $email = $input->getOption('email');
+        $plainPassword = $input->getOption('password');
         $organizationName = $input->getOption('organization-name') ?: 'Default Organization';
 
         if (!\is_string($email) || '' === $email) {
@@ -55,6 +53,12 @@ class CreateAccountCommand extends Command
 
         if (!\is_string($plainPassword) || '' === $plainPassword) {
             $this->commandManager->error('Password is required.');
+
+            return Command::FAILURE;
+        }
+
+        if (mb_strlen($plainPassword) < self::MIN_PASSWORD_LENGTH) {
+            $this->commandManager->error(\sprintf('Password must be at least %d characters long.', self::MIN_PASSWORD_LENGTH));
 
             return Command::FAILURE;
         }

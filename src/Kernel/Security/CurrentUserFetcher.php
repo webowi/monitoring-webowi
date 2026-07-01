@@ -19,10 +19,21 @@ class CurrentUserFetcher
 
     public function fetchUser(): User
     {
+        $user = $this->fetchUserOrNull();
+
+        if (null === $user) {
+            throw new \LogicException('Current user is not an instance of User.');
+        }
+
+        return $user;
+    }
+
+    public function fetchUserOrNull(): ?User
+    {
         $user = $this->security->getUser();
 
         if (!$user instanceof SymfonyUserAdapter) {
-            throw new \LogicException('Current user is not an instance of User.');
+            return null;
         }
 
         return $user->getDomainUser();

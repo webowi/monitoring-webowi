@@ -3,8 +3,9 @@
 CONTAINER_NAME = monitoring-webowi-php
 
 .PHONY: install
-init: ## Initialize project
+install: ## Initialize project
 	bash bin/setup.sh
+init: install ## Alias for install
 
 .PHONY: start
 start: ## Start project

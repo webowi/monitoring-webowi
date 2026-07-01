@@ -41,9 +41,12 @@ final readonly class TimestampableSubscriber
 
         $entity->setUpdatedAt($dateTimeNow);
 
-        try {
-            $user = $this->currentUserFetcher->fetchUser();
+        $user = $this->currentUserFetcher->fetchUserOrNull();
+        if (null === $user) {
+            return;
+        }
 
+        try {
             if (null === $entity->getCreatedBy()) {
                 $entity->setCreatedBy($user->getUserIdentifier());
             }
@@ -72,8 +75,12 @@ final readonly class TimestampableSubscriber
 
         $entity->setUpdatedAt($this->getDateTimeNow());
 
+        $user = $this->currentUserFetcher->fetchUserOrNull();
+        if (null === $user) {
+            return;
+        }
+
         try {
-            $user = $this->currentUserFetcher->fetchUser();
             $entity->setUpdatedBy($user->getUserIdentifier());
         } catch (\Throwable $exception) {
             $this->logger->error(
@@ -98,8 +105,12 @@ final readonly class TimestampableSubscriber
 
         $entity->setDeletedAt($this->getDateTimeNow());
 
+        $user = $this->currentUserFetcher->fetchUserOrNull();
+        if (null === $user) {
+            return;
+        }
+
         try {
-            $user = $this->currentUserFetcher->fetchUser();
             $entity->setDeletedBy($user->getUserIdentifier());
         } catch (\Throwable $exception) {
             $this->logger->error(
