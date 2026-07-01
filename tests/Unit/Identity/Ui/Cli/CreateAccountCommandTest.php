@@ -43,11 +43,15 @@ class CreateAccountCommandTest extends TestCase
     #[Test]
     public function returnsSuccessOnValidInput(): void
     {
-        $this->stubInputs('user@example.com', 'secret123');
+        $email = 'user@example.com';
+        $pass  = 'secret123';
         $this->handler->expects($this->once())->method('handle');
         $this->commandManager->expects($this->once())->method('success');
 
-        $exitCode = $this->tester->execute([]);
+        $exitCode = $this->tester->execute([
+            '--email' => $email,
+            '--password' => $pass,
+        ]);
 
         $this->assertSame(Command::SUCCESS, $exitCode);
     }
@@ -55,23 +59,15 @@ class CreateAccountCommandTest extends TestCase
     #[Test]
     public function returnsFailureWhenEmailIsEmpty(): void
     {
-        $this->stubInputs('', 'secret123');
+        $email = '';
+        $pass = 'secret123';
         $this->handler->expects($this->never())->method('handle');
         $this->commandManager->expects($this->once())->method('error');
 
-        $exitCode = $this->tester->execute([]);
-
-        $this->assertSame(Command::FAILURE, $exitCode);
-    }
-
-    #[Test]
-    public function returnsFailureWhenEmailIsNull(): void
-    {
-        $this->commandManager->method('ask')->willReturn(null);
-        $this->commandManager->method('askHidden')->willReturn('secret123');
-        $this->handler->expects($this->never())->method('handle');
-
-        $exitCode = $this->tester->execute([]);
+        $exitCode = $this->tester->execute([
+            '--email' => $email,
+            '--password' => $pass,
+        ]);
 
         $this->assertSame(Command::FAILURE, $exitCode);
     }
@@ -79,22 +75,31 @@ class CreateAccountCommandTest extends TestCase
     #[Test]
     public function returnsFailureWhenPasswordIsEmpty(): void
     {
-        $this->stubInputs('user@example.com', '');
+        $email = 'user@example.com';
+        $pass = '';
         $this->handler->expects($this->never())->method('handle');
         $this->commandManager->expects($this->once())->method('error');
 
-        $exitCode = $this->tester->execute([]);
+        $exitCode = $this->tester->execute([
+            '--email' => $email,
+            '--password' => $pass,
+        ]);
 
         $this->assertSame(Command::FAILURE, $exitCode);
     }
 
     #[Test]
-    public function returnsFailureWhenPasswordIsNull(): void
+    public function returnsFailureWhenPasswordIsTooShort(): void
     {
-        $this->stubInputs('user@example.com', null);
+        $email = 'user@example.com';
+        $pass = 'short1';
         $this->handler->expects($this->never())->method('handle');
+        $this->commandManager->expects($this->once())->method('error');
 
-        $exitCode = $this->tester->execute([]);
+        $exitCode = $this->tester->execute([
+            '--email' => $email,
+            '--password' => $pass,
+        ]);
 
         $this->assertSame(Command::FAILURE, $exitCode);
     }
@@ -102,11 +107,15 @@ class CreateAccountCommandTest extends TestCase
     #[Test]
     public function returnsFailureWhenUserAlreadyExists(): void
     {
-        $this->stubInputs('user@example.com', 'secret123');
-        $this->handler->method('handle')->willThrowException(new UserExistException());
+        $email = 'user@email.com';
+        $pass  = 'secret123';
+        $this->handler->expects($this->once())->method('handle')->willThrowException(new UserExistException());
         $this->commandManager->expects($this->once())->method('error');
 
-        $exitCode = $this->tester->execute([]);
+        $exitCode = $this->tester->execute([
+            '--email' => $email,
+            '--password' => $pass,
+        ]);
 
         $this->assertSame(Command::FAILURE, $exitCode);
     }
@@ -114,11 +123,15 @@ class CreateAccountCommandTest extends TestCase
     #[Test]
     public function returnsFailureOnInvalidEmailFormat(): void
     {
-        $this->stubInputs('not-an-email', 'secret123');
+        $email = 'not-an-email';
+        $pass = 'secret123';
         $this->handler->method('handle')->willThrowException(new \InvalidArgumentException('Invalid email'));
         $this->commandManager->expects($this->once())->method('error');
 
-        $exitCode = $this->tester->execute([]);
+        $exitCode = $this->tester->execute([
+            '--email' => $email,
+            '--password' => $pass,
+        ]);
 
         $this->assertSame(Command::FAILURE, $exitCode);
     }
@@ -126,10 +139,8 @@ class CreateAccountCommandTest extends TestCase
     #[Test]
     public function usesDefaultOrganizationNameWhenOrgInputIsNull(): void
     {
-        $this->commandManager
-            ->method('ask')
-            ->willReturnOnConsecutiveCalls('user@example.com', null);
-        $this->commandManager->method('askHidden')->willReturn('secret123');
+        $email = 'user@exampel.com';
+        $pass = 'password123';
 
         $this->handler
             ->expects($this->once())
@@ -138,6 +149,10 @@ class CreateAccountCommandTest extends TestCase
                 fn ($cmd) => 'Default Organization' === $cmd->organizationName,
             ));
 
-        $this->tester->execute([]);
+        $this->tester->execute([
+            '--email' => $email,
+            '--password' => $pass,
+            '--organization-name' => null,
+        ]);
     }
 }

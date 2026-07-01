@@ -47,6 +47,37 @@ class CurrentUserFetcherTest extends TestCase
     }
 
     #[Test]
+    public function fetchUserOrNullReturnsNullWhenCurrentUserIsNotInstanceOfUser(): void
+    {
+        $this->security
+            ->expects($this->once())
+            ->method('getUser')
+            ->willReturn(null);
+
+        $result = $this->currentUserFetcher->fetchUserOrNull();
+
+        $this->assertNull($result);
+    }
+
+    #[Test]
+    public function fetchUserOrNullReturnsUserWhenAuthenticated(): void
+    {
+        $user = $this->createMock(SymfonyUserAdapter::class);
+        $this->security
+            ->expects($this->once())
+            ->method('getUser')
+            ->willReturn($user);
+        $user
+            ->expects($this->once())
+            ->method('getDomainUser')
+            ->willReturn($domainUser = $this->createStub(User::class));
+
+        $result = $this->currentUserFetcher->fetchUserOrNull();
+
+        $this->assertSame($domainUser, $result);
+    }
+
+    #[Test]
     public function fetchCurrentUserSuccessfully(): void
     {
         $user = $this->createMock(SymfonyUserAdapter::class);

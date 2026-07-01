@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Behat\Context;
 
+use App\Tests\Behat\Exception\ExpectedOutputContainException;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -52,5 +53,18 @@ class CommandContext implements Context
     private function prepareAsFlag(string $value): string
     {
         return str_starts_with($value, '--') ? $value : \sprintf('--%s', $value);
+    }
+
+    /**
+     * @Then I should see output containing :expected
+     *
+     * @throws ExpectedOutputContainException
+     */
+    public function iShouldSeeOutputContaining(string $expected): void
+    {
+        $actualOutput = $this->output->fetch();
+        if (!str_contains($actualOutput, $expected)) {
+            throw new ExpectedOutputContainException($expected, $actualOutput);
+        }
     }
 }

@@ -110,8 +110,8 @@ class TimestampableSubscriberTest extends TestCase
             ->willReturnSelf();
         $this->currentUserFetcher
             ->expects($this->once())
-            ->method('fetchUser')
-            ->willThrowException($exception = new \LogicException());
+            ->method('fetchUserOrNull')
+            ->willReturn(null);
         $this->entity
             ->expects($this->never())
             ->method('setCreatedBy');
@@ -120,15 +120,8 @@ class TimestampableSubscriberTest extends TestCase
             ->method('setUpdatedBy')
             ->with(null);
         $this->logger
-            ->expects($this->once())
-            ->method('error')
-            ->with(
-                'Setting user data for resource failed.',
-                [
-                    'exception' => $exception,
-                    'class'     => TimestampableSubscriber::class,
-                ]
-            );
+            ->expects($this->never())
+            ->method('error');
 
         $this->subscriber->prePersist($this->event);
     }
@@ -158,7 +151,7 @@ class TimestampableSubscriberTest extends TestCase
             ->willReturnSelf();
         $this->currentUserFetcher
             ->expects($this->once())
-            ->method('fetchUser')
+            ->method('fetchUserOrNull')
             ->willReturn($this->user);
         $this->user
             ->expects($this->once())
@@ -199,7 +192,7 @@ class TimestampableSubscriberTest extends TestCase
             ->willReturnSelf();
         $this->currentUserFetcher
             ->expects($this->once())
-            ->method('fetchUser')
+            ->method('fetchUserOrNull')
             ->willReturn($this->user);
         $this->user
             ->expects($this->once())
@@ -240,8 +233,8 @@ class TimestampableSubscriberTest extends TestCase
             ->willReturnSelf();
         $this->currentUserFetcher
             ->expects($this->once())
-            ->method('fetchUser')
-            ->willThrowException($exception = new \LogicException());
+            ->method('fetchUserOrNull')
+            ->willReturn(null);
         $this->user
             ->expects($this->never())
             ->method('getUserIdentifier');
@@ -250,15 +243,8 @@ class TimestampableSubscriberTest extends TestCase
             ->method('setUpdatedBy')
             ->with(null);
         $this->logger
-            ->expects($this->once())
-            ->method('error')
-            ->with(
-                'Setting user data for resource failed.',
-                [
-                    'exception' => $exception,
-                    'class'     => TimestampableSubscriber::class,
-                ]
-            );
+            ->expects($this->never())
+            ->method('error');
 
         $this->subscriber->preUpdate($this->event);
     }
@@ -279,7 +265,7 @@ class TimestampableSubscriberTest extends TestCase
             ->willReturnSelf();
         $this->currentUserFetcher
             ->expects($this->once())
-            ->method('fetchUser')
+            ->method('fetchUserOrNull')
             ->willReturn($this->user);
         $this->user
             ->expects($this->once())
@@ -320,8 +306,8 @@ class TimestampableSubscriberTest extends TestCase
             ->willReturnSelf();
         $this->currentUserFetcher
             ->expects($this->once())
-            ->method('fetchUser')
-            ->willThrowException($exception = new \LogicException());
+            ->method('fetchUserOrNull')
+            ->willReturn(null);
         $this->user
             ->expects($this->never())
             ->method('getUserIdentifier');
@@ -330,15 +316,8 @@ class TimestampableSubscriberTest extends TestCase
             ->method('setDeletedBy')
             ->with(null);
         $this->logger
-            ->expects($this->once())
-            ->method('error')
-            ->with(
-                'Setting user data for resource failed.',
-                [
-                    'exception' => $exception,
-                    'class'     => TimestampableSubscriber::class,
-                ]
-            );
+            ->expects($this->never())
+            ->method('error');
 
         $this->subscriber->preRemove($this->event);
     }

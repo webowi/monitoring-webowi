@@ -1,7 +1,8 @@
 App\Identity\Domain\Organization\Organization:
   organization (template):
-    uuid: <uuid()>
-    name: <firstName()>
+    __factory:
+      register:
+        name: <firstName()>
 
 App\Projects\Domain\Project:
   project (template):

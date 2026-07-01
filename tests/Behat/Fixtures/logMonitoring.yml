@@ -3,27 +3,29 @@ include:
 
 App\Identity\Domain\Organization\Organization:
   organization1:
-    uuid: <uuid('5cbef58b-8961-442e-bdf4-55dcba699374')>
-    name: 'Log Monitoring Owner Org'
+    __factory:
+        register:
+            name: 'Log Monitoring Owner Org'
   organization2:
-    uuid: <uuid('d0880741-2719-43e8-b1f4-233cc76ef691')>
-    name: 'Log Monitoring Other Org'
+    __factory:
+        register:
+            name 'Log Monitoring Other Org'
 
 App\Identity\Domain\User\User:
   user1:
     __factory:
       register:
-        - '@organization1->uuid'
-        - <(App\Tests\Mock\ValueObjectFactory::monitoringEmail('owner'))>
-        - <(password_hash('demo1234', PASSWORD_DEFAULT))>
+        organizationId: '@organization1->uuid'
+        email: <(App\Tests\Mock\ValueObjectFactory::monitoringEmail('owner'))>
+        password: <(password_hash('demo1234', PASSWORD_DEFAULT))>
     __calls:
       - activate: [ ]
   user2:
     __factory:
       register:
-        - '@organization2->uuid'
-        - <(App\Tests\Mock\ValueObjectFactory::monitoringEmail('other'))>
-        - <(password_hash('demo1234', PASSWORD_DEFAULT))>
+        organizationId: '@organization2->uuid'
+        email: <(App\Tests\Mock\ValueObjectFactory::monitoringEmail('other'))>
+        password: <(password_hash('demo1234', PASSWORD_DEFAULT))>
     __calls:
       - activate: [ ]
 

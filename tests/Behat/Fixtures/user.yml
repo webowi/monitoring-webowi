@@ -1,15 +1,18 @@
 include:
   - _templates.yml
 
-App\Identity\Domain\Organization:
-  organization1 (extends organization):
-    name: 'name'
-    organizationEmail: 'test@example.com'
-    default: true
+App\Identity\Domain\Organization\Organization:
+  organization1:
+    __factory:
+      register:
+        name: 'organization1'
 
-App\Identity\Domain\User:
-  user1 (extends user):
-    uuid: <uuid('67a377bd-a129-48ab-a000-e6a9e570dc8d')>
-    email: 'admin@example.com'
-    password: <hashPassword(@user1, 'user')>
-    company: '@organization1'
+App\Identity\Domain\User\User:
+  user1:
+    __factory:
+      register:
+        - '@organization1->uuid'
+        - <(App\Tests\Mock\ValueObjectFactory::monitoringEmail('owner'))>
+        - <(password_hash('demo1234', PASSWORD_DEFAULT))>
+    __calls:
+      - activate: [ ]
