@@ -25,101 +25,56 @@ class Project implements TimestampableResourceInterface
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     #[ORM\Column(type: Types::INTEGER)]
-    private ?int $id = null; /** @phpstan-ignore property.unusedType */
-    #[ORM\Column(type: 'uuid', unique: true)]
-    private ?Uuid $uuid = null;
+    /** @phpstan-ignore-next-line  property.unusedType */
+    private ?int $id = null;
 
-    #[ORM\Column(type: 'uuid')]
-    private Uuid $organizationId;
+    private function __construct(
+        #[ORM\Column(type: 'uuid', unique: true)]
+        public Uuid $uuid,
+        #[ORM\Column(type: 'uuid')]
+        public Uuid $organizationId,
+        #[ORM\Column(type: Types::STRING, length: 500, unique: true, nullable: false)]
+        public string $name,
+        #[ORM\Column(
+            type: 'string',
+            length: 191,
+            nullable: false,
+            enumType: ProjectStatusEnum::class,
+            options: ['default' => ProjectStatusEnum::ACTIVE],
+        )]
+        public ProjectStatusEnum $status = ProjectStatusEnum::ACTIVE,
+        #[ORM\Column(
+            type: 'string',
+            length: 50,
+            enumType: ProjectPlatformEnum::class,
+            options: ['default' => ProjectPlatformEnum::SYMFONY],
+        )]
+        public ProjectPlatformEnum $platform = ProjectPlatformEnum::SYMFONY,
+    ) {}
 
-    #[ORM\Column(type: Types::STRING, length: 500, unique: true, nullable: false)]
-    private string $name;
-
-    #[ORM\Column(
-        type: 'string',
-        length: 191,
-        nullable: false,
-        enumType: ProjectStatusEnum::class,
-        options: ['default' => ProjectStatusEnum::ACTIVE],
-    )]
-    private ProjectStatusEnum $status = ProjectStatusEnum::ACTIVE;
-
-    #[ORM\Column(
-        type: 'string',
-        length: 50,
-        enumType: ProjectPlatformEnum::class,
-        options: ['default' => ProjectPlatformEnum::SYMFONY],
-    )]
-    private ProjectPlatformEnum $platform = ProjectPlatformEnum::SYMFONY;
+    public static function register(
+        Uuid $organizationId,
+        string $name,
+        ProjectStatusEnum $status = ProjectStatusEnum::ACTIVE,
+        ProjectPlatformEnum $platform = ProjectPlatformEnum::SYMFONY,
+    ): self {
+        return new self(
+            uuid: Uuid::v4(),
+            organizationId: $organizationId,
+            name: $name,
+            status: $status,
+            platform: $platform
+        );
+    }
 
     public function __toString(): string
     {
-        return $this->getName();
+        return $this->name;
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getUuid(): ?Uuid
-    {
-        return $this->uuid;
-    }
-
-    public function setUuid(?Uuid $uuid): self
-    {
-        $this->uuid = $uuid;
-
-        return $this;
-    }
-
-    public function getOrganizationId(): Uuid
-    {
-        return $this->organizationId;
-    }
-
-    public function setOrganizationId(Uuid $organizationId): self
-    {
-        $this->organizationId = $organizationId;
-
-        return $this;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    public function getStatus(): ProjectStatusEnum
-    {
-        return $this->status;
-    }
-
-    public function setStatus(ProjectStatusEnum $status): self
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    public function getPlatform(): ProjectPlatformEnum
-    {
-        return $this->platform;
-    }
-
-    public function setPlatform(ProjectPlatformEnum $platform): self
-    {
-        $this->platform = $platform;
-
-        return $this;
     }
 
     public function belongsToOrganization(Uuid $organizationId): bool

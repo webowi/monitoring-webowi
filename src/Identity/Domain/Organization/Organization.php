@@ -31,93 +31,43 @@ class Organization implements TimestampableResourceInterface
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     #[ORM\Column(type: Types::INTEGER)]
+    /** @phpstan-ignore-next-line  property.unusedType */
     private ?int $id = null;
 
-    #[ORM\Column(type: 'uuid', unique: true)]
-    private Uuid $uuid;
+    private function __construct(
+        #[ORM\Column(type: 'uuid', unique: true)]
+        public Uuid $uuid,
+        #[ORM\Column(type: Types::STRING, length: 191, nullable: true)]
+        #[Assert\NotNull]
+        #[Assert\Length(
+            max: 191
+        )]
+        public string $name,
+        #[ORM\Column(type: Types::STRING, length: 191, nullable: true)]
+        #[Assert\Length(
+            max: 191
+        )]
+        public ?string $slug = null,
+        #[Vich\UploadableField(mapping: 'logos', fileNameProperty: 'logo', size: 'logoSize')]
+        public ?File $logoFile = null,
+        #[ORM\Column(nullable: true)]
+        public ?string $logo = null,
+        #[ORM\Column(nullable: true)]
+        public ?int $logoSize = null,
+    ) {}
 
-    #[ORM\Column(type: Types::STRING, length: 191, nullable: true)]
-    #[Assert\NotNull]
-    #[Assert\Length(
-        max: 191
-    )]
-    private string $name;
-
-    #[ORM\Column(type: Types::STRING, length: 191, nullable: true)]
-    #[Assert\Length(
-        max: 191
-    )]
-    private ?string $slug = null;
-
-    #[Vich\UploadableField(mapping: 'logos', fileNameProperty: 'logo', size: 'logoSize')]
-    private ?File $logoFile = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?string $logo = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $logoSize = null;
-
-    public function __construct(
-    ) {
-        $this->uuid = Uuid::v4();
+    public static function register(
+        string $name,
+    ): self {
+        return new self(
+            uuid: Uuid::v4(),
+            name: $name,
+        );
     }
 
     public function __toString(): string
     {
-        return $this->name ?? '';
-    }
-
-    public function getId(): int
-    {
-        if (null === $this->id) {
-            throw new \DomainException('Organization ID cannot be null');
-        }
-
-        return $this->id;
-    }
-
-    public function setId(?int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    public function getUuid(): ?Uuid
-    {
-        return $this->uuid;
-    }
-
-    public function setUuid(Uuid $uuid): self
-    {
-        $this->uuid = $uuid;
-
-        return $this;
-    }
-
-    public function getName(): ?string
-    {
         return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    public function getSlug(): ?string
-    {
-        return $this->slug;
-    }
-
-    public function setSlug(?string $slug): self
-    {
-        $this->slug = $slug;
-
-        return $this;
     }
 
     /**
@@ -134,21 +84,6 @@ class Organization implements TimestampableResourceInterface
         }
     }
 
-    public function getLogoFile(): ?File
-    {
-        return $this->logoFile;
-    }
-
-    public function setLogo(?string $logo): void
-    {
-        $this->logo = $logo;
-    }
-
-    public function getLogo(): ?string
-    {
-        return $this->logo;
-    }
-
     public function getLogoUrl(): ?string
     {
         if (!$this->logo) {
@@ -160,15 +95,5 @@ class Organization implements TimestampableResourceInterface
         }
 
         return \sprintf('/uploads/images/logos/%s', $this->logo);
-    }
-
-    public function setLogoSize(?int $logoSize): void
-    {
-        $this->logoSize = $logoSize;
-    }
-
-    public function getLogoSize(): ?int
-    {
-        return $this->logoSize;
     }
 }

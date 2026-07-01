@@ -42,7 +42,7 @@ final class IngestionKeyAuthenticator extends AbstractAuthenticator
             throw new InvalidIngestionKeyException();
         }
 
-        $project = $this->projectRepository->getById($ingestionKey->getProjectId());
+        $project = $this->projectRepository->getById($ingestionKey->projectId);
 
         if (null === $project) {
             throw new InvalidIngestionKeyException();
@@ -54,7 +54,7 @@ final class IngestionKeyAuthenticator extends AbstractAuthenticator
         $principal = new IngestionPrincipal($project, $ingestionKey);
 
         return new SelfValidatingPassport(
-            new UserBadge((string) $project->getUuid(), static fn (): IngestionPrincipal => $principal),
+            new UserBadge($project->uuid->toString(), static fn (): IngestionPrincipal => $principal),
         );
     }
 

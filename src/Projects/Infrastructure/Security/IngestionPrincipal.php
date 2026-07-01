@@ -27,10 +27,7 @@ final class IngestionPrincipal implements UserInterface
 
     public function getUserIdentifier(): string
     {
-        $identifier = (string) $this->project->getUuid();
-        \assert('' !== $identifier);
-
-        return $identifier;
+        return $this->project->uuid->toString();
     }
 
     public function getRoles(): array

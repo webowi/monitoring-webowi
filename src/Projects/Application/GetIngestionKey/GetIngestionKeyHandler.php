@@ -31,10 +31,10 @@ final class GetIngestionKeyHandler
         $key = $this->ingestionKeyRepository->findActiveByProjectId($projectUuid);
 
         return new GetIngestionKeyResult(
-            keyUuid: $key?->getUuid(),
-            status: $key?->getStatus()->value ?? 'none',
-            value: $key?->getKeyValue(),
-            snippet: $this->snippetBuilder->build($key?->getKeyValue() ?? ''),
+            keyUuid: $key?->uuid,
+            status: $key?->status->value ?? 'none',
+            value: $key?->keyValue,
+            snippet: $this->snippetBuilder->build($key->keyValue ?? ''),
         );
     }
 }

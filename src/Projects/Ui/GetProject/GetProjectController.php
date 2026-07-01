@@ -21,10 +21,10 @@ final class GetProjectController
         $project = $this->handler->handle(Uuid::fromString($projectUuid));
 
         return new JsonResponse([
-            'uuid' => (string) $project->getUuid(),
-            'name' => $project->getName(),
-            'platform' => $project->getPlatform()->value,
-            'status' => $project->getStatus()->value,
+            'uuid' => $project->uuid->toString(),
+            'name' => $project->name,
+            'platform' => $project->platform->value,
+            'status' => $project->status->value,
         ]);
     }
 }

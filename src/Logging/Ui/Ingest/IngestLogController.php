@@ -31,7 +31,7 @@ final class IngestLogController
         /** @var IngestionPrincipal $principal */
         $principal = $this->security->getUser();
 
-        $projectUuid = (string) $principal->getProject()->getUuid();
+        $projectUuid = $principal->getProject()->uuid->toString();
 
         $limiter = $this->logIngestionLimiter->create($projectUuid);
         if (false === $limiter->consume()->isAccepted()) {

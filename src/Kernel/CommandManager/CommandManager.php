@@ -10,22 +10,18 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-/**
- * @codeCoverageIgnore
- *
- * @infection-ignore-all
- */
 class CommandManager implements CommandManagerInterface
 {
     private ?SymfonyStyle $io = null;
 
     public function __construct(
         private readonly LoggerInterface $logger,
+        private readonly IoFactoryInterface $ioFactory,
     ) {}
 
     public function initialize(InputInterface $input, OutputInterface $output): self
     {
-        $this->io = new SymfonyStyle($input, $output);
+        $this->io = $this->ioFactory->create($input, $output);
 
         return $this;
     }
@@ -81,5 +77,23 @@ class CommandManager implements CommandManagerInterface
     public function generateProgressBar(OutputInterface $output): ProgressBar
     {
         return new ProgressBar($output);
+    }
+
+    public function ask(string $string, ?string $default = null): mixed
+    {
+        if (null === $this->io) {
+            throw new \LogicException('SymfonyStyle is not initialized. Call initialize() method first.');
+        }
+
+        return $this->io->ask($string, $default);
+    }
+
+    public function askHidden(string $string): mixed
+    {
+        if (null === $this->io) {
+            throw new \LogicException('SymfonyStyle is not initialized. Call initialize() method first.');
+        }
+
+        return $this->io->askHidden($string);
     }
 }

@@ -44,17 +44,17 @@ final class RotateIngestionKeyHandler
         $plaintext = $this->keyGenerator->generate();
         $hash = $this->keyHasher->hash($plaintext);
 
-        $newKey = (new IngestionKey())
-            ->setUuid(Uuid::v4())
-            ->setProjectId($projectUuid)
-            ->setName($existingKey?->getName() ?? 'Default')
-            ->setKeyHash($hash)
-            ->setKeyValue($plaintext);
+        $newKey = IngestionKey::new(
+            $projectUuid,
+            $existingKey?->name,
+            $hash,
+            $plaintext
+        );
 
         $this->ingestionKeyRepository->save($newKey);
 
         return new RotateIngestionKeyResult(
-            keyUuid: $newKey->getUuid() ?? throw new \LogicException('New key UUID was not set.'),
+            keyUuid: $newKey->uuid ?? throw new \LogicException('New key UUID was not set.'),
             value: $plaintext,
             snippet: $this->snippetBuilder->build($plaintext),
         );

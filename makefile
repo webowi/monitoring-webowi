@@ -2,12 +2,13 @@
 
 CONTAINER_NAME = monitoring-webowi-php
 
-.PHONY: init
-init: ## Shell into container
-	@read -p "This action will rebuild the project from scratch and create a new user. Continue? [y/N] " confirm && [ "$$confirm" = "y" ] || exit 1
-	bash docker/run-app.sh
-	docker exec -it -u root $(CONTAINER_NAME) bin/console app:create:account --email=admin@example.com --password=admin
+.PHONY: install
+init: ## Initialize project
+	bash bin/setup.sh
 
+.PHONY: start
+start: ## Start project
+	bash docker/run-app.sh
 
 .PHONY: exec-root
 exec-root: ## Shell into container
@@ -48,7 +49,7 @@ csfix: cs-fixer ## Alias for cs-fixer
 
 .PHONY: create-account ca c-a
 create-account: ## Rebuild node container
-	docker exec -it -u root $(CONTAINER_NAME) bin/console app:create:account --email=admin@example.com --password=admin
+	docker exec -it -u root $(CONTAINER_NAME) bin/console mw:create:account --email=admin@example.com --password=admin
 ca: create-account ## Alias for create-account
 c-a: create-account ## Alias for create-account
 

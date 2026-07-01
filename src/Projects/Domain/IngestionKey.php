@@ -24,123 +24,67 @@ class IngestionKey implements TimestampableResourceInterface
 {
     use TimestampableTrait;
 
+    private const string DEFAULT_NAME = 'Default';
+
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     #[ORM\Column(type: Types::INTEGER)]
-    private ?int $id = null; /** @phpstan-ignore property.unusedType */
-    #[ORM\Column(type: 'uuid', unique: true)]
-    private ?Uuid $uuid = null;
+    /** @phpstan-ignore-next-line property.unusedType */
+    private ?int $id = null;
 
-    #[ORM\Column(type: 'uuid')]
-    private Uuid $projectId;
+    private function __construct(
+        #[ORM\Column(type: 'uuid', unique: true)]
+        public Uuid $uuid,
+        #[ORM\Column(type: 'uuid')]
+        public Uuid $projectId,
+        #[ORM\Column(type: Types::STRING, length: 191, nullable: false)]
+        #[Assert\NotBlank]
+        #[Assert\Length(max: 191)]
+        public string $name,
 
-    #[ORM\Column(type: Types::STRING, length: 191, nullable: false)]
-    #[Assert\NotBlank]
-    #[Assert\Length(max: 191)]
-    private string $name;
+        /**
+         * Hash tokenu (NIE plaintext).
+         * Najczęściej: hash_hmac('sha256', $token, $appSecret) albo sodium_crypto_generichash.
+         */
+        #[ORM\Column(name: 'key_hash', type: Types::STRING, length: 128, unique: true, nullable: false)]
+        #[Assert\NotBlank]
+        #[Assert\Length(max: 128)]
+        public string $keyHash,
+        #[ORM\Column(
+            type: Types::STRING,
+            length: 32,
+            enumType: IngestionKeyStatusEnum::class,
+            options: ['default' => IngestionKeyStatusEnum::ACTIVE],
+        )]
+        public IngestionKeyStatusEnum $status = IngestionKeyStatusEnum::ACTIVE,
+        #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+        public ?\DateTimeImmutable $revokedAt = null,
+        #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+        public ?\DateTimeImmutable $lastUsedAt = null,
+        #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+        public ?\DateTimeImmutable $expiresAt = null,
+        #[ORM\Column(name: 'key_value', type: Types::STRING, length: 255, nullable: true)]
+        public ?string $keyValue = null,
+    ) {}
 
-    /**
-     * Hash tokenu (NIE plaintext).
-     * Najczęściej: hash_hmac('sha256', $token, $appSecret) albo sodium_crypto_generichash.
-     */
-    #[ORM\Column(name: 'key_hash', type: Types::STRING, length: 128, unique: true, nullable: false)]
-    #[Assert\NotBlank]
-    #[Assert\Length(max: 128)]
-    private string $keyHash;
-
-    #[ORM\Column(
-        type: Types::STRING,
-        length: 32,
-        enumType: IngestionKeyStatusEnum::class,
-        options: ['default' => IngestionKeyStatusEnum::ACTIVE],
-    )]
-    private IngestionKeyStatusEnum $status = IngestionKeyStatusEnum::ACTIVE;
-
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    private ?\DateTimeImmutable $revokedAt = null;
-
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    private ?\DateTimeImmutable $lastUsedAt = null;
-
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    private ?\DateTimeImmutable $expiresAt = null;
-
-    #[ORM\Column(name: 'key_value', type: Types::STRING, length: 255, nullable: true)]
-    private ?string $keyValue = null;
-
-    public function getKeyValue(): ?string
-    {
-        return $this->keyValue;
-    }
-
-    public function setKeyValue(?string $keyValue): self
-    {
-        $this->keyValue = $keyValue;
-
-        return $this;
+    public static function new(
+        Uuid $projectId,
+        ?string $name,
+        string $keyHash,
+        ?string $keyValue = null,
+    ): self {
+        return new self(
+            uuid: Uuid::v4(),
+            projectId: $projectId,
+            name: $name ?? self::DEFAULT_NAME,
+            keyHash: $keyHash,
+            keyValue: $keyValue,
+        );
     }
 
     public function __toString(): string
     {
         return $this->name;
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getUuid(): ?Uuid
-    {
-        return $this->uuid;
-    }
-
-    public function setUuid(?Uuid $uuid): self
-    {
-        $this->uuid = $uuid;
-
-        return $this;
-    }
-
-    public function getProjectId(): Uuid
-    {
-        return $this->projectId;
-    }
-
-    public function setProjectId(Uuid $projectId): self
-    {
-        $this->projectId = $projectId;
-
-        return $this;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    public function getKeyHash(): string
-    {
-        return $this->keyHash;
-    }
-
-    public function setKeyHash(string $keyHash): self
-    {
-        $this->keyHash = $keyHash;
-
-        return $this;
-    }
-
-    public function getStatus(): IngestionKeyStatusEnum
-    {
-        return $this->status;
     }
 
     public function isActive(): bool
@@ -162,30 +106,8 @@ class IngestionKey implements TimestampableResourceInterface
         $this->revokedAt = $at ?? new \DateTimeImmutable('now');
     }
 
-    public function getRevokedAt(): ?\DateTimeImmutable
-    {
-        return $this->revokedAt;
-    }
-
-    public function getLastUsedAt(): ?\DateTimeImmutable
-    {
-        return $this->lastUsedAt;
-    }
-
     public function markUsedNow(): void
     {
         $this->lastUsedAt = new \DateTimeImmutable('now');
-    }
-
-    public function getExpiresAt(): ?\DateTimeImmutable
-    {
-        return $this->expiresAt;
-    }
-
-    public function setExpiresAt(?\DateTimeImmutable $expiresAt): self
-    {
-        $this->expiresAt = $expiresAt;
-
-        return $this;
     }
 }

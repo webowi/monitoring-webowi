@@ -1,1 +1,0 @@
-Most frequently asked questions.

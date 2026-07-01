@@ -1,46 +1,119 @@
-# monitoring-webowi
+# Monitoring Webowi API
 
-## Full documentaion avaliable [here](https://kkedzierski.github.io/monitoring-webowi/pl)
+Backend aplikacji **Monitoring Webowi** oparty o Symfony oraz Docker.
 
-## Installation quick guide
+Monitoring Webowi składa się z dwóch repozytoriów:
 
-### Requirements
+| Repozytorium          | Opis |
+|-----------------------|------|
+| `monitoring-webowi`   | Backend aplikacji oparty o Symfony i Docker |
+| `monitoring-webowi-ui` | Panel administracyjny (SPA) napisany w React |
 
-To run this project, you need to have Docker and Docker Compose installed. Below are instructions on how to check if these tools are installed and how to install them if they are missing.
+> To repozytorium zawiera wyłącznie backend aplikacji.
+> Należy również pobrać repozytorium z panelem administracyjnym, aby móc w pełni korzystać z aplikacji.
+> Panel administracyjny jest dostępny pod adresem: [monitoring-webowi-ui](https://github.com/webowi/monitoring-webowi-ui)
 
-### Checking Docker Installation
+---
 
-To check if Docker is installed on your system, run the following command in your terminal:
+# Wymagania
 
-```sh
+Przed rozpoczęciem upewnij się, że masz zainstalowane:
+
+- Docker
+- Docker Compose
+- Git
+
+Możesz sprawdzić poprawność instalacji poleceniami:
+
+```bash
 docker --version
+docker compose version
+git --version
 ```
 
-If Docker Compose is not installed, follow the instructions [on the official Docker Compose](https://docs.docker.com/get-docker/) website to install it.
+Jeżeli nie masz zainstalowanego Dockera, pobierz go z oficjalnej strony:
 
-### Checking Docker Compose Installation
+https://docs.docker.com/get-docker/
 
-To check if Docker Compose is installed on your system, run the following command in your terminal:
+---
 
-```sh
-docker-compose --version
-```
+# Szybki start
 
-If Docker Compose is not installed, follow the instructions [on the official Docker Compose](https://docs.docker.com/compose/install/) website to install it.
+## 1. Sklonuj repozytorium
 
-### Running the project
-
-To run the project, clone the repository and run the following commands in the project directory:
-
-1. clone the repository
-
-```sh
-git clone git@github.com:kkedzierski/monitoring-webowi.git
+```bash
+git clone git@github.com:webowi/monitoring-webowi.git
 cd monitoring-webowi
 ```
 
-2. Run the project
+## 2. Uruchom instalator
 
-```sh
-bash docker/run-app.sh
+```bash
+make install
 ```
+
+Instalator automatycznie:
+
+- uruchomi kontenery Dockera,
+- zainstaluje wymagane zależności,
+- przygotuje środowisko,
+- wykona migracje bazy danych,
+- poprosi o utworzenie konta administratora,
+- skonfiguruje aplikację.
+
+Podczas instalacji zostaniesz poproszony o podanie:
+
+- adresu e-mail administratora,
+- hasła,
+- potwierdzenia hasła.
+- opcjonalnie nazwy organuizacji (jeżeli nie zostanie podana, zostanie użyta domyślna nazwa "Default organization").
+
+Domyślnie aplikacja będzie dostępna pod adresem:
+
+```text
+http://localhost:34500
+```
+
+---
+
+# Uruchomienie panelu administracyjnego (SPA)
+
+Po poprawnym uruchomieniu backendu pobierz aplikację SPA:
+
+```bash
+git clone git@github.com:webowi/monitoring-webowi-ui.git
+cd monitoring-webowi-ui
+npm install
+npm run dev
+```
+
+Domyślnie aplikacja będzie dostępna pod adresem:
+
+```text
+http://localhost:5173
+```
+
+Backend będzie dostępny zgodnie z konfiguracją Dockera (domyślny adres znajdziesz w pliku `docker-compose.yml` lub dokumentacji projektu).
+
+---
+
+# Kolejne uruchomienie projektu
+
+Jeżeli aplikacja została już zainstalowana, wystarczy uruchomić:
+
+```bash
+make start
+```
+
+
+---
+
+# Pomoc
+
+Jeżeli podczas instalacji pojawią się problemy, upewnij się, że:
+
+- Docker jest uruchomiony,
+- wymagane porty nie są zajęte przez inne aplikacje,
+- korzystasz z aktualnej wersji repozytorium.
+
+Jeżeli problem nadal występuje, zgłoś go w zakładce **Issues** repozytorium GitHub.

@@ -33,7 +33,7 @@ class DeleteProjectHandler
                 \sprintf('Failed to delete project. %s', $exception->getMessage()),
                 [
                     'exception' => $exception,
-                    'projectId' => $project->getUuid(),
+                    'projectId' => $project->uuid,
                     'organizationId' => $command->organizationId,
                     'userId' => $command->userId,
                 ]
