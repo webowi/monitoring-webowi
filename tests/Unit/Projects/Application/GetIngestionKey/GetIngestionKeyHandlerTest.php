@@ -50,10 +50,7 @@ class GetIngestionKeyHandlerTest extends TestCase
 
     private function buildProject(Uuid $uuid, Uuid $organizationId): Project
     {
-        return (new Project())
-            ->setUuid($uuid)
-            ->setOrganizationId($organizationId)
-            ->setName('Test Project');
+        return Project::register($organizationId, 'Test Project');
     }
 
     private function buildUser(Uuid $organizationId): User
@@ -63,12 +60,7 @@ class GetIngestionKeyHandlerTest extends TestCase
 
     private function buildActiveKey(Uuid $projectId, string $keyValue): IngestionKey
     {
-        return (new IngestionKey())
-            ->setUuid(Uuid::v4())
-            ->setProjectId($projectId)
-            ->setName('Test Key')
-            ->setKeyHash('hash')
-            ->setKeyValue($keyValue);
+        return IngestionKey::new($projectId, 'Test key', 'hash', $keyValue);
     }
 
     #[Test]

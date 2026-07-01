@@ -57,10 +57,7 @@ class RotateIngestionKeyHandlerTest extends TestCase
 
     private function buildProject(Uuid $uuid, Uuid $organizationId): Project
     {
-        return (new Project())
-            ->setUuid($uuid)
-            ->setOrganizationId($organizationId)
-            ->setName('Test Project');
+        return Project::register($organizationId, 'Test Project');
     }
 
     private function buildUser(Uuid $organizationId): User
@@ -70,12 +67,7 @@ class RotateIngestionKeyHandlerTest extends TestCase
 
     private function buildActiveKey(Uuid $projectId, string $name = 'Test Key'): IngestionKey
     {
-        return (new IngestionKey())
-            ->setUuid(Uuid::v4())
-            ->setProjectId($projectId)
-            ->setName($name)
-            ->setKeyHash('oldhash')
-            ->setKeyValue('mon_ing_oldkey00000000000000000000000000');
+        return IngestionKey::new($projectId, $name, 'oldHash', 'mon_ing_oldkey00000000000000000000000000');
     }
 
     #[Test]
@@ -100,7 +92,7 @@ class RotateIngestionKeyHandlerTest extends TestCase
         $this->assertSame($generatedPlaintext, $result->value);
         $this->assertSame('snippet-content', $result->snippet);
         $this->assertNotNull($result->keyUuid);
-        $this->assertSame(IngestionKeyStatusEnum::REVOKED, $oldKey->getStatus());
+        $this->assertSame(IngestionKeyStatusEnum::REVOKED, $oldKey->status);
     }
 
     #[Test]

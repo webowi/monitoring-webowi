@@ -41,7 +41,7 @@ class TechnicalUserProvider
     private function createOrganization(): Organization
     {
         try {
-            $organization = new Organization();
+            $organization = Organization::register('name');
             $this->entityManager->persist($organization);
             $this->entityManager->flush();
 

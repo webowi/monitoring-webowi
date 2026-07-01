@@ -77,7 +77,7 @@ class CurrentUserFetcherTest extends TestCase
             ->expects($this->once())
             ->method('getById')
             ->with($organizationId)
-            ->willReturn($organization = new Organization());
+            ->willReturn($organization = Organization::register('name'));
 
         $result = $this->currentUserFetcher->fetchUserOrganization();
 

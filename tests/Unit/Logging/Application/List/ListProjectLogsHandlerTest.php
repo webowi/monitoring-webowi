@@ -43,10 +43,7 @@ class ListProjectLogsHandlerTest extends TestCase
 
     private function buildProject(Uuid $uuid, Uuid $organizationId): Project
     {
-        return (new Project())
-            ->setUuid($uuid)
-            ->setOrganizationId($organizationId)
-            ->setName('Test Project ' . $uuid);
+        return Project::register($organizationId, \sprintf('Test Project %s', $uuid->toString()));
     }
 
     private function buildUser(Uuid $organizationId): User
