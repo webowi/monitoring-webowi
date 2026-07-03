@@ -82,4 +82,19 @@ class Project implements TimestampableResourceInterface
     {
         return $this->organizationId->equals($organizationId);
     }
+
+    public function rename(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    public function changePlatform(ProjectPlatformEnum $platform): void
+    {
+        $this->platform = $platform;
+    }
+
+    public function changeStatus(ProjectStatusEnum $status): void
+    {
+        $this->status = $status;
+    }
 }

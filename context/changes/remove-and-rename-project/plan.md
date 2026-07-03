@@ -25,17 +25,17 @@ Add two API operations to the Projects bounded context, following the module's e
 ## Desired End State
 
 - `DELETE /api/v1/projects/{uuid}` removes the project and its `IngestionKey` rows for the caller's own organization, returns `204 No Content`; returns `404` (translated `error` body) for a missing/foreign project, `401` unauthenticated.
-- `PATCH /api/v1/projects/{uuid}` with `{"name": "..."}` renames the project within the caller's own organization, returns `200` with the updated project representation (`uuid`, `name`, `platform`, `status`); returns `409` on a name collision, `422` on a blank/oversized name, `404` for a missing/foreign project, `401` unauthenticated.
+- `PATCH /api/v1/projects/{uuid}` with any of `{"name": "...", "platform": "...", "status": "..."}` updates only the fields provided, within the caller's own organization, returns `200` with the updated project representation (`uuid`, `name`, `platform`, `status`); returns `409` on a genuine name collision (not on resubmitting the project's own current name), `422` on a blank/oversized name or an invalid platform/status, `404` for a missing/foreign project, `401` unauthenticated.
 - The old, unwired `DeleteProjectHandler`/`DeleteProjectCommand` and their non-translatable exceptions are gone, replaced by handlers that match every other handler in the module.
-- Verify via: `make phpunit`, the new Behat features, and `POST /projects` → `PATCH .../{uuid}` → `GET .../{uuid}` → `DELETE .../{uuid}` → `GET .../{uuid}` (404) manually.
+- Verify via: `make phpunit`, the new Behat features, and `POST /projects` → `PATCH .../{uuid}` (all three fields) → `GET .../{uuid}` → `DELETE .../{uuid}` → `GET .../{uuid}` (404) manually.
 
 ## What We're NOT Doing
 
 - Not touching `LogEntry` rows on project delete. Cascading them would require either violating the documented Logging→Projects-only dependency direction or introducing a net-new cross-context event mechanism — both out of proportion for this change. Log entries for a deleted project are left orphaned; a follow-up cleanup mechanism is explicitly deferred (see Open Risks).
 - Not introducing a soft-delete / "removed" status. `ProjectStatusEnum` stays `ACTIVE`/`INACTIVE` only; delete remains a hard row removal, matching the existing (dead) `DeleteProjectHandler`'s behavior and the repository's existing `remove()` method.
-- Not building a general-purpose "update project" endpoint. Rename is a dedicated `PATCH` accepting only `name` — platform/status changes are out of scope.
+- Not building a fully generic CRUD `UpdateProject` endpoint. `UpdateProjectSettings` is deliberately scoped to the three settings-page fields (`name`, `platform`, `status`) — not an arbitrary-field PATCH.
 - Not adding organization-scoped name uniqueness. `existsByName()` stays global, matching `CreateProjectHandler`'s existing behavior; changing that scope is a separate concern.
-- Not excluding a project's own current name from the rename uniqueness check (rejected option — see plan brief).
+- Not giving `status` any side effects beyond the flag itself. Nothing in the codebase today checks a project's status to gate ingestion or anything else — that's a pre-existing gap, not something this change addresses.
 
 ## Implementation Approach
 
@@ -115,61 +115,67 @@ Rebuild the dead `DeleteProjectHandler` to match the module's current handler co
 
 ---
 
-## Phase 2: Rename project
+## Phase 2: Update project settings
 
 ### Overview
 
-Add a `rename()` domain method and a dedicated `PATCH` slice, matching `CreateProject`'s validation/uniqueness pattern.
+**Reworked mid-implementation** (originally planned as a dedicated `RenameProject` slice — see plan brief's Key Decisions for the pivot rationale). Add `rename()`/`changePlatform()`/`changeStatus()` domain methods and a single `PATCH` slice accepting optional `name`/`platform`/`status`, so a settings-page save is one atomic request instead of three.
 
 ### Changes Required:
 
-#### 1. Domain rename method
+#### 1. Domain mutators
 
 **File**: `src/Projects/Domain/Project.php`
 
-**Intent**: Allow the application layer to change a project's name without exposing the constructor.
+**Intent**: Allow the application layer to change a project's name, platform, and status without exposing the constructor. Kept as three small single-field mutators (not one combined setter) so each remains independently reusable and testable.
 
-**Contract**: `public function rename(string $name): void` — sets `$this->name`, no internal validation (validation happens at the `Ui` input layer, matching how `register()` takes raw values today).
+**Contract**: `rename(string $name): void`, `changePlatform(ProjectPlatformEnum $platform): void`, `changeStatus(ProjectStatusEnum $status): void` — each a plain property mutation, no internal validation (validation happens at the `Ui` input layer).
 
-#### 2. Rename application slice
+**File**: `src/Projects/Domain/ProjectStatusEnum.php`
 
-**File**: `src/Projects/Application/RenameProject/RenameProjectCommand.php` (new)
+**Intent**: Add a `values()` helper so the `Ui` input layer can validate `status` the same way `ProjectPlatformEnum::values()` already validates `platform`.
 
-**Intent**: Carry the target project UUID and the new name into the handler.
+**Contract**: `public static function values(): array` — mirrors `ProjectPlatformEnum::values()`.
 
-**Contract**: `final readonly class` with `public Uuid $projectUuid` and `public string $name`.
+#### 2. Update-settings application slice
 
-**File**: `src/Projects/Application/RenameProject/RenameProjectHandler.php` (new)
+**File**: `src/Projects/Application/UpdateProjectSettings/UpdateProjectSettingsCommand.php` (new)
 
-**Intent**: Resolve and authorize the project the same way every other handler in this module does, enforce name uniqueness the same way `CreateProjectHandler` does, then persist the rename.
+**Intent**: Carry the target project UUID plus optional new values for each settable field.
 
-**Contract**: `handle(RenameProjectCommand $command): Project`. Constructor deps: `ProjectRepositoryInterface`, `CurrentUserFetcher`. Throws `ProjectNotFoundOrAccessDeniedException` (missing/foreign project) or `ProjectNameAlreadyExistsException` (reused as-is from `Application/Exception/` — no new exception needed) before calling `$project->rename()` + `$projectRepository->save()`.
+**Contract**: `final readonly class` with `public Uuid $projectUuid`, `public ?string $name = null`, `public ?ProjectPlatformEnum $platform = null`, `public ?ProjectStatusEnum $status = null`.
 
-#### 3. Rename Ui slice
+**File**: `src/Projects/Application/UpdateProjectSettings/UpdateProjectSettingsHandler.php` (new)
 
-**File**: `src/Projects/Ui/RenameProject/RenameProjectInput.php` (new)
+**Intent**: Resolve and authorize the project the same way every other handler in this module does, then apply only the fields that were actually provided, then persist everything in a single `save()` call so the whole settings update is atomic. Uniqueness is checked only when the submitted name differs from the project's current name — otherwise a settings form that resubmits the full (unchanged) form state would spuriously 409 on its own name.
 
-**Intent**: Validate the request body the same way `CreateProjectInput` validates `name`.
+**Contract**: `handle(UpdateProjectSettingsCommand $command): Project`. Constructor deps: `ProjectRepositoryInterface`, `CurrentUserFetcher`. Throws `ProjectNotFoundOrAccessDeniedException` (missing/foreign project) or `ProjectNameAlreadyExistsException` (reused as-is from `Application/Exception/`) before calling the relevant `Project` mutators + one `$projectRepository->save()`.
 
-**Contract**: `final readonly class` with `public string $name`, constraints `#[Assert\Type('string')]`, `#[Assert\NotBlank]`, `#[Assert\Length(max: 500)]`.
+#### 3. Update-settings Ui slice
 
-**File**: `src/Projects/Ui/RenameProject/RenameProjectController.php` (new)
+**File**: `src/Projects/Ui/UpdateProjectSettings/UpdateProjectSettingsInput.php` (new)
 
-**Intent**: Validate input, invoke the handler, return the updated project representation — same response shape as `GetProjectController`/`CreateProjectController`.
+**Intent**: Validate each field only when it's actually present in the request body — omitted fields must pass validation untouched, but an explicitly blank/invalid value for a present field must still fail.
 
-**Contract**: `#[Route(path: '/projects/{projectUuid}', name: 'projects_rename_project', methods: ['PATCH'])]`. `__invoke(string $projectUuid, #[MapRequestPayload] RenameProjectInput $input): JsonResponse`, `200` with `{uuid, name, platform, status}`.
+**Contract**: `final readonly class` with `public ?string $name = null` (`#[Assert\Type('string')]`, `#[Assert\NotBlank(allowNull: true)]`, `#[Assert\Length(max: 500)]`), `public ?string $platform = null` (`#[Assert\Choice(callback: [ProjectPlatformEnum::class, 'values'])]`), `public ?string $status = null` (`#[Assert\Choice(callback: [ProjectStatusEnum::class, 'values'])]`). `Assert\Choice` already treats `null` as valid without extra configuration.
+
+**File**: `src/Projects/Ui/UpdateProjectSettings/UpdateProjectSettingsController.php` (new)
+
+**Intent**: Validate input, convert present string fields to their enums, invoke the handler, return the updated project representation — same response shape as `GetProjectController`/`CreateProjectController`.
+
+**Contract**: `#[Route(path: '/projects/{projectUuid}', name: 'projects_update_project_settings', methods: ['PATCH'])]`. `__invoke(string $projectUuid, #[MapRequestPayload] UpdateProjectSettingsInput $input): JsonResponse`, `200` with `{uuid, name, platform, status}`.
 
 ### Success Criteria:
 
 #### Automated Verification:
 
-- Unit tests pass: `make phpunit` (new `tests/Unit/Projects/Application/RenameProject/RenameProjectHandlerTest.php` covering: successful rename calls `rename()` + `save()`; not-found/foreign project throws `ProjectNotFoundOrAccessDeniedException`; name-collision throws `ProjectNameAlreadyExistsException`; renaming to the project's own current name also throws `ProjectNameAlreadyExistsException` — documenting the accepted no-self-exclusion tradeoff)
-- Behat passes: `./vendor/bin/behat --tags=@projects` (new `tests/Behat/Features/Projects/renameProject.feature`: owner renames own project → 200 with updated `name`; blank name → 422; name collision with another project in the same org → 409; wrong-org user → 404; unauthenticated → 401)
+- Unit tests pass: `make phpunit` (new `tests/Unit/Projects/Application/UpdateProjectSettings/UpdateProjectSettingsHandlerTest.php` covering: updating all three fields in one `save()` call; resubmitting the unchanged current name alongside another field change does NOT call `existsByName`; providing only one field leaves the others untouched; not-found/foreign project throws `ProjectNotFoundOrAccessDeniedException`; a genuine name collision throws `ProjectNameAlreadyExistsException`)
+- Behat passes: `./vendor/bin/behat --tags=@projects` (new `tests/Behat/Features/Projects/updateProjectSettings.feature`: owner updates name+platform+status in one save → 200; owner updates only platform while resubmitting the unchanged name → 200, not 409; blank name → 422; invalid platform → 422; name collision with another project in the same org → 409; wrong-org user → 404; unauthenticated → 401)
 - Static analysis passes: `./vendor/bin/phpstan analyse`
 
 #### Manual Verification:
 
-- `POST /api/v1/projects`, then `PATCH /api/v1/projects/{uuid}` with a new name, then `GET /api/v1/projects/{uuid}` reflects the new name
+- `POST /api/v1/projects`, then `PATCH /api/v1/projects/{uuid}` with `{name, platform, status}` all at once, then `GET /api/v1/projects/{uuid}` reflects all three new values
 
 **Implementation Note**: After completing this phase and all automated verification passes, pause here for manual confirmation from the human that the manual testing was successful before proceeding to the next phase.
 
@@ -189,7 +195,7 @@ Add a `rename()` domain method and a dedicated `PATCH` slice, matching `CreatePr
 ### Manual Testing Steps:
 
 1. Create a project via `POST /api/v1/projects`.
-2. Rename it via `PATCH /api/v1/projects/{uuid}` and confirm via `GET`.
+2. Update its name, platform, and status in one `PATCH /api/v1/projects/{uuid}` call and confirm all three via `GET`.
 3. Delete it via `DELETE /api/v1/projects/{uuid}` and confirm the subsequent `GET` returns 404.
 4. Inspect the `ingestion_key` table to confirm no rows remain for the deleted project's UUID.
 
@@ -211,24 +217,24 @@ No schema migration needed — both operations work against the existing `projec
 
 #### Automated
 
-- [x] 1.1 Unit tests pass: `make phpunit`
-- [x] 1.2 Behat passes: `./vendor/bin/behat --tags=@projects`
-- [x] 1.3 Static analysis passes: `./vendor/bin/phpstan analyse`
-- [x] 1.4 No remaining references to removed classes
+- [x] 1.1 Unit tests pass: `make phpunit` — cfb09ad
+- [x] 1.2 Behat passes: `./vendor/bin/behat --tags=@projects` — cfb09ad
+- [x] 1.3 Static analysis passes: `./vendor/bin/phpstan analyse` — cfb09ad
+- [x] 1.4 No remaining references to removed classes — cfb09ad
 
 #### Manual
 
-- [ ] 1.5 Create → delete → GET-404 flow verified via API
-- [ ] 1.6 DB inspection confirms ingestion_key rows removed
+- [x] 1.5 Create → delete → GET-404 flow verified via API — cfb09ad
+- [x] 1.6 DB inspection confirms ingestion_key rows removed — cfb09ad
 
-### Phase 2: Rename project
+### Phase 2: Update project settings
 
 #### Automated
 
-- [ ] 2.1 Unit tests pass: `make phpunit`
-- [ ] 2.2 Behat passes: `./vendor/bin/behat --tags=@projects`
-- [ ] 2.3 Static analysis passes: `./vendor/bin/phpstan analyse`
+- [x] 2.1 Unit tests pass: `make phpunit`
+- [x] 2.2 Behat passes: `./vendor/bin/behat --tags=@projects`
+- [x] 2.3 Static analysis passes: `./vendor/bin/phpstan analyse`
 
 #### Manual
 
-- [ ] 2.4 Create → rename → GET-reflects-new-name flow verified via API
+- [ ] 2.4 Create → update settings (name+platform+status) → GET-reflects-new-values flow verified via API

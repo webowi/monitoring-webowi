@@ -36,6 +36,11 @@ App\Projects\Domain\Project:
         uuid: <uuid('135a465d-cf7a-4ca8-872a-c76272cbb16f')>
         organizationId: '@organization1->uuid'
         name: 'Owner Monitored Project'
+  project2 (extends project):
+    __factory:
+      register:
+        organizationId: '@organization1->uuid'
+        name: 'Another Owner Project'
 
 App\Projects\Domain\IngestionKey:
   ingestionKeyActive:
