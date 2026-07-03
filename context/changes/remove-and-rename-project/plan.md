@@ -231,10 +231,10 @@ No schema migration needed — both operations work against the existing `projec
 
 #### Automated
 
-- [x] 2.1 Unit tests pass: `make phpunit`
-- [x] 2.2 Behat passes: `./vendor/bin/behat --tags=@projects`
-- [x] 2.3 Static analysis passes: `./vendor/bin/phpstan analyse`
+- [x] 2.1 Unit tests pass: `make phpunit` — 0860866
+- [x] 2.2 Behat passes: `./vendor/bin/behat --tags=@projects` — 0860866
+- [x] 2.3 Static analysis passes: `./vendor/bin/phpstan analyse` — 0860866
 
 #### Manual
 
-- [ ] 2.4 Create → update settings (name+platform+status) → GET-reflects-new-values flow verified via API
+- [x] 2.4 Create → update settings (name+platform+status) → GET-reflects-new-values flow verified via API — 0860866
