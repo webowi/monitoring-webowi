@@ -64,6 +64,21 @@ class ProjectRepository extends ServiceEntityRepository implements ProjectReposi
             ->getOneOrNullResult();
     }
 
+    public function existsByName(string $name): bool
+    {
+        return null !== $this->createQueryBuilder('p')
+            ->andWhere('p.name = :name')
+            ->setParameter('name', $name)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function save(Project $project): void
+    {
+        $this->getEntityManager()->persist($project);
+        $this->getEntityManager()->flush();
+    }
+
     public function remove(Project $project): void
     {
         $this->getEntityManager()->remove($project);

@@ -17,5 +17,9 @@ interface ProjectRepositoryInterface
 
     public function getById(Uuid $projectId): ?Project;
 
+    public function existsByName(string $name): bool;
+
+    public function save(Project $project): void;
+
     public function remove(Project $project): void;
 }

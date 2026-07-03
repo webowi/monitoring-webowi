@@ -6,6 +6,7 @@ App\Identity\Domain\Organization\Organization:
 
 App\Projects\Domain\Project:
   project (template):
-    uuid: <uuid('135a465d-cf7a-4ca8-872a-c76272cbb16f')>
-    organizationId: '@organization->uuid'
-    name: <firstname()>
+    __factory:
+      register:
+        organizationId: '@organization->uuid'
+        name: <firstName()>

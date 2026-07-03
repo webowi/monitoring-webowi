@@ -24,4 +24,12 @@ enum ProjectPlatformEnum: string
             self::VITE_REACT => 'Frontend (Vite) → wysyłka błędów/zdarzeń do ingest API.',
         };
     }
+
+    /**
+     * @return list<string>
+     */
+    public static function values(): array
+    {
+        return array_map(static fn (self $case): string => $case->value, self::cases());
+    }
 }

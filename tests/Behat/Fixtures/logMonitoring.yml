@@ -9,7 +9,7 @@ App\Identity\Domain\Organization\Organization:
   organization2:
     __factory:
         register:
-            name 'Log Monitoring Other Org'
+            name: 'Log Monitoring Other Org'
 
 App\Identity\Domain\User\User:
   user1:
@@ -31,21 +31,25 @@ App\Identity\Domain\User\User:
 
 App\Projects\Domain\Project:
   project1 (extends project):
-    uuid: <uuid('135a465d-cf7a-4ca8-872a-c76272cbb16f')>
-    organizationId: '@organization1->uuid'
-    name: 'Owner Monitored Project'
+    __factory:
+      register:
+        uuid: <uuid('135a465d-cf7a-4ca8-872a-c76272cbb16f')>
+        organizationId: '@organization1->uuid'
+        name: 'Owner Monitored Project'
 
 App\Projects\Domain\IngestionKey:
   ingestionKeyActive:
-    uuid: <uuid('352b9e34-7641-40a7-b7bb-a0f1dee3e9f9')>
-    projectId: '@project1->uuid'
-    name: 'Active Ingestion Key'
-    keyHash: '5ba4d1100b4ddbcfe3b7ad37af948c76b043e710c571bd81432a551151f2c99c'
-    keyValue: 'mon_ing_demo0000000000000000000000000000'
+    __factory:
+      new:
+        projectId: '@project1->uuid'
+        name: 'Active Ingestion Key'
+        keyHash: '5ba4d1100b4ddbcfe3b7ad37af948c76b043e710c571bd81432a551151f2c99c'
+        keyValue: 'mon_ing_demo0000000000000000000000000000'
   ingestionKeyActiveRevoked:
-    uuid: <uuid('9ed340ec-f47a-4f97-b6a5-860cb90e189d')>
-    projectId: '@project1->uuid'
-    name: 'Revoked Ingestion Key'
-    keyHash: '47782fcca6f185c64f7ebb80db7776480d96355c9cb63d640e94c4317011aa55'
+    __factory:
+      new:
+        projectId: '@project1->uuid'
+        name: 'Revoked Ingestion Key'
+        keyHash: '47782fcca6f185c64f7ebb80db7776480d96355c9cb63d640e94c4317011aa55'
     __calls:
       - revoke: []

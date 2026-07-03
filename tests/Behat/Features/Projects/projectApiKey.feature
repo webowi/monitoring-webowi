@@ -7,7 +7,6 @@ Feature:
       | logMonitoring |
 
   # GET /api/v1/projects/{uuid}
-
   Scenario: Owner retrieves project metadata
     Given I sign in as "owner@monitoring-webowi.test" with password "demo1234"
     When I send a "GET" JSON request to "/api/v1/projects/135a465d-cf7a-4ca8-872a-c76272cbb16f"
@@ -23,7 +22,7 @@ Feature:
     Given I sign in as "other@monitoring-webowi.test" with password "demo1234"
     When I send a "GET" JSON request to "/api/v1/projects/135a465d-cf7a-4ca8-872a-c76272cbb16f"
     Then the response status code should be 404
-    And the JSON node "error" should be equal to "Project not found."
+    And the JSON node "error" should be equal to "Projekt nie został znaleziony."
 
   # GET /api/v1/projects/{uuid}/ingestion-key
 
@@ -71,4 +70,4 @@ Feature:
     Given I sign in as "other@monitoring-webowi.test" with password "demo1234"
     When I send a "POST" JSON request to "/api/v1/projects/135a465d-cf7a-4ca8-872a-c76272cbb16f/ingestion-key/rotate"
     Then the response status code should be 404
-    And the JSON node "error" should be equal to "Project not found."
+    And the JSON node "error" should be equal to "Projekt nie został znaleziony."

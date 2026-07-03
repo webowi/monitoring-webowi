@@ -55,11 +55,12 @@ class Project implements TimestampableResourceInterface
     public static function register(
         Uuid $organizationId,
         string $name,
+        ?Uuid $uuid = null,
         ProjectStatusEnum $status = ProjectStatusEnum::ACTIVE,
         ProjectPlatformEnum $platform = ProjectPlatformEnum::SYMFONY,
     ): self {
         return new self(
-            uuid: Uuid::v4(),
+            uuid: $uuid ?? Uuid::v4(),
             organizationId: $organizationId,
             name: $name,
             status: $status,

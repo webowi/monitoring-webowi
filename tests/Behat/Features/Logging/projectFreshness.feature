@@ -28,7 +28,7 @@ Feature:
     Given I sign in as "other@monitoring-webowi.test" with password "demo1234"
     When I send a "GET" JSON request to "/api/v1/projects/135a465d-cf7a-4ca8-872a-c76272cbb16f/freshness"
     Then the response status code should be 404
-    And the JSON node "error" should be equal to "Project not found."
+    And the JSON node "error" should be equal to "Projekt nie został znaleziony."
 
   Scenario: An unauthenticated request is rejected
     When I send a "GET" JSON request to "/api/v1/projects/135a465d-cf7a-4ca8-872a-c76272cbb16f/freshness"

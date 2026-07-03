@@ -1,0 +1,34 @@
+App\Identity\Domain\Organization\Organization:
+  organization1:
+    __factory:
+      register:
+        name: 'Create Project Owner Org'
+  organization2:
+    __factory:
+      register:
+        name: 'Create Project Other Org'
+
+App\Identity\Domain\User\User:
+  user1:
+    __factory:
+      register:
+        organizationId: '@organization1->uuid'
+        email: <(App\Tests\Mock\ValueObjectFactory::monitoringEmail('create-project-owner'))>
+        password: <(password_hash('demo1234', PASSWORD_DEFAULT))>
+    __calls:
+      - activate: []
+  user2:
+    __factory:
+      register:
+        organizationId: '@organization2->uuid'
+        email: <(App\Tests\Mock\ValueObjectFactory::monitoringEmail('create-project-other'))>
+        password: <(password_hash('demo1234', PASSWORD_DEFAULT))>
+    __calls:
+      - activate: []
+
+App\Projects\Domain\Project:
+  existingProject:
+    __factory:
+      register:
+        organizationId: '@organization1->uuid'
+        name: 'Existing Project'
