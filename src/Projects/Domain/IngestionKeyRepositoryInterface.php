@@ -13,4 +13,6 @@ interface IngestionKeyRepositoryInterface
     public function findActiveByProjectId(Uuid $projectId): ?IngestionKey;
 
     public function save(IngestionKey $key): void;
+
+    public function removeAllByProjectId(Uuid $projectId): void;
 }

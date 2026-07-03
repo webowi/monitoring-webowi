@@ -51,4 +51,14 @@ class IngestionKeyRepository extends ServiceEntityRepository implements Ingestio
         $this->getEntityManager()->persist($key);
         $this->getEntityManager()->flush();
     }
+
+    public function removeAllByProjectId(Uuid $projectId): void
+    {
+        $this->createQueryBuilder('k')
+            ->delete()
+            ->andWhere('k.projectId = :projectId')
+            ->setParameter('projectId', $projectId, 'uuid')
+            ->getQuery()
+            ->execute();
+    }
 }
