@@ -264,5 +264,5 @@ Not applicable — no existing data or deployed behavior changes; this is new, p
 
 #### Manual
 
-- [x] 4.1 Log sent through the pasted classes appears via `GET /api/v1/projects/{uuid}/logs`
-- [x] 4.2 A wrong API key results in silence — no exception, no log recorded
+- [x] 4.1 Log sent through the pasted classes appears via `GET /api/v1/projects/{uuid}/logs` — 5ccc9fd
+- [x] 4.2 A wrong API key results in silence — no exception, no log recorded — 5ccc9fd

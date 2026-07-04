@@ -1,7 +1,7 @@
 ---
 change_id: ingest-handler-reference-impl
 title: Reference IngestHandler implementation for the install snippet
-status: implementing
+status: implemented
 created: 2026-07-04
 updated: 2026-07-04
 archived_at: null
