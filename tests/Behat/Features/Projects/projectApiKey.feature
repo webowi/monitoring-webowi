@@ -71,3 +71,38 @@ Feature:
     When I send a "POST" JSON request to "/api/v1/projects/135a465d-cf7a-4ca8-872a-c76272cbb16f/ingestion-key/rotate"
     Then the response status code should be 404
     And the JSON node "error" should be equal to "Projekt nie został znaleziony."
+
+  # POST /api/v1/projects/{uuid}/ingestion-key
+
+  Scenario: Owner generates the first ingestion key for a keyless project
+    Given I sign in as "owner@monitoring-webowi.test" with password "demo1234"
+    When I send a "POST" JSON request to "/api/v1/projects/9b1e5f3a-2c4d-4a6b-8e7f-1a2b3c4d5e6f/ingestion-key"
+    Then the response status code should be 201
+    And the JSON node "value" should contain "mon_ing_"
+    And the JSON node "snippet" should contain "mon_ing_"
+
+  Scenario: After generating, GET ingestion-key reflects the new value
+    Given I sign in as "owner@monitoring-webowi.test" with password "demo1234"
+    When I send a "POST" JSON request to "/api/v1/projects/9b1e5f3a-2c4d-4a6b-8e7f-1a2b3c4d5e6f/ingestion-key"
+    Then the response status code should be 201
+    When I send a "GET" JSON request to "/api/v1/projects/9b1e5f3a-2c4d-4a6b-8e7f-1a2b3c4d5e6f/ingestion-key"
+    Then the response status code should be 200
+    And the JSON node "value" should contain "mon_ing_"
+
+  Scenario: Generating again on a project that already has a key is rejected
+    Given I sign in as "owner@monitoring-webowi.test" with password "demo1234"
+    When I send a "POST" JSON request to "/api/v1/projects/9b1e5f3a-2c4d-4a6b-8e7f-1a2b3c4d5e6f/ingestion-key"
+    Then the response status code should be 201
+    When I send a "POST" JSON request to "/api/v1/projects/9b1e5f3a-2c4d-4a6b-8e7f-1a2b3c4d5e6f/ingestion-key"
+    Then the response status code should be 409
+    And the JSON node "error" should be equal to "Projekt ma już aktywny klucz wprowadzania danych."
+
+  Scenario: Unauthenticated request to generate ingestion key is rejected
+    When I send a "POST" JSON request to "/api/v1/projects/9b1e5f3a-2c4d-4a6b-8e7f-1a2b3c4d5e6f/ingestion-key"
+    Then the response status code should be 401
+
+  Scenario: Wrong-org user cannot generate a key for another project
+    Given I sign in as "other@monitoring-webowi.test" with password "demo1234"
+    When I send a "POST" JSON request to "/api/v1/projects/9b1e5f3a-2c4d-4a6b-8e7f-1a2b3c4d5e6f/ingestion-key"
+    Then the response status code should be 404
+    And the JSON node "error" should be equal to "Projekt nie został znaleziony."

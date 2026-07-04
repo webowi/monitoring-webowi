@@ -188,16 +188,16 @@ Same response-building shape as `RotateIngestionKeyController`, using `Response:
 
 #### Automated
 
-- [x] 1.1 Static analysis passes: `./vendor/bin/phpstan analyse`
-- [x] 1.2 Unit tests pass: `./vendor/bin/phpunit`
+- [x] 1.1 Static analysis passes: `./vendor/bin/phpstan analyse` — 30da046
+- [x] 1.2 Unit tests pass: `./vendor/bin/phpunit` — 30da046
 
 ### Phase 2: Controller, Route, and Acceptance Tests
 
 #### Automated
 
-- [ ] 2.1 Static analysis passes: `./vendor/bin/phpstan analyse`
-- [ ] 2.2 Unit tests pass: `./vendor/bin/phpunit`
-- [ ] 2.3 Behat suite passes: `./vendor/bin/behat`
+- [x] 2.1 Static analysis passes: `./vendor/bin/phpstan analyse`
+- [x] 2.2 Unit tests pass: `./vendor/bin/phpunit`
+- [x] 2.3 Behat suite passes: `./vendor/bin/behat`
 
 #### Manual
 

@@ -2,3 +2,4 @@
 'Project with this name already exists.': 'Projekt o tej nazwie już istnieje.'
 'Cannot save project.': 'Nie można utworzyć projektu.'
 'Cannot remove project.': 'Nie można usunąć projektu.'
+'Project already has an active ingestion key.': 'Projekt ma już aktywny klucz wprowadzania danych.'

@@ -39,6 +39,7 @@ App\Projects\Domain\Project:
   project2 (extends project):
     __factory:
       register:
+        uuid: <uuid('9b1e5f3a-2c4d-4a6b-8e7f-1a2b3c4d5e6f')>
         organizationId: '@organization1->uuid'
         name: 'Another Owner Project'
 
