@@ -1,7 +1,7 @@
 ---
 change_id: provision-ingestion-key-on-create
 title: Add a dedicated endpoint to generate a project's first ingestion key
-status: implementing
+status: implemented
 created: 2026-07-04
 updated: 2026-07-04
 archived_at: null

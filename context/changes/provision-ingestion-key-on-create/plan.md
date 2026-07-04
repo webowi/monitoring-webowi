@@ -195,12 +195,12 @@ Same response-building shape as `RotateIngestionKeyController`, using `Response:
 
 #### Automated
 
-- [x] 2.1 Static analysis passes: `./vendor/bin/phpstan analyse`
-- [x] 2.2 Unit tests pass: `./vendor/bin/phpunit`
-- [x] 2.3 Behat suite passes: `./vendor/bin/behat`
+- [x] 2.1 Static analysis passes: `./vendor/bin/phpstan analyse` — 25b3bc8
+- [x] 2.2 Unit tests pass: `./vendor/bin/phpunit` — 25b3bc8
+- [x] 2.3 Behat suite passes: `./vendor/bin/behat` — 25b3bc8
 
 #### Manual
 
-- [ ] 2.4 `POST .../ingestion-key` on a keyless project returns 201 with `value` and `snippet`
-- [ ] 2.5 Repeating the call returns 409
-- [ ] 2.6 `GET .../ingestion-key` after generation reflects the new value
+- [x] 2.4 `POST .../ingestion-key` on a keyless project returns 201 with `value` and `snippet` — 25b3bc8
+- [x] 2.5 Repeating the call returns 409 — 25b3bc8
+- [x] 2.6 `GET .../ingestion-key` after generation reflects the new value — 25b3bc8
