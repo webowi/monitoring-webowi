@@ -251,18 +251,18 @@ Not applicable — no existing data or deployed behavior changes; this is new, p
 
 #### Automated
 
-- [x] 3.1 Unit tests pass: `make phpunit`
-- [x] 3.2 Mutation coverage: `make infection` reports 100% MSI / covered-MSI including `InstallSnippetBuilder`
-- [x] 3.3 Static analysis passes: phpstan analyse
-- [x] 3.4 Coding standards pass: `make cs-fixer` produces no diff
+- [x] 3.1 Unit tests pass: `make phpunit` — fc06d78
+- [x] 3.2 Mutation coverage: `make infection` reports 100% MSI / covered-MSI including `InstallSnippetBuilder` — fc06d78
+- [x] 3.3 Static analysis passes: phpstan analyse — fc06d78
+- [x] 3.4 Coding standards pass: `make cs-fixer` produces no diff — fc06d78
 
 #### Manual
 
-- [x] 3.5 Snippet response visibly contains real class bodies against the running dev stack
+- [x] 3.5 Snippet response visibly contains real class bodies against the running dev stack — fc06d78
 
 ### Phase 4: Manual end-to-end verification
 
 #### Manual
 
-- [ ] 4.1 Log sent through the pasted classes appears via `GET /api/v1/projects/{uuid}/logs`
-- [ ] 4.2 A wrong API key results in silence — no exception, no log recorded
+- [x] 4.1 Log sent through the pasted classes appears via `GET /api/v1/projects/{uuid}/logs`
+- [x] 4.2 A wrong API key results in silence — no exception, no log recorded
