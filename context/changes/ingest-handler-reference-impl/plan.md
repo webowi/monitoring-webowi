@@ -233,19 +233,19 @@ Not applicable — no existing data or deployed behavior changes; this is new, p
 
 #### Automated
 
-- [x] 1.1 Unit tests pass: `make phpunit`
-- [x] 1.2 Mutation coverage: `make infection` reports 100% MSI / covered-MSI for the new files
-- [x] 1.3 Static analysis passes: phpstan analyse
-- [x] 1.4 Coding standards pass: `make cs-fixer` produces no diff
+- [x] 1.1 Unit tests pass: `make phpunit` — 212188b
+- [x] 1.2 Mutation coverage: `make infection` reports 100% MSI / covered-MSI for the new files — 212188b
+- [x] 1.3 Static analysis passes: phpstan analyse — 212188b
+- [x] 1.4 Coding standards pass: `make cs-fixer` produces no diff — 212188b
 
 ### Phase 2: IngestHandler
 
 #### Automated
 
-- [ ] 2.1 Unit tests pass: `make phpunit`
-- [ ] 2.2 Mutation coverage: `make infection` reports 100% MSI / covered-MSI for the new file
-- [ ] 2.3 Static analysis passes: phpstan analyse
-- [ ] 2.4 Coding standards pass: `make cs-fixer` produces no diff
+- [x] 2.1 Unit tests pass: `make phpunit`
+- [x] 2.2 Mutation coverage: `make infection` reports 100% MSI / covered-MSI for the new file
+- [x] 2.3 Static analysis passes: phpstan analyse
+- [x] 2.4 Coding standards pass: `make cs-fixer` produces no diff
 
 ### Phase 3: Snippet embedding
 
