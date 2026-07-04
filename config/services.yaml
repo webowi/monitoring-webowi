@@ -18,6 +18,7 @@ services:
         resource: '../src/'
         exclude:
             - '../src/Kernel.php'
+            - '../src/MonitoringWebowi/'
 
     GusApi\GusApi:
         arguments:
@@ -30,3 +31,4 @@ services:
     App\Projects\Application\GetIngestionKey\InstallSnippetBuilder:
         arguments:
             $appUrl: '%env(APP_URL)%'
+            $projectDir: '%kernel.project_dir%'

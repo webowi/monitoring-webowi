@@ -242,23 +242,23 @@ Not applicable — no existing data or deployed behavior changes; this is new, p
 
 #### Automated
 
-- [x] 2.1 Unit tests pass: `make phpunit`
-- [x] 2.2 Mutation coverage: `make infection` reports 100% MSI / covered-MSI for the new file
-- [x] 2.3 Static analysis passes: phpstan analyse
-- [x] 2.4 Coding standards pass: `make cs-fixer` produces no diff
+- [x] 2.1 Unit tests pass: `make phpunit` — 6213c1f
+- [x] 2.2 Mutation coverage: `make infection` reports 100% MSI / covered-MSI for the new file — 6213c1f
+- [x] 2.3 Static analysis passes: phpstan analyse — 6213c1f
+- [x] 2.4 Coding standards pass: `make cs-fixer` produces no diff — 6213c1f
 
 ### Phase 3: Snippet embedding
 
 #### Automated
 
-- [ ] 3.1 Unit tests pass: `make phpunit`
-- [ ] 3.2 Mutation coverage: `make infection` reports 100% MSI / covered-MSI including `InstallSnippetBuilder`
-- [ ] 3.3 Static analysis passes: phpstan analyse
-- [ ] 3.4 Coding standards pass: `make cs-fixer` produces no diff
+- [x] 3.1 Unit tests pass: `make phpunit`
+- [x] 3.2 Mutation coverage: `make infection` reports 100% MSI / covered-MSI including `InstallSnippetBuilder`
+- [x] 3.3 Static analysis passes: phpstan analyse
+- [x] 3.4 Coding standards pass: `make cs-fixer` produces no diff
 
 #### Manual
 
-- [ ] 3.5 Snippet response visibly contains real class bodies against the running dev stack
+- [x] 3.5 Snippet response visibly contains real class bodies against the running dev stack
 
 ### Phase 4: Manual end-to-end verification
 
